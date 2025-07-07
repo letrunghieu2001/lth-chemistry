@@ -18,17 +18,14 @@ const TeacherSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Teacher Image */}
           <div className="flex justify-center animate-slide-up">
-            <div className="relative">
-              <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-primary/10 to-primary-dark/10 p-8 flex items-center justify-center">
-                {/* Placeholder for teacher photo */}
-                <div className="w-full h-full rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-                  <div className="text-center text-primary-foreground">
-                    <div className="text-6xl mb-4">👨‍🏫</div>
-                    <div className="font-quicksand font-bold text-xl">Thầy Lê Trung Hiếu</div>
-                    <div className="font-vietnam text-sm opacity-90">Giảng viên Hóa học</div>
-                  </div>
+              <div className="relative">
+                <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-primary/10 to-primary-dark/10 p-2 flex items-center justify-center">
+                  <img 
+                    src="/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png" 
+                    alt="Thầy Lê Trung Hiếu" 
+                    className="w-full h-full rounded-2xl object-cover"
+                  />
                 </div>
-              </div>
               
               {/* Floating badges */}
               <div className="absolute -top-4 -right-4 bg-gold text-gold-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float">

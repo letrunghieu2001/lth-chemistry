@@ -70,8 +70,8 @@ const HeroSection = () => {
                 <div className="font-vietnam text-sm text-muted-foreground">Năm kinh nghiệm</div>
               </div>
               <div className="text-center col-span-2 md:col-span-1">
-                <div className="font-quicksand font-bold text-2xl gradient-text">100+</div>
-                <div className="font-vietnam text-sm text-muted-foreground">Học sinh thành công</div>
+                <div className="font-quicksand font-bold text-2xl gradient-text">50+</div>
+                <div className="font-vietnam text-sm text-muted-foreground">Học sinh đậu vào trường top</div>
               </div>
             </div>
           </div>
@@ -81,7 +81,7 @@ const HeroSection = () => {
             <div className="relative">
               <div className="w-80 h-80 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 flex items-center justify-center animate-float">
                 <img 
-                  src="/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png" 
+                  src="/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png" 
                   alt="LTH Chemistry Logo" 
                   className="w-64 h-64 md:w-80 md:h-80 object-contain"
                 />

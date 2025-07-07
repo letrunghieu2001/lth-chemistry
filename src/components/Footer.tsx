@@ -17,7 +17,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <img 
-                src="/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png" 
+                src="/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png" 
                 alt="LTH Chemistry Logo" 
                 className="h-12 w-auto brightness-0 invert"
               />
@@ -86,20 +86,24 @@ const Footer = () => {
             <h4 className="font-quicksand font-bold text-lg mb-4">Thông Tin Liên Hệ</h4>
             <div className="space-y-2">
               <div className="font-vietnam text-sm">
-                <div className="opacity-80 mb-1">Địa chỉ:</div>
-                <div>123 Đường ABC, Quận XYZ, Hà Nội</div>
+                <div className="opacity-80 mb-1">Cơ sở 1:</div>
+                <div>Số 28, ngách 371/9 Phố Kim Mã, P. Giảng Võ, Q. Ba Đình, Hà Nội</div>
+              </div>
+              <div className="font-vietnam text-sm">
+                <div className="opacity-80 mb-1">Cơ sở 2:</div>
+                <div>Số 44D, ngõ 66 Đường Hồ Tùng Mậu, P. Phú Diễn, Q. Bắc Từ Liêm, Hà Nội</div>
               </div>
               <div className="font-vietnam text-sm">
                 <div className="opacity-80 mb-1">Hotline:</div>
-                <div className="font-semibold">0123 456 789</div>
+                <div className="font-semibold">0942225766</div>
               </div>
               <div className="font-vietnam text-sm">
-                <div className="opacity-80 mb-1">Email:</div>
-                <div>contact@lthchemistry.vn</div>
+                <div className="opacity-80 mb-1">Email doanh nghiệp:</div>
+                <div>chemistrylth@gmail.com</div>
               </div>
               <div className="font-vietnam text-sm">
-                <div className="opacity-80 mb-1">Giờ làm việc:</div>
-                <div>Thứ 2 - CN: 8:00 - 22:00</div>
+                <div className="opacity-80 mb-1">Email cá nhân:</div>
+                <div>letrunghieu2001@gmail.com</div>
               </div>
             </div>
           </div>
@@ -109,7 +113,7 @@ const Footer = () => {
             <h4 className="font-quicksand font-bold text-lg mb-4">Kết Nối Với Chúng Tôi</h4>
             <div className="space-y-3">
               <a 
-                href="https://zalo.me/0123456789"
+                href="https://zalo.me/0942225766"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 font-vietnam text-sm opacity-80 hover:opacity-100 transition-opacity"
@@ -117,11 +121,11 @@ const Footer = () => {
                 <div className="w-8 h-8 bg-primary-foreground/20 rounded-full flex items-center justify-center">
                   <MessageCircle className="h-4 w-4" />
                 </div>
-                <span>Zalo: 0123 456 789</span>
+                <span>Zalo: 0942225766</span>
               </a>
               
               <a 
-                href="https://m.me/lthchemistry"
+                href="https://m.me/thl.201"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 font-vietnam text-sm opacity-80 hover:opacity-100 transition-opacity"
@@ -133,7 +137,7 @@ const Footer = () => {
               </a>
               
               <a 
-                href="mailto:contact@lthchemistry.vn"
+                href="mailto:chemistrylth@gmail.com"
                 className="flex items-center space-x-3 font-vietnam text-sm opacity-80 hover:opacity-100 transition-opacity"
               >
                 <div className="w-8 h-8 bg-primary-foreground/20 rounded-full flex items-center justify-center">
@@ -155,9 +159,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-primary-foreground/20 text-center">
           <p className="font-vietnam text-sm opacity-80">
-            © 2024 LTH Chemistry. Tất cả quyền được bảo lưu. 
-            <span className="mx-2">|</span>
-            Thiết kế bởi Lovable
+            © 2025 LTH Chemistry. All Rights Reserved.
           </p>
         </div>
       </div>

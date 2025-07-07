@@ -33,7 +33,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <img 
-              src="/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png" 
+              src="/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png" 
               alt="LTH Chemistry Logo" 
               className="h-12 w-auto animate-float"
             />

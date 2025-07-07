@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MessageCircle, Phone, Calendar } from 'lucide-react';
+import { MessageCircle, Phone, Calendar, MessagesSquare } from 'lucide-react';
 
 const ContactSection = () => {
   const [activeTab, setActiveTab] = useState('zalo');
@@ -29,7 +29,7 @@ const ContactSection = () => {
                 <span>Zalo</span>
               </TabsTrigger>
               <TabsTrigger value="messenger" className="font-vietnam font-semibold flex items-center space-x-2">
-                <MessageCircle className="h-4 w-4" />
+                <MessagesSquare className="h-4 w-4" />
                 <span>Messenger</span>
               </TabsTrigger>
               <TabsTrigger value="gmail" className="font-vietnam font-semibold flex items-center space-x-2">
@@ -74,7 +74,7 @@ const ContactSection = () => {
                           <span className="font-vietnam font-semibold">Số điện thoại</span>
                         </div>
                         <div className="font-vietnam text-lg font-bold text-primary">
-                          0123 456 789
+                          0942225766
                         </div>
                         <div className="font-vietnam text-sm text-muted-foreground mt-1">
                           Tìm kiếm số này trên Zalo
@@ -88,7 +88,6 @@ const ContactSection = () => {
                         </div>
                         <div className="font-vietnam text-sm">
                           <div>Thứ 2 - Chủ nhật: 8:00 - 22:00</div>
-                          <div className="text-gold font-medium">Phản hồi trong 15 phút</div>
                         </div>
                       </div>
                     </div>
@@ -118,22 +117,15 @@ const ContactSection = () => {
                     <div className="space-y-4">
                       <Button 
                         className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-4 rounded-full text-lg"
-                        onClick={() => window.open('https://m.me/lthchemistry', '_blank')}
+                        onClick={() => window.open('https://m.me/thl.201', '_blank')}
                       >
-                        Mở Messenger Chat
+                        Liên hệ ngay
                       </Button>
                       
                       <div className="bg-primary/10 rounded-lg p-4">
                         <div className="font-vietnam font-semibold mb-1">Facebook Page</div>
                         <div className="font-vietnam text-sm text-muted-foreground">
-                          facebook.com/lthchemistry
-                        </div>
-                      </div>
-                      
-                      <div className="bg-gold/10 rounded-lg p-4">
-                        <div className="font-vietnam font-semibold mb-1">Thời gian phản hồi</div>
-                        <div className="font-vietnam text-sm text-gold">
-                          Trung bình 10 phút
+                          https://m.me/thl.201
                         </div>
                       </div>
                     </div>
@@ -155,34 +147,38 @@ const ContactSection = () => {
                     </p>
                   </div>
 
-                  <div className="max-w-md mx-auto space-y-6">
-                    <div className="w-32 h-32 bg-gradient-to-br from-primary/10 to-primary-dark/10 rounded-full flex items-center justify-center mx-auto">
-                      <div className="text-5xl">📧</div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <Button 
-                        className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-4 rounded-full text-lg"
-                        onClick={() => window.open('mailto:contact@lthchemistry.vn?subject=Tư vấn khóa học Hóa học&body=Xin chào thầy Hiếu,%0D%0A%0D%0ATôi muốn tìm hiểu về khóa học Hóa học tại LTH Chemistry.%0D%0A%0D%0AThông tin học sinh:%0D%0A- Họ tên:%0D%0A- Lớp:%0D%0A- Số điện thoại:%0D%0A- Mục tiêu học tập:%0D%0A%0D%0ACảm ơn thầy!', '_blank')}
-                      >
-                        Gửi Email Ngay
-                      </Button>
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <Button 
+                          className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-4 rounded-full text-lg"
+                          onClick={() => window.open('mailto:chemistrylth@gmail.com?subject=Tư vấn khóa học Hóa học&body=Xin chào thầy Hiếu,%0D%0A%0D%0ATôi muốn tìm hiểu về khóa học Hóa học tại LTH Chemistry.%0D%0A%0D%0AThông tin học sinh:%0D%0A- Họ tên:%0D%0A- Lớp:%0D%0A- Số điện thoại:%0D%0A- Mục tiêu học tập:%0D%0A%0D%0ACảm ơn thầy!', '_blank')}
+                        >
+                          Gửi Email Doanh Nghiệp
+                        </Button>
+                        
+                        <Button 
+                          variant="outline"
+                          className="w-full font-vietnam font-semibold py-4 rounded-full text-lg"
+                          onClick={() => window.open('mailto:letrunghieu2001@gmail.com?subject=Tư vấn khóa học Hóa học&body=Xin chào thầy Hiếu,%0D%0A%0D%0ATôi muốn tìm hiểu về khóa học Hóa học tại LTH Chemistry.%0D%0A%0D%0AThông tin học sinh:%0D%0A- Họ tên:%0D%0A- Lớp:%0D%0A- Số điện thoại:%0D%0A- Mục tiêu học tập:%0D%0A%0D%0ACảm ơn thầy!', '_blank')}
+                        >
+                          Gửi Email Cá Nhân
+                        </Button>
+                      </div>
                       
                       <div className="bg-primary/10 rounded-lg p-4">
-                        <div className="font-vietnam font-semibold mb-1">Email liên hệ</div>
+                        <div className="font-vietnam font-semibold mb-1">Email doanh nghiệp</div>
                         <div className="font-vietnam text-lg font-bold text-primary">
-                          contact@lthchemistry.vn
+                          chemistrylth@gmail.com
                         </div>
                       </div>
                       
-                      <div className="bg-gold/10 rounded-lg p-4">
-                        <div className="font-vietnam font-semibold mb-1">Thời gian phản hồi</div>
-                        <div className="font-vietnam text-sm text-gold">
-                          Trong vòng 24 giờ
+                      <div className="bg-secondary/20 rounded-lg p-4">
+                        <div className="font-vietnam font-semibold mb-1">Email cá nhân</div>
+                        <div className="font-vietnam text-lg font-bold text-primary">
+                          letrunghieu2001@gmail.com
                         </div>
                       </div>
                     </div>
-                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -198,13 +194,13 @@ const ContactSection = () => {
               </h3>
               <div className="space-y-3">
                 <div className="font-vietnam">
-                  <strong>Địa chỉ:</strong> 123 Đường ABC, Quận XYZ, Hà Nội
+                  <strong>Cơ sở 1:</strong> Số 28, ngách 371/9 Phố Kim Mã, P. Giảng Võ, Q. Ba Đình, Hà Nội
                 </div>
                 <div className="font-vietnam">
-                  <strong>Hotline:</strong> <span className="text-primary font-semibold">0123 456 789</span>
+                  <strong>Cơ sở 2:</strong> Số 44D, ngõ 66 Đường Hồ Tùng Mậu, P. Phú Diễn, Q. Bắc Từ Liêm, Hà Nội
                 </div>
                 <div className="font-vietnam">
-                  <strong>Giờ làm việc:</strong> Thứ 2 - Chủ nhật, 8:00 - 22:00
+                  <strong>Hotline:</strong> <span className="text-primary font-semibold">0942225766</span>
                 </div>
               </div>
             </CardContent>

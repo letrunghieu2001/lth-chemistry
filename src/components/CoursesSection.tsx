@@ -10,8 +10,8 @@ const CoursesSection = () => {
       title: "Lớp 10",
       subtitle: "Nền tảng vững chắc cho Hóa học",
       description: "Xây dựng nền tảng Hóa học cơ bản, giúp học sinh làm quen và yêu thích môn học.",
-      schedule: "Thứ 2, 4, 6 - 19:00-21:00",
-      duration: "36 buổi/khóa",
+      schedule: "Thứ 2, 4, 6",
+      duration: "2 tiếng",
       students: "8-12 học sinh/lớp", 
       content: [
         "Cấu tạo nguyên tử và bảng tuần hoàn",
@@ -20,14 +20,14 @@ const CoursesSection = () => {
         "Mol và tính toán hóa học",
         "Các loại phản ứng vô cơ cơ bản"
       ],
-      price: "1.200.000đ/khóa"
+      price: "Thỏa thuận"
     },
     "lop-11": {
       title: "Lớp 11", 
       subtitle: "Phát triển tư duy Hóa học",
       description: "Nâng cao kiến thức, phát triển kỹ năng giải bài tập phức tạp và tư duy logic.",
-      schedule: "Thứ 3, 5, 7 - 19:00-21:00",
-      duration: "36 buổi/khóa",
+      schedule: "Thứ 3, 5, 7",
+      duration: "2 tiếng",
       students: "8-12 học sinh/lớp",
       content: [
         "Cân bằng hóa học và các yếu tố ảnh hưởng",
@@ -36,30 +36,31 @@ const CoursesSection = () => {
         "Điện hóa học và ăn mòn kim loại",
         "Bài tập nâng cao và thi học kỳ"
       ],
-      price: "1.300.000đ/khóa"
+      price: "Thỏa thuận"
     },
     "lop-12": {
       title: "Lớp 12",
       subtitle: "Luyện thi THPT Quốc gia",
       description: "Ôn tập toàn diện, luyện đề thi THPT, đảm bảo điểm số cao trong kỳ thi.",
-      schedule: "Thứ 2, 4, 6, 7 - 19:00-21:00", 
-      duration: "48 buổi/khóa",
+      schedule: "Thứ 2, 4, 6, 7", 
+      duration: "2 tiếng",
       students: "6-10 học sinh/lớp",
       content: [
+        "Bám sát chương trình GDPT 2018 của Bộ giáo dục và đào tạo",
         "Ôn tập toàn bộ kiến thức 3 năm THPT",
         "Luyện đề thi THPT Quốc gia các năm",
         "Kỹ thuật làm bài thi trắc nghiệm",
         "Bài tập nâng cao và phát triển",
         "Tư vấn chiến lược làm bài"
       ],
-      price: "1.500.000đ/khóa"
+      price: "Thỏa thuận"
     },
     "kem-11": {
       title: "Kèm 1-1",
       subtitle: "Học tập cá nhân hóa",
       description: "Chương trình học được thiết kế riêng cho từng học sinh, tập trung vào điểm yếu cá nhân.",
       schedule: "Linh hoạt theo lịch học sinh",
-      duration: "Theo nhu cầu",
+      duration: "2 tiếng",
       students: "1 học sinh",
       content: [
         "Đánh giá trình độ và xây dựng lộ trình",
@@ -68,7 +69,7 @@ const CoursesSection = () => {
         "Theo dõi tiến độ sát sao",
         "Hỗ trợ 24/7 qua các kênh liên lạc"
       ],
-      price: "300.000đ/buổi"
+      price: "Thỏa thuận"
     }
   };
 
@@ -154,7 +155,7 @@ const CoursesSection = () => {
                   <CardContent className="p-8">
                     <div className="flex items-center space-x-3 mb-6">
                       <BookOpen className="h-6 w-6 text-primary" />
-                      <h4 className="font-quicksand font-bold text-xl">Nội Dung Khóa Học</h4>
+                      <h4 className="font-quicksand font-bold text-xl">Nội Dung Học Tập</h4>
                     </div>
 
                     <ul className="space-y-3 mb-8">
