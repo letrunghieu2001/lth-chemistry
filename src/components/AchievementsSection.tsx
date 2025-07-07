@@ -14,37 +14,40 @@ const AchievementsSection = () => {
     { number: "95%+", label: "Tỷ lệ hài lòng của phụ huynh" }
   ];
 
-  // Top universities
+  // Top universities with logos
   const universities = [
-    "Đại học Bách Khoa Hà Nội",
-    "Đại học Y Hà Nội", 
-    "Đại học Quốc gia Hà Nội",
-    "Đại học Kinh tế Quốc dân",
-    "Đại học Ngoại thương",
-    "Học viện Ngân hàng",
-    "Đại học Xây Dựng",
-    "Đại học Công nghiệp Hà Nội"
+    { name: "Đại học Bách Khoa Hà Nội", logo: "/university-logos/hust-logo.png" },
+    { name: "Đại học Y Hà Nội", logo: "/university-logos/hmu-logo.png" }, 
+    { name: "Đại học Quốc gia Hà Nội", logo: "/university-logos/vnu-hanoi-logo.png" },
+    { name: "Đại học Kinh tế Quốc dân", logo: "/university-logos/neu-logo.png" },
+    { name: "Đại học Ngoại thương", logo: "/university-logos/ftu-logo.png" },
+    { name: "Học viện Ngân hàng", logo: "/university-logos/banking-academy-logo.png" },
+    { name: "Đại học Xây Dựng", logo: "/university-logos/hau-logo.png" },
+    { name: "Đại học Công nghiệp Hà Nội", logo: "/university-logos/haui-logo.png" }
   ];
 
-  // Student testimonials
+  // Student testimonials with high schools
   const testimonials = [
     {
       name: "Nguyễn Minh Anh",
-      grade: "Lớp 12A1",
+      school: "THPT Hà Nội - Amsterdam",
+      schoolLogo: "/highschool-logos/hanoi-amsterdam-logo.png",
       score: "9.2 điểm Hóa",
       university: "Đại học Bách Khoa Hà Nội",
       content: "Thầy Hiếu dạy rất dễ hiểu, luôn tạo không khí học tập vui vẻ. Nhờ thầy mà em đã từ sợ Hóa học thành yêu thích môn này."
     },
     {
       name: "Trần Việt Hoàng",
-      grade: "Lớp 12A2", 
+      school: "THPT Nguyễn Huệ", 
+      schoolLogo: "/highschool-logos/nguyen-hue-logo.png",
       score: "8.8 điểm Hóa",
       university: "Đại học Y Hà Nội",
       content: "Phương pháp của thầy giúp em hiểu bản chất các phản ứng, không cần học thuộc lòng mà vẫn nhớ lâu."
     },
     {
       name: "Lê Thị Mai",
-      grade: "Lớp 12A3",
+      school: "THPT Chu Văn An",
+      schoolLogo: "/highschool-logos/chu-van-an-logo.png",
       score: "9.0 điểm Hóa", 
       university: "Đại học Quốc gia Hà Nội",
       content: "Thầy luôn nhiệt tình hỗ trợ, giải đáp mọi thắc mắc của học sinh. Cảm ơn thầy đã giúp em đạt được ước mơ."
@@ -105,11 +108,16 @@ const AchievementsSection = () => {
             {universities.map((university, index) => (
               <div 
                 key={index}
-                className="bg-background rounded-lg p-4 text-center border-2 border-transparent hover:border-primary/20 transition-all duration-300 animate-slide-up"
+                className="bg-background rounded-lg p-4 text-center border-2 border-transparent hover:border-primary/20 transition-all duration-300 animate-slide-up flex flex-col items-center"
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
+                <img 
+                  src={university.logo} 
+                  alt={`${university.name} logo`}
+                  className="w-12 h-12 object-contain mb-2"
+                />
                 <div className="font-vietnam font-medium text-sm text-foreground">
-                  {university}
+                  {university.name}
                 </div>
               </div>
             ))}
@@ -146,8 +154,16 @@ const AchievementsSection = () => {
                           <div className="font-quicksand font-bold text-xl gradient-text">
                             {testimonial.name}
                           </div>
+                          <div className="flex items-center justify-center space-x-2 font-vietnam text-sm text-muted-foreground">
+                            <img 
+                              src={testimonial.schoolLogo} 
+                              alt={`${testimonial.school} logo`}
+                              className="w-6 h-6 object-contain"
+                            />
+                            <span>Cựu học sinh {testimonial.school}</span>
+                          </div>
                           <div className="font-vietnam text-sm text-muted-foreground">
-                            {testimonial.grade} • {testimonial.score}
+                            {testimonial.score}
                           </div>
                           <div className="font-vietnam text-sm font-medium text-primary">
                             {testimonial.university}
