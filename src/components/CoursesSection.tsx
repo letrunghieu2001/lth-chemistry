@@ -1,31 +1,33 @@
-import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Clock, Users, BookOpen, Calendar } from 'lucide-react';
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Clock, Users, BookOpen, Calendar } from "lucide-react";
 
 const CoursesSection = () => {
   const courseData = {
     "lop-10": {
       title: "Lớp 10",
       subtitle: "Nền tảng vững chắc cho Hóa học",
-      description: "Xây dựng nền tảng Hóa học cơ bản, giúp học sinh làm quen và yêu thích môn học.",
+      description:
+        "Xây dựng nền tảng Hóa học cơ bản, giúp học sinh làm quen và yêu thích môn học.",
       schedule: "Thứ 2, 4, 6",
       duration: "2 tiếng",
-      students: "8-12 học sinh/lớp", 
+      students: "8-12 học sinh/lớp",
       content: [
         "Cấu tạo nguyên tử và bảng tuần hoàn",
         "Liên kết hóa học cơ bản",
         "Phản ứng hóa học và cân bằng phương trình",
         "Mol và tính toán hóa học",
-        "Các loại phản ứng vô cơ cơ bản"
+        "Các loại phản ứng vô cơ cơ bản",
       ],
-      price: "Thỏa thuận"
+      price: "Thỏa thuận",
     },
     "lop-11": {
-      title: "Lớp 11", 
+      title: "Lớp 11",
       subtitle: "Phát triển tư duy Hóa học",
-      description: "Nâng cao kiến thức, phát triển kỹ năng giải bài tập phức tạp và tư duy logic.",
+      description:
+        "Nâng cao kiến thức, phát triển kỹ năng giải bài tập phức tạp và tư duy logic.",
       schedule: "Thứ 3, 5, 7",
       duration: "2 tiếng",
       students: "8-12 học sinh/lớp",
@@ -34,15 +36,16 @@ const CoursesSection = () => {
         "Tốc độ phản ứng và động học",
         "Hóa học hữu cơ cơ bản",
         "Điện hóa học và ăn mòn kim loại",
-        "Bài tập nâng cao và thi học kỳ"
+        "Bài tập nâng cao và thi học kỳ",
       ],
-      price: "Thỏa thuận"
+      price: "Thỏa thuận",
     },
     "lop-12": {
       title: "Lớp 12",
       subtitle: "Luyện thi THPT Quốc gia",
-      description: "Ôn tập toàn diện, luyện đề thi THPT, đảm bảo điểm số cao trong kỳ thi.",
-      schedule: "Thứ 2, 4, 6, 7", 
+      description:
+        "Ôn tập toàn diện, luyện đề thi THPT, đảm bảo điểm số cao trong kỳ thi.",
+      schedule: "Thứ 2, 4, 6, 7",
       duration: "2 tiếng",
       students: "6-10 học sinh/lớp",
       content: [
@@ -51,26 +54,27 @@ const CoursesSection = () => {
         "Luyện đề thi THPT Quốc gia các năm",
         "Kỹ thuật làm bài thi trắc nghiệm",
         "Bài tập nâng cao và phát triển",
-        "Tư vấn chiến lược làm bài"
+        "Tư vấn chiến lược làm bài",
       ],
-      price: "Thỏa thuận"
+      price: "Thỏa thuận",
     },
     "kem-11": {
       title: "Kèm 1-1",
       subtitle: "Học tập cá nhân hóa",
-      description: "Chương trình học được thiết kế riêng cho từng học sinh, tập trung vào điểm yếu cá nhân.",
+      description:
+        "Chương trình học được thiết kế riêng cho từng học sinh, tập trung vào điểm yếu cá nhân.",
       schedule: "Linh hoạt theo lịch học sinh",
       duration: "2 tiếng",
       students: "1 học sinh",
       content: [
         "Đánh giá trình độ và xây dựng lộ trình",
-        "Tập trung vào điểm yếu cá nhân", 
+        "Tập trung vào điểm yếu cá nhân",
         "Bài tập và đề thi cá nhân hóa",
         "Theo dõi tiến độ sát sao",
-        "Hỗ trợ 24/7 qua các kênh liên lạc"
+        "Hỗ trợ 24/7 qua các kênh liên lạc",
       ],
-      price: "Thỏa thuận"
-    }
+      price: "Thỏa thuận",
+    },
   };
 
   return (
@@ -79,10 +83,12 @@ const CoursesSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-quicksand font-bold text-3xl md:text-4xl mb-4">
-            Thông Tin <span className="gradient-text">Khóa Học</span> & Cơ Sở Vật Chất
+            Thông Tin <span className="gradient-text">Khóa Học</span> & Cơ Sở
+            Vật Chất
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-2xl mx-auto">
-            Các khóa học được thiết kế phù hợp với từng cấp độ và nhu cầu học tập
+            Các khóa học được thiết kế phù hợp với từng cấp độ và nhu cầu học
+            tập
           </p>
         </div>
 
@@ -144,7 +150,8 @@ const CoursesSection = () => {
 
                     <div className="bg-gold/10 rounded-lg p-4 text-center">
                       <div className="font-quicksand font-bold text-xl text-gold-foreground">
-                        Học phí: <span className="gradient-text">{course.price}</span>
+                        Học phí:{" "}
+                        <span className="gradient-text">{course.price}</span>
                       </div>
                     </div>
                   </CardContent>
@@ -155,14 +162,18 @@ const CoursesSection = () => {
                   <CardContent className="p-8">
                     <div className="flex items-center space-x-3 mb-6">
                       <BookOpen className="h-6 w-6 text-primary" />
-                      <h4 className="font-quicksand font-bold text-xl">Nội Dung Học Tập</h4>
+                      <h4 className="font-quicksand font-bold text-xl">
+                        Nội Dung Học Tập
+                      </h4>
                     </div>
 
                     <ul className="space-y-3 mb-8">
                       {course.content.map((item, index) => (
                         <li key={index} className="flex items-start space-x-3">
                           <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <span className="text-primary font-semibold text-sm">{index + 1}</span>
+                            <span className="text-primary font-semibold text-sm">
+                              {index + 1}
+                            </span>
                           </div>
                           <span className="font-vietnam text-muted-foreground">
                             {item}
@@ -171,8 +182,12 @@ const CoursesSection = () => {
                       ))}
                     </ul>
 
-                    <Button 
-                      onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                    <Button
+                      onClick={() =>
+                        document
+                          .getElementById("contact")
+                          ?.scrollIntoView({ behavior: "smooth" })
+                      }
                       className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-3 rounded-full"
                     >
                       Đăng Ký Ngay
@@ -189,14 +204,17 @@ const CoursesSection = () => {
           <h3 className="font-quicksand font-bold text-2xl text-center mb-8">
             Cơ Sở Vật Chất Hiện Đại
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="text-center hover:shadow-lg transition-all duration-300">
               <CardContent className="p-6">
                 <div className="text-4xl mb-4">🏫</div>
-                <h4 className="font-vietnam font-semibold text-lg mb-2">Phòng Học Hiện Đại</h4>
+                <h4 className="font-vietnam font-semibold text-lg mb-2">
+                  Phòng Học Hiện Đại
+                </h4>
                 <p className="font-vietnam text-sm text-muted-foreground">
-                  Phòng học được trang bị đầy đủ tiện nghi, máy chiếu, bảng thông minh
+                  Phòng học được trang bị đầy đủ tiện nghi, máy chiếu, bảng
+                  thông minh
                 </p>
               </CardContent>
             </Card>
@@ -204,7 +222,9 @@ const CoursesSection = () => {
             <Card className="text-center hover:shadow-lg transition-all duration-300">
               <CardContent className="p-6">
                 <div className="text-4xl mb-4">🧪</div>
-                <h4 className="font-vietnam font-semibold text-lg mb-2">Phòng Thí Nghiệm</h4>
+                <h4 className="font-vietnam font-semibold text-lg mb-2">
+                  Phòng Thí Nghiệm
+                </h4>
                 <p className="font-vietnam text-sm text-muted-foreground">
                   Thí nghiệm thực hành giúp học sinh hiểu sâu hơn về lý thuyết
                 </p>
@@ -214,7 +234,9 @@ const CoursesSection = () => {
             <Card className="text-center hover:shadow-lg transition-all duration-300">
               <CardContent className="p-6">
                 <div className="text-4xl mb-4">📚</div>
-                <h4 className="font-vietnam font-semibold text-lg mb-2">Thư Viện Tài Liệu</h4>
+                <h4 className="font-vietnam font-semibold text-lg mb-2">
+                  Thư Viện Tài Liệu
+                </h4>
                 <p className="font-vietnam text-sm text-muted-foreground">
                   Bộ sưu tập tài liệu, đề thi phong phú và cập nhật liên tục
                 </p>

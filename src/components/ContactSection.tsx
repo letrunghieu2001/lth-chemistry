@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MessageCircle, Phone, Calendar, MessagesSquare } from 'lucide-react';
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MessageCircle, Phone, Calendar, MessagesSquare } from "lucide-react";
 
 const ContactSection = () => {
-  const [activeTab, setActiveTab] = useState('zalo');
+  const [activeTab, setActiveTab] = useState("zalo");
 
   return (
     <section id="contact" className="py-20 bg-secondary/50">
@@ -13,26 +13,41 @@ const ContactSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-quicksand font-bold text-3xl md:text-4xl mb-4">
-            Sẵn Sàng Bứt Phá? <span className="gradient-text">Kết Nối Với Thầy Ngay!</span>
+            Sẵn Sàng Bứt Phá?{" "}
+            <span className="gradient-text">Kết Nối Với Thầy Ngay!</span>
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-2xl mx-auto">
-            Chọn kênh liên lạc phù hợp và bắt đầu hành trình chinh phục Hóa học cùng LTH Chemistry
+            Chọn kênh liên lạc phù hợp và bắt đầu hành trình chinh phục Hóa học
+            cùng LTH Chemistry
           </p>
         </div>
 
         {/* Contact Tabs */}
         <div className="max-w-4xl mx-auto">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
             <TabsList className="grid w-full grid-cols-3 mb-8">
-              <TabsTrigger value="zalo" className="font-vietnam font-semibold flex items-center space-x-2">
+              <TabsTrigger
+                value="zalo"
+                className="font-vietnam font-semibold flex items-center space-x-2"
+              >
                 <MessageCircle className="h-4 w-4" />
                 <span>Zalo</span>
               </TabsTrigger>
-              <TabsTrigger value="messenger" className="font-vietnam font-semibold flex items-center space-x-2">
+              <TabsTrigger
+                value="messenger"
+                className="font-vietnam font-semibold flex items-center space-x-2"
+              >
                 <MessagesSquare className="h-4 w-4" />
                 <span>Messenger</span>
               </TabsTrigger>
-              <TabsTrigger value="gmail" className="font-vietnam font-semibold flex items-center space-x-2">
+              <TabsTrigger
+                value="gmail"
+                className="font-vietnam font-semibold flex items-center space-x-2"
+              >
                 <MessageCircle className="h-4 w-4" />
                 <span>Gmail</span>
               </TabsTrigger>
@@ -47,7 +62,8 @@ const ContactSection = () => {
                       Kết Nối Qua Zalo
                     </h3>
                     <p className="font-vietnam text-muted-foreground">
-                      Quét mã QR hoặc tìm kiếm theo số điện thoại để liên lạc nhanh chóng
+                      Quét mã QR hoặc tìm kiếm theo số điện thoại để liên lạc
+                      nhanh chóng
                     </p>
                   </div>
 
@@ -56,13 +72,18 @@ const ContactSection = () => {
                     <div className="flex flex-col items-center">
                       <div className="w-48 h-48 bg-gradient-to-br from-primary/10 to-primary-dark/10 rounded-2xl flex items-center justify-center mb-4">
                         <div className="text-center">
-                          <div className="text-6xl mb-2">📱</div>
-                          <div className="font-vietnam text-sm text-muted-foreground">Mã QR Zalo</div>
-                          <div className="font-vietnam text-xs text-muted-foreground mt-1">Quét để kết nối</div>
+                          <div className="text-6xl mb-2">
+                            {" "}
+                            <img
+                              src="/contacts/zaloqr.png"
+                              alt="Thầy Lê Trung Hiếu"
+                              className="w-full h-full rounded-2xl object-cover"
+                            />{" "}
+                          </div>
                         </div>
                       </div>
                       <p className="font-vietnam text-sm text-muted-foreground text-center">
-                        Mở ứng dụng Zalo và quét mã QR để chat trực tiếp với thầy
+                        Mở ứng dụng Zalo và quét mã QR để chat với thầy
                       </p>
                     </div>
 
@@ -71,20 +92,21 @@ const ContactSection = () => {
                       <div className="bg-primary/10 rounded-lg p-4">
                         <div className="flex items-center space-x-3 mb-2">
                           <Phone className="h-5 w-5 text-primary" />
-                          <span className="font-vietnam font-semibold">Số điện thoại</span>
+                          <span className="font-vietnam font-semibold">
+                            Số điện thoại
+                          </span>
                         </div>
                         <div className="font-vietnam text-lg font-bold text-primary">
                           0942225766
-                        </div>
-                        <div className="font-vietnam text-sm text-muted-foreground mt-1">
-                          Tìm kiếm số này trên Zalo
                         </div>
                       </div>
 
                       <div className="bg-gold/10 rounded-lg p-4">
                         <div className="flex items-center space-x-3 mb-2">
                           <Calendar className="h-5 w-5 text-gold" />
-                          <span className="font-vietnam font-semibold">Thời gian hỗ trợ</span>
+                          <span className="font-vietnam font-semibold">
+                            Thời gian hỗ trợ
+                          </span>
                         </div>
                         <div className="font-vietnam text-sm">
                           <div>Thứ 2 - Chủ nhật: 8:00 - 22:00</div>
@@ -105,27 +127,38 @@ const ContactSection = () => {
                       Kết Nối Qua Messenger
                     </h3>
                     <p className="font-vietnam text-muted-foreground">
-                      Chat trực tiếp qua Facebook Messenger để được tư vấn chi tiết
+                      Chat trực tiếp qua Facebook Messenger để được tư vấn chi
+                      tiết
                     </p>
                   </div>
 
                   <div className="max-w-md mx-auto space-y-6">
                     <div className="w-32 h-32 bg-gradient-to-br from-primary/10 to-primary-dark/10 rounded-full flex items-center justify-center mx-auto">
-                      <div className="text-5xl">💬</div>
+                      <div className="text-5xl">
+                        <img
+                          src="/contacts/messenger.png"
+                          alt="Thầy Lê Trung Hiếu"
+                          className="w-full h-full rounded-2xl object-cover"
+                        />
+                      </div>
                     </div>
 
                     <div className="space-y-4">
-                      <Button 
+                      <Button
                         className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-4 rounded-full text-lg"
-                        onClick={() => window.open('https://m.me/thl.201', '_blank')}
+                        onClick={() =>
+                          window.open("https://m.me/thl.201", "_blank")
+                        }
                       >
                         Liên hệ ngay
                       </Button>
-                      
+
                       <div className="bg-primary/10 rounded-lg p-4">
-                        <div className="font-vietnam font-semibold mb-1">Facebook Page</div>
+                        <div className="font-vietnam font-semibold mb-1">
+                          Facebook
+                        </div>
                         <div className="font-vietnam text-sm text-muted-foreground">
-                          https://m.me/thl.201
+                          https://www.facebook.com/thl.201
                         </div>
                       </div>
                     </div>
@@ -143,42 +176,54 @@ const ContactSection = () => {
                       Kết Nối Qua Email
                     </h3>
                     <p className="font-vietnam text-muted-foreground">
-                      Gửi email để được tư vấn chi tiết về khóa học và lộ trình học tập
+                      Gửi email để được tư vấn chi tiết về khóa học và lộ trình
+                      học tập
                     </p>
                   </div>
 
-                    <div className="space-y-6">
-                      <div className="space-y-4">
-                        <Button 
-                          className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-4 rounded-full text-lg"
-                          onClick={() => window.open('mailto:chemistrylth@gmail.com?subject=Tư vấn khóa học Hóa học&body=Xin chào thầy Hiếu,%0D%0A%0D%0ATôi muốn tìm hiểu về khóa học Hóa học tại LTH Chemistry.%0D%0A%0D%0AThông tin học sinh:%0D%0A- Họ tên:%0D%0A- Lớp:%0D%0A- Số điện thoại:%0D%0A- Mục tiêu học tập:%0D%0A%0D%0ACảm ơn thầy!', '_blank')}
-                        >
-                          Gửi Email Doanh Nghiệp
-                        </Button>
-                        
-                        <Button 
-                          variant="outline"
-                          className="w-full font-vietnam font-semibold py-4 rounded-full text-lg"
-                          onClick={() => window.open('mailto:letrunghieu2001@gmail.com?subject=Tư vấn khóa học Hóa học&body=Xin chào thầy Hiếu,%0D%0A%0D%0ATôi muốn tìm hiểu về khóa học Hóa học tại LTH Chemistry.%0D%0A%0D%0AThông tin học sinh:%0D%0A- Họ tên:%0D%0A- Lớp:%0D%0A- Số điện thoại:%0D%0A- Mục tiêu học tập:%0D%0A%0D%0ACảm ơn thầy!', '_blank')}
-                        >
-                          Gửi Email Cá Nhân
-                        </Button>
-                      </div>
-                      
+                  <div className="space-y-6">
+                    <div className="space-y-4">
                       <div className="bg-primary/10 rounded-lg p-4">
-                        <div className="font-vietnam font-semibold mb-1">Email doanh nghiệp</div>
+                        <div className="font-vietnam font-semibold mb-1">
+                          Email doanh nghiệp
+                        </div>
                         <div className="font-vietnam text-lg font-bold text-primary">
                           chemistrylth@gmail.com
                         </div>
                       </div>
-                      
+                      <Button
+                        className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-4 rounded-full text-lg"
+                        onClick={() =>
+                          window.open(
+                            "mailto:chemistrylth@gmail.com?subject=Tư vấn khóa học Hóa học&body=Xin chào thầy Hiếu,%0D%0A%0D%0ATôi muốn tìm hiểu về khóa học Hóa học tại LTH Chemistry.%0D%0A%0D%0AThông tin học sinh:%0D%0A- Họ tên:%0D%0A- Lớp:%0D%0A- Số điện thoại:%0D%0A- Mục tiêu học tập:%0D%0A%0D%0ACảm ơn thầy!",
+                            "_blank"
+                          )
+                        }
+                      >
+                        Gửi Email Doanh Nghiệp
+                      </Button>
                       <div className="bg-secondary/20 rounded-lg p-4">
-                        <div className="font-vietnam font-semibold mb-1">Email cá nhân</div>
+                        <div className="font-vietnam font-semibold mb-1">
+                          Email cá nhân
+                        </div>
                         <div className="font-vietnam text-lg font-bold text-primary">
                           letrunghieu2001@gmail.com
                         </div>
                       </div>
+                      <Button
+                        variant="outline"
+                        className="w-full font-vietnam font-semibold py-4 rounded-full text-lg"
+                        onClick={() =>
+                          window.open(
+                            "mailto:letrunghieu2001@gmail.com?subject=Tư vấn khóa học Hóa học&body=Xin chào thầy Hiếu,%0D%0A%0D%0ATôi muốn tìm hiểu về khóa học Hóa học tại LTH Chemistry.%0D%0A%0D%0AThông tin học sinh:%0D%0A- Họ tên:%0D%0A- Lớp:%0D%0A- Số điện thoại:%0D%0A- Mục tiêu học tập:%0D%0A%0D%0ACảm ơn thầy!",
+                            "_blank"
+                          )
+                        }
+                      >
+                        Gửi Email Cá Nhân
+                      </Button>
                     </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -194,13 +239,16 @@ const ContactSection = () => {
               </h3>
               <div className="space-y-3">
                 <div className="font-vietnam">
-                  <strong>Cơ sở 1:</strong> Số 28, ngách 371/9 Phố Kim Mã, P. Giảng Võ, Q. Ba Đình, Hà Nội
+                  <strong>Cơ sở 1:</strong> Số 28, ngách 371/9 Kim Mã, P. Giảng
+                  Võ, Q. Ba Đình, Hà Nội
                 </div>
                 <div className="font-vietnam">
-                  <strong>Cơ sở 2:</strong> Số 44D, ngõ 66 Đường Hồ Tùng Mậu, P. Phú Diễn, Q. Bắc Từ Liêm, Hà Nội
+                  <strong>Cơ sở 2:</strong> Số 44D, ngõ 66 Hồ Tùng Mậu, P. Phú
+                  Diễn, Q. Bắc Từ Liêm, Hà Nội
                 </div>
                 <div className="font-vietnam">
-                  <strong>Hotline:</strong> <span className="text-primary font-semibold">0942225766</span>
+                  <strong>Hotline:</strong>{" "}
+                  <span className="text-primary font-semibold">0942225766</span>
                 </div>
               </div>
             </CardContent>
