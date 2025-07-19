@@ -191,7 +191,7 @@ const ContactSection = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Email Doanh Nghiệp */}
-                    <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-6 border border-primary/20">
+                    <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-6 border border-primary/20 hover:shadow-xl hover:border-primary/40 hover:bg-gradient-to-br hover:from-primary/10 hover:to-primary/20 transition-all duration-300 transform hover:scale-105 cursor-pointer">
                       <div className="text-center mb-4">
                         <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                           <MessageCircle className="h-6 w-6 text-primary" />
@@ -224,7 +224,7 @@ const ContactSection = () => {
                     </div>
 
                     {/* Email Cá Nhân */}
-                    <div className="bg-gradient-to-br from-secondary/5 to-secondary/10 rounded-xl p-6 border border-secondary/20">
+                    <div className="bg-gradient-to-br from-secondary/5 to-secondary/10 rounded-xl p-6 border border-secondary/20 hover:shadow-xl hover:border-secondary/40 hover:bg-gradient-to-br hover:from-secondary/10 hover:to-secondary/20 transition-all duration-300 transform hover:scale-105 cursor-pointer">
                       <div className="text-center mb-4">
                         <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                           <MessageCircle className="h-6 w-6 text-secondary-foreground" />

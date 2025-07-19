@@ -148,10 +148,12 @@ const CoursesSection = () => {
                       </div>
                     </div>
 
-                    <div className="bg-gold/10 rounded-lg p-4 text-center">
-                      <div className="font-quicksand font-bold text-xl text-gold-foreground">
-                        Học phí:{" "}
-                        <span className="gradient-text">{course.price}</span>
+                    <div className="flex flex-col justify-end h-full">
+                      <div className="bg-gold/10 rounded-lg p-4 text-center mb-4">
+                        <div className="font-quicksand font-bold text-xl text-gold-foreground">
+                          Học phí:{" "}
+                          <span className="gradient-text">{course.price}</span>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -159,7 +161,7 @@ const CoursesSection = () => {
 
                 {/* Course Content */}
                 <Card className="border-2 hover:border-primary/20 transition-all duration-300">
-                  <CardContent className="p-8">
+                  <CardContent className="p-8 h-full flex flex-col">
                     <div className="flex items-center space-x-3 mb-6">
                       <BookOpen className="h-6 w-6 text-primary" />
                       <h4 className="font-quicksand font-bold text-xl">
@@ -167,7 +169,7 @@ const CoursesSection = () => {
                       </h4>
                     </div>
 
-                    <ul className="space-y-3 mb-8">
+                    <ul className="space-y-3 mb-8 flex-grow">
                       {course.content.map((item, index) => (
                         <li key={index} className="flex items-start space-x-3">
                           <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -182,16 +184,18 @@ const CoursesSection = () => {
                       ))}
                     </ul>
 
-                    <Button
-                      onClick={() =>
-                        document
-                          .getElementById("contact")
-                          ?.scrollIntoView({ behavior: "smooth" })
-                      }
-                      className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-3 rounded-full"
-                    >
-                      Đăng Ký Ngay
-                    </Button>
+                    <div className="mt-auto">
+                      <Button
+                        onClick={() =>
+                          document
+                            .getElementById("contact")
+                            ?.scrollIntoView({ behavior: "smooth" })
+                        }
+                        className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-3 rounded-full"
+                      >
+                        Đăng Ký Ngay
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
