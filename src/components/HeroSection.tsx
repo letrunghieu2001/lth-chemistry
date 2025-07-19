@@ -101,16 +101,20 @@ const HeroSection = () => {
           {/* Right Content */}
           <div className="flex-1 flex justify-center lg:justify-end animate-slide-up">
             <div className="relative">
-              <div className="w-80 h-80 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 flex items-center justify-center animate-float">
-                <video
-                  src="/lovable-uploads/Video_Ready_Add_a_Wave.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-64 h-64 md:w-80 md:h-80 object-contain"
-                  aria-label="LTH Chemistry Logo Animation"
-                />
+              <div className="w-80 h-80 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 flex items-center justify-center animate-float p-4">
+                <div className="relative w-full h-full rounded-full overflow-hidden shadow-2xl border-4 border-white/10 backdrop-blur-sm">
+                  <video
+                    src="/lovable-uploads/Video_Ready_Add_a_Wave.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover rounded-full"
+                    aria-label="LTH Chemistry Logo Animation"
+                  />
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/30 via-gold/30 to-primary-dark/30 opacity-50 blur-lg animate-pulse"></div>
+                </div>
               </div>
 
               {/* Floating badges */}
