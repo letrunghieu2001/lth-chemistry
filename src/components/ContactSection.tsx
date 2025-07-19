@@ -240,11 +240,11 @@ const ContactSection = () => {
               <div className="space-y-3">
                 <div className="font-vietnam">
                   <strong>Cơ sở 1:</strong> Số 28, ngách 371/9 Kim Mã, P. Giảng
-                  Võ, Q. Ba Đình, Hà Nội
+                  Võ, Hà Nội
                 </div>
                 <div className="font-vietnam">
                   <strong>Cơ sở 2:</strong> Số 44D, ngõ 66 Hồ Tùng Mậu, P. Phú
-                  Diễn, Q. Bắc Từ Liêm, Hà Nội
+                  Diễn, Hà Nội
                 </div>
                 <div className="font-vietnam">
                   <strong>Hotline:</strong>{" "}

@@ -93,13 +93,13 @@ const Footer = () => {
               <div className="font-vietnam text-sm">
                 <div className="opacity-80 mb-1">Cơ sở 1:</div>
                 <div>
-                  Số 28, ngách 371/9 Kim Mã, P. Giảng Võ, Q. Ba Đình, Hà Nội
+                  Số 28, ngách 371/9 Kim Mã, P. Giảng Võ, Hà Nội
                 </div>
               </div>
               <div className="font-vietnam text-sm">
                 <div className="opacity-80 mb-1">Cơ sở 2:</div>
                 <div>
-                  Số 44D, ngõ 66 Hồ Tùng Mậu, P. Phú Diễn, Q. Bắc Từ Liêm, Hà
+                  Số 44D, ngõ 66 Hồ Tùng Mậu, P. Phú Diễn, Hà
                   Nội
                 </div>
               </div>
