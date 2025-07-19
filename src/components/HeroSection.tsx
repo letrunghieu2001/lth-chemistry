@@ -102,10 +102,14 @@ const HeroSection = () => {
           <div className="flex-1 flex justify-center lg:justify-end animate-slide-up">
             <div className="relative">
               <div className="w-80 h-80 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 flex items-center justify-center animate-float">
-                <img
-                  src="/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png"
-                  alt="LTH Chemistry Logo"
+                <video
+                  src="/lovable-uploads/Video_Ready_Add_a_Wave.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
                   className="w-64 h-64 md:w-80 md:h-80 object-contain"
+                  aria-label="LTH Chemistry Logo Animation"
                 />
               </div>
 
