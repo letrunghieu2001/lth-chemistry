@@ -11,8 +11,8 @@ const TeacherSection = () => {
             Về Giảng Viên -{" "}
             <span className="gradient-text">Thầy Lê Trung Hiếu</span>
           </h2>
-          <p className="font-vietnam text-lg text-muted-foreground max-w-2xl mx-auto">
-            Người thầy tận tâm với sứ mệnh truyền cảm hứng học Hóa học
+          <p className="font-vietnam text-lg text-muted-foreground max-w-3xl mx-auto">
+            Với hơn 6 năm kinh nghiệm giảng dạy và đam mê cháy bỏng với Hóa học, thầy không chỉ là một người thầy, mà còn là một người anh, một người cố vấn tận tâm trên con đường học tập của mỗi học viên.
           </p>
         </div>
 
@@ -30,13 +30,13 @@ const TeacherSection = () => {
 
               {/* Floating badges */}
               <div className="absolute -top-4 -right-4 bg-gold text-gold-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float">
-                5+ năm kinh nghiệm
+                6+ năm kinh nghiệm
               </div>
               <div
                 className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float"
                 style={{ animationDelay: "1s" }}
               >
-                Chuyên gia Hóa học
+                Học sinh xuất sắc
               </div>
             </div>
           </div>
@@ -54,27 +54,19 @@ const TeacherSection = () => {
                     <Book className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Trình Độ Chuyên Môn
+                        Nền Tảng Kiến Thức Đỉnh Cao
                       </h4>
-                      <p className="font-vietnam text-muted-foreground">
-                        Tốt nghiệp Đại học Khoa học Tự nhiên, chuyên ngành Hóa
-                        học. Có chứng chỉ giảng dạy và nhiều năm kinh nghiệm
-                        trong lĩnh vực giáo dục.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <Calendar className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Kinh Nghiệm Giảng Dạy
-                      </h4>
-                      <p className="font-vietnam text-muted-foreground">
-                        Hơn 5 năm giảng dạy Hóa học cho học sinh cấp 3. Đã giúp
-                        hàng trăm học sinh đạt điểm cao và đậu vào các trường
-                        đại học uy tín.
-                      </p>
+                      <div className="font-vietnam text-muted-foreground space-y-3">
+                        <p>
+                          • Cựu học sinh lớp chuyên Hóa - THPT Chuyên Khoa Học Tự Nhiên (ĐHQGHN), một trong những "cái nôi" đào tạo nhân tài hàng đầu Việt Nam.
+                        </p>
+                        <p>
+                          • Luôn duy trì GPA Hóa học trên 9.8 và GPA tổng kết trên 9.4 suốt 3 năm cấp 3.
+                        </p>
+                        <p>
+                          • Vinh dự nhận danh hiệu "Học sinh xuất sắc toàn khóa" khối chuyên Hóa năm 2019.
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -85,12 +77,27 @@ const TeacherSection = () => {
                     />
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Phương Pháp Đặc Biệt
+                        Tư Duy Sư Phạm Hiện Đại & Đa Chiều
+                      </h4>
+                      <div className="font-vietnam text-muted-foreground space-y-3">
+                        <p>
+                          • Tốt nghiệp 2 bằng Cử nhân loại Giỏi tại Đại học Kinh Tế Quốc Dân: Quản trị Kinh doanh & Công nghệ thông tin.
+                        </p>
+                        <p>
+                          • Sự kết hợp độc đáo này mang đến một phương pháp giảng dạy logic, hệ thống, dễ hiểu của một chuyên gia IT và khả năng truyền đạt, thấu hiểu tâm lý học sinh của một nhà quản trị.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <Calendar className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-vietnam font-semibold text-lg mb-2">
+                        Kinh Nghiệm Giảng Dạy
                       </h4>
                       <p className="font-vietnam text-muted-foreground">
-                        Áp dụng phương pháp giảng dạy hiện đại, kết hợp lý
-                        thuyết với thực hành. Tạo môi trường học tập tích cực,
-                        khuyến khích học sinh tự khám phá.
+                        Hơn 6 năm kinh nghiệm giảng dạy Hóa học với đam mê cháy bỏng. Đã giúp hàng trăm học sinh đạt điểm cao và đậu vào các trường đại học uy tín.
                       </p>
                     </div>
                   </div>
@@ -102,9 +109,7 @@ const TeacherSection = () => {
                         Cam Kết
                       </h4>
                       <p className="font-vietnam text-muted-foreground">
-                        Luôn đồng hành cùng học sinh, hỗ trợ 24/7 qua các kênh
-                        liên lạc. Cam kết mang lại kết quả học tập tốt nhất cho
-                        từng em.
+                        Không chỉ là một người thầy, mà còn là một người anh, một người cố vấn tận tâm trên con đường học tập của mỗi học viên. Luôn đồng hành và hỗ trợ 24/7.
                       </p>
                     </div>
                   </div>
