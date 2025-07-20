@@ -94,7 +94,7 @@ const CoursesSection = () => {
 
         {/* Course Tabs */}
         <Tabs defaultValue="lop-10" className="max-w-6xl mx-auto">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
+          <TabsList className="grid w-full grid-cols-4 gap-1 md:gap-0 mb-8 text-xs md:text-sm">
             <TabsTrigger value="lop-10" className="font-vietnam font-semibold">
               Lớp 10
             </TabsTrigger>
