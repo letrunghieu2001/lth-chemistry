@@ -105,16 +105,16 @@ const ContactSection = () => {
                         </div>
                       </div>
 
-                      <div className="bg-gradient-to-r from-gold/10 to-gold/5 rounded-xl p-6 border border-gold/20">
+                      <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 border border-primary/20">
                         <div className="flex items-center justify-center space-x-3">
-                          <div className="w-10 h-10 bg-gold/20 rounded-full flex items-center justify-center">
-                            <Calendar className="h-5 w-5 text-gold" />
+                          <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                            <Calendar className="h-5 w-5 text-primary" />
                           </div>
                           <div className="text-center">
                             <div className="font-vietnam font-bold text-sm text-muted-foreground mb-1">
                               Thời gian hỗ trợ
                             </div>
-                            <div className="font-vietnam text-sm font-semibold text-gold">
+                            <div className="font-vietnam text-sm font-semibold text-primary">
                               Thứ 2 - Chủ nhật: 8:00 - 22:00
                             </div>
                           </div>
@@ -191,7 +191,7 @@ const ContactSection = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Email Doanh Nghiệp */}
-                    <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-6 border border-primary/20 hover:shadow-xl hover:border-primary/40 hover:bg-gradient-to-br hover:from-primary/10 hover:to-primary/20 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                    <div className="rounded-xl p-6 border-2 border-white bg-white hover:border-primary hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
                       <div className="text-center mb-4">
                         <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                           <MessageCircle className="h-6 w-6 text-primary" />
@@ -204,7 +204,7 @@ const ContactSection = () => {
                         </p>
                       </div>
                       
-                      <div className="bg-white/80 rounded-lg p-4 mb-4 border">
+                      <div className="bg-gray-50 rounded-lg p-4 mb-4 border">
                         <div className="font-vietnam text-center text-primary font-semibold break-all">
                           chemistrylth@gmail.com
                         </div>
@@ -224,7 +224,7 @@ const ContactSection = () => {
                     </div>
 
                     {/* Email Cá Nhân */}
-                    <div className="bg-gradient-to-br from-secondary/5 to-secondary/10 rounded-xl p-6 border border-secondary/20 hover:shadow-xl hover:border-secondary/40 hover:bg-gradient-to-br hover:from-secondary/10 hover:to-secondary/20 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                    <div className="rounded-xl p-6 border-2 border-white bg-white hover:border-primary hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
                       <div className="text-center mb-4">
                         <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                           <MessageCircle className="h-6 w-6 text-secondary-foreground" />
@@ -237,7 +237,7 @@ const ContactSection = () => {
                         </p>
                       </div>
                       
-                      <div className="bg-white/80 rounded-lg p-4 mb-4 border">
+                      <div className="bg-gray-50 rounded-lg p-4 mb-4 border">
                         <div className="font-vietnam text-center text-secondary-foreground font-semibold break-all">
                           letrunghieu2001@gmail.com
                         </div>
