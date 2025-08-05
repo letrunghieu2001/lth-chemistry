@@ -137,6 +137,16 @@ const AchievementsSection = () => {
       content:
         "Em bắt đầu học thầy với số điểm chỉ 5-6. Thầy đã kiên nhẫn dạy lại cho em từ những kiến thức nền tảng nhất. Đạt được 8.0 điểm là một kỳ tích và sự tiến bộ vượt bậc đối với em.",
     },
+    {
+      name: "Phạm Vũ Gia Huy",
+      school: "THPT Đống Đa",
+      schoolLogo: "/highschool-logos/dong-da-logo.png",
+      score: "8.0 điểm Hóa Kỳ thi THPT Quốc gia 2022",
+      university: "Đại học Khoa học tự nhiên",
+      universityLogo: "/university-logos/vnu-hanoi-logo.png",
+      content:
+        "Nhờ có thầy, em đã vượt qua được nỗi sợ môn Hóa và đạt được kết quả 8.0 điểm. Cách giảng dạy sinh động và dễ hiểu của thầy đã giúp em xây dựng nền tảng vững chắc để theo đuổi ngành khoa học.",
+    },
   ];
 
   // Randomize testimonials order on each page load
