@@ -33,17 +33,17 @@ const HeroSection = () => {
           {/* Left Content */}
           <div className="flex-1 text-center lg:text-left animate-fade-in">
             <h1 className="font-quicksand font-bold text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight">
-              <span className="gradient-text">LTH Chemistry</span>
+              <span className="gradient-text">LTH Chemistry:</span>
               <br />
-              <span className="text-foreground">Khơi Dậy Đam Mê</span>
+              <span className="text-foreground">Công cụ & Tài liệu Học Hóa Học Trực Tuyến</span>
               <br />
-              <span className="text-primary-dark">Chinh Phục Điểm Số</span>
+              <span className="text-primary-dark">Khơi Dậy Đam Mê - Chinh Phục Điểm Số</span>
             </h1>
 
             <p className="font-vietnam text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
-              Phương pháp học Hóa học hiệu quả, được thiết kế đặc biệt cho học
-              sinh cấp 3. Cùng thầy Lê Trung Hiếu biến Hóa học từ khó khăn thành
-              đam mê.
+              Trung tâm dạy Hóa học chất lượng cao cho học sinh cấp 3 với phương pháp giảng dạy hiệu quả. 
+              Công cụ học tập trực tuyến, tài liệu phong phú và bảng tuần hoàn tương tác giúp 90% học sinh đạt điểm 8+ môn Hóa. 
+              Cùng thầy Lê Trung Hiếu - chuyên gia với 6+ năm kinh nghiệm - chinh phục kỳ thi THPT Quốc gia.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -110,7 +110,8 @@ const HeroSection = () => {
                     loop
                     playsInline
                     className="w-full h-full object-cover rounded-full"
-                    aria-label="LTH Chemistry Logo Animation"
+                    aria-label="Video giới thiệu LTH Chemistry - Trung tâm dạy Hóa học chất lượng cao"
+                    title="LTH Chemistry - Khơi dậy đam mê Hóa học"
                   />
                   <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/30 via-gold/30 to-primary-dark/30 opacity-50 blur-lg animate-pulse"></div>

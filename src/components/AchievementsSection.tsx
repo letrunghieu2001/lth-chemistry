@@ -211,8 +211,9 @@ const AchievementsSection = () => {
               >
                 <img
                   src={university.logo}
-                  alt={`${university.name} logo`}
+                  alt={`Logo ${university.name} - Trường đại học mà học sinh LTH Chemistry đã đậu vào`}
                   className="w-12 h-12 object-contain mb-2"
+                  title={`${university.name} - Đích đến của học sinh LTH Chemistry`}
                 />
                 <div className="font-vietnam font-medium text-sm text-foreground">
                   {university.name}
@@ -261,8 +262,9 @@ const AchievementsSection = () => {
                           <div className="flex items-center justify-center space-x-3">
                             <img
                               src={testimonial.universityLogo}
-                              alt={`${testimonial.university} logo`}
+                              alt={`Logo ${testimonial.university} - Trường đại học mà ${testimonial.name} đã đậu vào`}
                               className="w-8 h-8 object-contain"
+                              title={`${testimonial.university} - Thành quả của ${testimonial.name}`}
                             />
                             <div className="font-vietnam text-sm font-medium text-primary">
                               {testimonial.university}
@@ -277,8 +279,9 @@ const AchievementsSection = () => {
                             <div className="flex items-center space-x-2">
                               <img
                                 src={testimonial.schoolLogo}
-                                alt={`${testimonial.school} logo`}
+                                alt={`Logo ${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
                                 className="w-5 h-5 object-contain"
+                                title={`${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
                               />
                               <span className="font-vietnam">Cựu học sinh {testimonial.school}</span>
                             </div>
