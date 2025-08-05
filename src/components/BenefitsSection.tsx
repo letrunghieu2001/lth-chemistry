@@ -38,9 +38,8 @@ const BenefitsSection = () => {
             <span className="gradient-text">LTH Chemistry?</span>
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-2xl mx-auto">
-            Trung tâm dạy Hóa học hàng đầu với phương pháp giảng dạy độc quyền, 
-            công cụ học tập hiện đại và tỷ lệ thành công cao nhất. 
-            Những lợi ích cốt lõi giúp học sinh thành công và đạt được mục tiêu học tập tốt nhất.
+            Những lợi ích cốt lõi giúp học sinh thành công và đạt được mục tiêu
+            học tập
           </p>
         </div>
 
