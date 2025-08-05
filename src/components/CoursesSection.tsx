@@ -113,8 +113,8 @@ const CoursesSection = () => {
             <TabsContent key={key} value={key} className="animate-fade-in">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Course Info */}
-                <Card className="border-2 hover:border-primary/20 transition-all duration-300">
-                  <CardContent className="p-8">
+                <Card className="border-2 hover:border-primary/20 transition-all duration-300 flex flex-col">
+                  <CardContent className="p-8 flex flex-col flex-grow">
                     <div className="mb-6">
                       <h3 className="font-quicksand font-bold text-2xl gradient-text mb-2">
                         {course.title}
@@ -148,7 +148,7 @@ const CoursesSection = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-col justify-between h-full">
+                    <div className="mt-auto">
                       <div className="bg-gold/10 rounded-lg p-4 text-center">
                         <div className="font-quicksand font-bold text-xl text-gold-foreground">
                           Học phí:{" "}
@@ -160,8 +160,8 @@ const CoursesSection = () => {
                 </Card>
 
                 {/* Course Content */}
-                <Card className="border-2 hover:border-primary/20 transition-all duration-300">
-                  <CardContent className="p-8 h-full flex flex-col">
+                <Card className="border-2 hover:border-primary/20 transition-all duration-300 flex flex-col">
+                  <CardContent className="p-8 flex flex-col flex-grow">
                     <div className="flex items-center space-x-3 mb-6">
                       <BookOpen className="h-6 w-6 text-primary" />
                       <h4 className="font-quicksand font-bold text-xl">
@@ -184,7 +184,7 @@ const CoursesSection = () => {
                       ))}
                     </ul>
 
-                    <div className="mt-auto pt-4">
+                    <div className="mt-auto">
                       <Button
                         onClick={() =>
                           document

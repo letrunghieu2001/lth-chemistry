@@ -233,7 +233,9 @@ const AchievementsSection = () => {
                             {testimonial.name}
                           </div>
                           
-                          <div className="flex items-center justify-center space-x-2">
+                          <div className="w-16 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto"></div>
+                          
+                          <div className="flex items-center justify-center space-x-3">
                             <img
                               src={testimonial.universityLogo}
                               alt={`${testimonial.university} logo`}
@@ -244,17 +246,19 @@ const AchievementsSection = () => {
                             </div>
                           </div>
                           
-                          <div className="font-vietnam text-sm text-muted-foreground font-medium">
-                            {testimonial.score}
-                          </div>
-                          
-                          <div className="flex items-center justify-center space-x-2 font-vietnam text-sm text-muted-foreground">
-                            <img
-                              src={testimonial.schoolLogo}
-                              alt={`${testimonial.school} logo`}
-                              className="w-6 h-6 object-contain"
-                            />
-                            <span>Cựu học sinh {testimonial.school}</span>
+                          <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
+                            <span className="font-vietnam font-medium">
+                              {testimonial.score}
+                            </span>
+                            <span>•</span>
+                            <div className="flex items-center space-x-2">
+                              <img
+                                src={testimonial.schoolLogo}
+                                alt={`${testimonial.school} logo`}
+                                className="w-5 h-5 object-contain"
+                              />
+                              <span className="font-vietnam">Cựu học sinh {testimonial.school}</span>
+                            </div>
                           </div>
                         </div>
                       </CardContent>
