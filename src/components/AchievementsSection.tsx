@@ -1,10 +1,20 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 
 const AchievementsSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideInterval = useRef<NodeJS.Timeout | null>(null);
+
+  // Fisher-Yates shuffle algorithm
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
 
   // Statistics
   const stats = [
@@ -35,8 +45,8 @@ const AchievementsSection = () => {
     { name: "Đại học Sư Phạm Hà Nội", logo: "/university-logos/hnue-logo.png" },
   ];
 
-  // Student testimonials with high schools
-  const testimonials = [
+  // Student testimonials with high schools (original order)
+  const originalTestimonials = [
     {
       name: "Trần Thu Phương",
       school: "THPT Nguyễn Thị Minh Khai",
@@ -128,6 +138,9 @@ const AchievementsSection = () => {
         "Em bắt đầu học thầy với số điểm chỉ 5-6. Thầy đã kiên nhẫn dạy lại cho em từ những kiến thức nền tảng nhất. Đạt được 8.0 điểm là một kỳ tích và sự tiến bộ vượt bậc đối với em.",
     },
   ];
+
+  // Randomize testimonials order on each page load
+  const testimonials = useMemo(() => shuffleArray(originalTestimonials), []);
 
   useEffect(() => {
     slideInterval.current = setInterval(() => {
