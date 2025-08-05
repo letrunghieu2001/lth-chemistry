@@ -35,9 +35,9 @@ const HeroSection = () => {
             <h1 className="font-quicksand font-bold text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight">
               <span className="gradient-text">LTH Chemistry</span>
               <br />
-              <span className="text-foreground">Trung Tâm Dạy Hóa Học Cấp 3</span>
+              <span className="text-foreground">Khơi Dậy Đam Mê</span>
               <br />
-              <span className="text-primary-dark">90% Học Sinh Đạt Điểm 8+</span>
+              <span className="text-primary-dark">Chinh Phục Điểm Số</span>
             </h1>
 
             <p className="font-vietnam text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
