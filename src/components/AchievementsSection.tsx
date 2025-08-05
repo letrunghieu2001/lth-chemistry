@@ -43,6 +43,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/ntmk-logo.png",
       score: "9.75 điểm Hóa Kỳ thi THPT Quốc gia 2025",
       university: "Đại học Y Hà Nội",
+      universityLogo: "/university-logos/hmu-logo.png",
       content:
         "Bộ đề chuyên sâu và các phương pháp giải nhanh của thầy là chìa khóa giúp em tối ưu hóa điểm số từ 9 lên 9.75. Thầy luôn có những cách tiếp cận bài toán rất độc đáo và hiệu quả.",
     },
@@ -52,6 +53,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/ntmk-logo.png",
       score: "9.5 điểm Hóa Kỳ thi THPT Quốc gia 2025",
       university: "Đại học Y Hà Nội",
+      universityLogo: "/university-logos/hmu-logo.png",
       content:
         "Từ một đứa sợ Hóa, em chưa bao giờ nghĩ mình có thể đạt 9.5 điểm. Phương pháp dạy của thầy không chỉ giúp em hiểu bài mà còn truyền cho em niềm yêu thích môn học này.",
     },
@@ -61,6 +63,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
       score: "9.25 điểm Hóa Kỳ thi THPT Quốc gia 2025",
       university: "Đại học Y Hà Nội",
+      universityLogo: "/university-logos/hmu-logo.png",
       content:
         "Đồng hành cùng thầy từ năm lớp 8, em đã được xây dựng một nền tảng Hóa học vững chắc từ con số 0. Sự tận tâm và kiên nhẫn của thầy là động lực lớn nhất giúp em đạt được kết quả hôm nay.",
     },
@@ -70,6 +73,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/dth-logo.png",
       score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2021",
       university: "Đại học Bách Khoa Hà Nội",
+      universityLogo: "/university-logos/hust-logo.png",
       content:
         "Thầy Hiếu dạy em cách tư duy như một kỹ sư, hiểu sâu bản chất vấn đề thay vì học vẹt. Các bài giảng về hóa vô cơ và điện phân của thầy thực sự đỉnh cao.",
     },
@@ -79,6 +83,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
       score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2024",
       university: "Đại học Kinh Tế Quốc dân",
+      universityLogo: "/university-logos/neu-logo.png",
       content:
         "Mỗi buổi học với thầy đều rất vui và nhiều năng lượng. Thầy biến những công thức khô khan trở nên thú vị, giúp em tiếp thu kiến thức một cách tự nhiên mà không hề áp lực.",
     },
@@ -88,6 +93,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/chu-van-an-logo.png",
       score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2023",
       university: "Đại học Kinh tế Quốc dân",
+      universityLogo: "/university-logos/neu-logo.png",
       content:
         "Dù là học sinh chuyên Hóa, em vẫn học được rất nhiều từ hệ thống kiến thức và các dạng bài nâng cao của thầy. Thầy giúp em lấp đầy những lỗ hổng kiến thức nhỏ nhất.",
     },
@@ -97,6 +103,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
       score: "8.5 điểm Hóa Kỳ thi THPT Quốc gia 2024",
       university: "Đại học Khoa học tự nhiên",
+      universityLogo: "/university-logos/vnu-hanoi-logo.png",
       content:
         "Thật không thể tin được! Chỉ trong 2 tháng học cấp tốc với thầy, em đã đi từ không biết gì về Hóa đến việc tự tin đạt 8.5 điểm. Lộ trình của thầy thực sự quá hiệu quả.",
     },
@@ -106,6 +113,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
       score: "8,5 điểm Hóa Kỳ thi THPT Quốc gia 2025",
       university: "Đại học Kinh tế Quốc dân",
+      universityLogo: "/university-logos/neu-logo.png",
       content:
         "Em đã theo học thầy từ những ngày đầu tiên của lớp 8. Thầy đã dẫn dắt em từ một người hoàn toàn mất gốc trở nên yêu thích và chinh phục được môn Hóa. Em thực sự biết ơn thầy.",
     },
@@ -115,6 +123,7 @@ const AchievementsSection = () => {
       schoolLogo: "/highschool-logos/dong-da-logo.png",
       score: "8.0 điểm Hóa Kỳ thi THPT Quốc gia 2021",
       university: "Đại học Kinh tế Quốc dân",
+      universityLogo: "/university-logos/neu-logo.png",
       content:
         "Em bắt đầu học thầy với số điểm chỉ 5-6. Thầy đã kiên nhẫn dạy lại cho em từ những kiến thức nền tảng nhất. Đạt được 8.0 điểm là một kỳ tích và sự tiến bộ vượt bậc đối với em.",
     },
@@ -219,16 +228,26 @@ const AchievementsSection = () => {
                           "{testimonial.content}"
                         </p>
 
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                           <div className="font-quicksand font-bold text-xl gradient-text">
                             {testimonial.name}
                           </div>
-                          <div className="font-vietnam text-sm font-medium text-primary">
-                            {testimonial.university}
+                          
+                          <div className="flex items-center justify-center space-x-2">
+                            <img
+                              src={testimonial.universityLogo}
+                              alt={`${testimonial.university} logo`}
+                              className="w-8 h-8 object-contain"
+                            />
+                            <div className="font-vietnam text-sm font-medium text-primary">
+                              {testimonial.university}
+                            </div>
                           </div>
-                          <div className="font-vietnam text-sm text-muted-foreground">
+                          
+                          <div className="font-vietnam text-sm text-muted-foreground font-medium">
                             {testimonial.score}
                           </div>
+                          
                           <div className="flex items-center justify-center space-x-2 font-vietnam text-sm text-muted-foreground">
                             <img
                               src={testimonial.schoolLogo}

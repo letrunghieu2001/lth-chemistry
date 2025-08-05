@@ -148,8 +148,8 @@ const CoursesSection = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-col justify-end h-full">
-                      <div className="bg-gold/10 rounded-lg p-4 text-center mb-4">
+                    <div className="flex flex-col justify-between h-full">
+                      <div className="bg-gold/10 rounded-lg p-4 text-center">
                         <div className="font-quicksand font-bold text-xl text-gold-foreground">
                           Học phí:{" "}
                           <span className="gradient-text">{course.price}</span>
@@ -184,7 +184,7 @@ const CoursesSection = () => {
                       ))}
                     </ul>
 
-                    <div className="mt-auto">
+                    <div className="mt-auto pt-4">
                       <Button
                         onClick={() =>
                           document
