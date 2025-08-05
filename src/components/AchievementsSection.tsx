@@ -38,31 +38,85 @@ const AchievementsSection = () => {
   // Student testimonials with high schools
   const testimonials = [
     {
-      name: "Nguyễn Minh Anh",
-      school: "THPT Chuyên Hà Nội - Amsterdam",
-      schoolLogo: "/highschool-logos/hanoi-amsterdam-logo.png",
-      score: "9.2 điểm Hóa",
-      university: "Đại học Bách Khoa Hà Nội",
-      content:
-        "Thầy Hiếu dạy rất dễ hiểu, luôn tạo không khí học tập vui vẻ. Nhờ thầy mà em đã từ sợ Hóa học thành yêu thích môn này.",
-    },
-    {
-      name: "Trần Việt Hoàng",
-      school: "THPT Chuyên Nguyễn Huệ",
-      schoolLogo: "/highschool-logos/nguyen-hue-logo.png",
-      score: "8.8 điểm Hóa",
+      name: "Trần Thu Phương",
+      school: "THPT Nguyễn Thị Minh Khai",
+      schoolLogo: "/highschool-logos/ntmk-logo.png",
+      score: "9.75 điểm Hóa Kỳ thi THPT Quốc gia 2025",
       university: "Đại học Y Hà Nội",
       content:
-        "Phương pháp của thầy giúp em hiểu bản chất các phản ứng, không cần học thuộc lòng mà vẫn nhớ lâu.",
+        "Bộ đề chuyên sâu và các phương pháp giải nhanh của thầy là chìa khóa giúp em tối ưu hóa điểm số từ 9 lên 9.75. Thầy luôn có những cách tiếp cận bài toán rất độc đáo và hiệu quả.",
     },
     {
-      name: "Lê Thị Mai",
+      name: "Nguyễn Khánh Vân",
+      school: "THPT Nguyễn Thị Minh Khai",
+      schoolLogo: "/highschool-logos/ntmk-logo.png",
+      score: "9.5 điểm Hóa Kỳ thi THPT Quốc gia 2025",
+      university: "Đại học Y Hà Nội",
+      content:
+        "Từ một đứa sợ Hóa, em chưa bao giờ nghĩ mình có thể đạt 9.5 điểm. Phương pháp dạy của thầy không chỉ giúp em hiểu bài mà còn truyền cho em niềm yêu thích môn học này.",
+    },
+    {
+      name: "Trần Minh Hiếu",
+      school: "THPT Phạm Hồng Thái",
+      schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
+      score: "9.25 điểm Hóa Kỳ thi THPT Quốc gia 2025",
+      university: "Đại học Y Hà Nội",
+      content:
+        "Đồng hành cùng thầy từ năm lớp 8, em đã được xây dựng một nền tảng Hóa học vững chắc từ con số 0. Sự tận tâm và kiên nhẫn của thầy là động lực lớn nhất giúp em đạt được kết quả hôm nay.",
+    },
+    {
+      name: "Nguyễn Bá Minh",
+      school: "THPT Đinh Tiên Hoàng",
+      schoolLogo: "/highschool-logos/dth-logo.png",
+      score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2021",
+      university: "Đại học Bách Khoa Hà Nội",
+      content:
+        "Thầy Hiếu dạy em cách tư duy như một kỹ sư, hiểu sâu bản chất vấn đề thay vì học vẹt. Các bài giảng về hóa vô cơ và điện phân của thầy thực sự đỉnh cao.",
+    },
+    {
+      name: "Phạm Lê Minh Nhật",
+      school: "THPT Nguyễn Trãi",
+      schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
+      score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2024",
+      university: "Đại học Kinh Tế Quốc dân",
+      content:
+        "Mỗi buổi học với thầy đều rất vui và nhiều năng lượng. Thầy biến những công thức khô khan trở nên thú vị, giúp em tiếp thu kiến thức một cách tự nhiên mà không hề áp lực.",
+    },
+    {
+      name: "Đỗ Trung Vĩnh",
       school: "THPT Chuyên Chu Văn An",
       schoolLogo: "/highschool-logos/chu-van-an-logo.png",
-      score: "9.0 điểm Hóa",
-      university: "Đại học Quốc gia Hà Nội",
+      score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2023",
+      university: "Đại học Kinh tế Quốc dân",
       content:
-        "Thầy luôn nhiệt tình hỗ trợ, giải đáp mọi thắc mắc của học sinh. Cảm ơn thầy đã giúp em đạt được ước mơ.",
+        "Dù là học sinh chuyên Hóa, em vẫn học được rất nhiều từ hệ thống kiến thức và các dạng bài nâng cao của thầy. Thầy giúp em lấp đầy những lỗ hổng kiến thức nhỏ nhất.",
+    },
+    {
+      name: "Ngô Quốc Khánh",
+      school: "THPT Nguyễn Trãi",
+      schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
+      score: "8.5 điểm Hóa Kỳ thi THPT Quốc gia 2024",
+      university: "Đại học Khoa học tự nhiên",
+      content:
+        "Thật không thể tin được! Chỉ trong 2 tháng học cấp tốc với thầy, em đã đi từ không biết gì về Hóa đến việc tự tin đạt 8.5 điểm. Lộ trình của thầy thực sự quá hiệu quả.",
+    },
+    {
+      name: "Nguyễn Phúc Minh",
+      school: "THPT Phạm Hồng Thái",
+      schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
+      score: "8,5 điểm Hóa Kỳ thi THPT Quốc gia 2025",
+      university: "Đại học Kinh tế Quốc dân",
+      content:
+        "Em đã theo học thầy từ những ngày đầu tiên của lớp 8. Thầy đã dẫn dắt em từ một người hoàn toàn mất gốc trở nên yêu thích và chinh phục được môn Hóa. Em thực sự biết ơn thầy.",
+    },
+    {
+      name: "Lê Minh Trang",
+      school: "THPT Đống Đa",
+      schoolLogo: "/highschool-logos/dong-da-logo.png",
+      score: "8.0 điểm Hóa Kỳ thi THPT Quốc gia 2021",
+      university: "Đại học Kinh tế Quốc dân",
+      content:
+        "Em bắt đầu học thầy với số điểm chỉ 5-6. Thầy đã kiên nhẫn dạy lại cho em từ những kiến thức nền tảng nhất. Đạt được 8.0 điểm là một kỳ tích và sự tiến bộ vượt bậc đối với em.",
     },
   ];
 
