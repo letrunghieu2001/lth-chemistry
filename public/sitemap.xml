@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+        http://www.google.com/schemas/sitemap-image/1.1
+        http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd
+        http://www.google.com/schemas/sitemap-video/1.1
+        http://www.google.com/schemas/sitemap-video/1.1/sitemap-video.xsd">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://lth-chemistry.lovable.app/</loc>
+    <lastmod>2025-01-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    
+    <!-- Main images -->
+    <image:image>
+      <image:loc>https://lth-chemistry.lovable.app/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png</image:loc>
+      <image:title>LTH Chemistry Logo - Trung tâm dạy Hóa học cấp 3</image:title>
+      <image:caption>Logo của LTH Chemistry - Trung tâm dạy Hóa học chất lượng cao cho học sinh cấp 3</image:caption>
+    </image:image>
+    
+    <image:image>
+      <image:loc>https://lth-chemistry.lovable.app/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png</image:loc>
+      <image:title>Thầy Lê Trung Hiếu - Giảng viên Hóa học</image:title>
+      <image:caption>Thầy Lê Trung Hiếu - Giảng viên Hóa học 6+ năm kinh nghiệm tại LTH Chemistry</image:caption>
+    </image:image>
+    
+    <!-- Hero video -->
+    <video:video>
+      <video:thumbnail_loc>https://lth-chemistry.lovable.app/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png</video:thumbnail_loc>
+      <video:title>LTH Chemistry - Video giới thiệu trung tâm</video:title>
+      <video:description>Video giới thiệu LTH Chemistry - Trung tâm dạy Hóa học cấp 3 với phương pháp hiệu quả, 90% học sinh đạt điểm 8+</video:description>
+      <video:content_loc>https://lth-chemistry.lovable.app/lovable-uploads/Video_Ready_Add_a_Wave.mp4</video:content_loc>
+      <video:duration>30</video:duration>
+    </video:video>
+  </url>
+  
+</urlset>

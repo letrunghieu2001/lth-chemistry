@@ -23,8 +23,9 @@ const TeacherSection = () => {
               <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-primary/10 to-primary-dark/10 p-2 flex items-center justify-center">
                 <img
                   src="/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png"
-                  alt="Thầy Lê Trung Hiếu"
+                  alt="Thầy Lê Trung Hiếu - Giảng viên Hóa học 6+ năm kinh nghiệm, cựu học sinh chuyên Hóa ĐHQGHN"
                   className="w-full h-full rounded-2xl object-cover"
+                  title="Thầy Lê Trung Hiếu - Giảng viên Hóa học chuyên nghiệp tại LTH Chemistry"
                 />
               </div>
 

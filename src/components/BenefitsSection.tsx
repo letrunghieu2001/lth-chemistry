@@ -34,8 +34,9 @@ const BenefitsSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-quicksand font-bold text-3xl md:text-4xl mb-4">
-            Tại Sao Nên Chọn{" "}
-            <span className="gradient-text">LTH Chemistry?</span>
+            Tại Sao Chọn{" "}
+            <span className="gradient-text">LTH Chemistry</span>{" "}
+            Để Học Hóa Cấp 3?
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-2xl mx-auto">
             Những lợi ích cốt lõi giúp học sinh thành công và đạt được mục tiêu

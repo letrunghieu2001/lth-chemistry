@@ -145,8 +145,9 @@ const ContactSection = () => {
                       <div className="text-5xl">
                         <img
                           src="/contacts/messenger.png"
-                          alt="Thầy Lê Trung Hiếu"
+                          alt="Facebook Messenger - Liên hệ trực tiếp với thầy Lê Trung Hiếu LTH Chemistry"
                           className="w-full h-full rounded-2xl object-cover"
+                          title="Chat Messenger với thầy Hiếu để được tư vấn khóa học Hóa học"
                         />
                       </div>
                     </div>
