@@ -340,10 +340,10 @@ const AchievementsSection = () => {
                       key={`${testimonial.name}-${index}`} 
                       className="w-full flex-shrink-0"
                     >
-                      <Card className="mx-4 border-2 border-primary/20 hover:border-primary/30 transition-all duration-300 shadow-lg h-[380px]">
+                      <Card className="mx-4 border-2 border-primary/20 hover:border-primary/30 transition-all duration-300 shadow-lg h-[320px]">
                         <CardContent className="p-6 text-center h-full flex flex-col">
                           {/* Stars */}
-                          <div className="flex justify-center mb-3">
+                          <div className="flex justify-center mb-2">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
@@ -353,7 +353,7 @@ const AchievementsSection = () => {
                           </div>
 
                           {/* Quote */}
-                          <div className="flex-1 flex items-center justify-center mb-3">
+                          <div className="flex-1 flex items-center justify-center mb-2">
                             <p className="font-vietnam text-base text-muted-foreground italic leading-snug">
                               "{testimonial.content}"
                             </p>
@@ -365,7 +365,7 @@ const AchievementsSection = () => {
                               {testimonial.name}
                             </div>
                             
-                            <div className="w-12 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto my-2"></div>
+                            <div className="w-12 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto my-1"></div>
                             
                             {/* University */}
                             <div className="flex items-center justify-center space-x-2">
