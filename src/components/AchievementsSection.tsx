@@ -3,12 +3,6 @@ import { Star } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 
 const AchievementsSection = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const slideInterval = useRef<NodeJS.Timeout | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-
   // Fisher-Yates shuffle algorithm
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array];
@@ -18,35 +12,6 @@ const AchievementsSection = () => {
     }
     return shuffled;
   };
-
-  // Statistics
-  const stats = [
-    { number: "90%+", label: "Học sinh đạt điểm 8+ môn Hóa" },
-    { number: "95%+", label: "Học sinh đậu vào trường top" },
-    { number: "5+", label: "Năm kinh nghiệm giảng dạy" },
-    { number: "100%", label: "Tỷ lệ hài lòng của phụ huynh" },
-  ];
-
-  // Top universities with logos
-  const universities = [
-    {
-      name: "Đại học Bách Khoa Hà Nội",
-      logo: "/university-logos/hust-logo.png",
-    },
-    { name: "Đại học Y Hà Nội", logo: "/university-logos/hmu-logo.png" },
-    {
-      name: "Đại học Quốc gia Hà Nội",
-      logo: "/university-logos/vnu-hanoi-logo.png",
-    },
-    {
-      name: "Đại học Kinh tế Quốc dân",
-      logo: "/university-logos/neu-logo.png",
-    },
-    { name: "Đại học Ngoại thương", logo: "/university-logos/ftu-logo.png" },
-    { name: "Đại học Dược Hà Nội", logo: "/university-logos/hup-logo.png" },
-    { name: "Đại học Xây Dựng", logo: "/university-logos/hau-logo.png" },
-    { name: "Đại học Sư Phạm Hà Nội", logo: "/university-logos/hnue-logo.png" },
-  ];
 
   // Student testimonials with high schools (original order)
   const originalTestimonials = [
@@ -154,6 +119,42 @@ const AchievementsSection = () => {
 
   // Randomize testimonials order on each page load
   const testimonials = useMemo(() => shuffleArray(originalTestimonials), []);
+  
+  // Statistics
+  const stats = [
+    { number: "90%+", label: "Học sinh đạt điểm 8+ môn Hóa" },
+    { number: "95%+", label: "Học sinh đậu vào trường top" },
+    { number: "5+", label: "Năm kinh nghiệm giảng dạy" },
+    { number: "100%", label: "Tỷ lệ hài lòng của phụ huynh" },
+  ];
+
+  // Top universities with logos
+  const universities = [
+    {
+      name: "Đại học Bách Khoa Hà Nội",
+      logo: "/university-logos/hust-logo.png",
+    },
+    { name: "Đại học Y Hà Nội", logo: "/university-logos/hmu-logo.png" },
+    {
+      name: "Đại học Quốc gia Hà Nội",
+      logo: "/university-logos/vnu-hanoi-logo.png",
+    },
+    {
+      name: "Đại học Kinh tế Quốc dân",
+      logo: "/university-logos/neu-logo.png",
+    },
+    { name: "Đại học Ngoại thương", logo: "/university-logos/ftu-logo.png" },
+    { name: "Đại học Dược Hà Nội", logo: "/university-logos/hup-logo.png" },
+    { name: "Đại học Xây Dựng", logo: "/university-logos/hau-logo.png" },
+    { name: "Đại học Sư Phạm Hà Nội", logo: "/university-logos/hnue-logo.png" },
+  ];
+  
+  // Start from center position
+  const [currentSlide, setCurrentSlide] = useState(() => Math.floor(testimonials.length / 2));
+  const slideInterval = useRef<NodeJS.Timeout | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
 
   // Drag handlers
   const handleDragStart = (clientX: number) => {
@@ -282,7 +283,9 @@ const AchievementsSection = () => {
               <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-secondary/30 to-transparent z-10 pointer-events-none"></div>
               
               <div 
-                className="overflow-hidden cursor-grab active:cursor-grabbing px-10"
+                className={`overflow-hidden px-10 select-none ${
+                  isDragging ? 'cursor-grabbing-vietnam' : 'cursor-grab-vietnam'
+                }`}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   handleDragStart(e.clientX);

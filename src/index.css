@@ -167,6 +167,19 @@
   .border-gold {
     border-color: hsl(var(--gold));
   }
+
+  /* Vietnamese Flag Cursor for National Day */
+  .cursor-vietnam-flag {
+    cursor: url("data:image/svg+xml,%3Csvg width='24' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='24' height='16' fill='%23da020e'/%3E%3Cpolygon points='12,3 13.5,7.5 18,6.5 15,9.5 16,14 12,11.5 8,14 9,9.5 6,6.5 10.5,7.5' fill='%23ffff00'/%3E%3C/svg%3E") 12 8, auto;
+  }
+
+  .cursor-grab-vietnam {
+    cursor: url("data:image/svg+xml,%3Csvg width='24' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='24' height='16' fill='%23da020e'/%3E%3Cpolygon points='12,3 13.5,7.5 18,6.5 15,9.5 16,14 12,11.5 8,14 9,9.5 6,6.5 10.5,7.5' fill='%23ffff00'/%3E%3C/svg%3E") 12 8, grab;
+  }
+
+  .cursor-grabbing-vietnam {
+    cursor: url("data:image/svg+xml,%3Csvg width='24' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='24' height='16' fill='%23da020e'/%3E%3Cpolygon points='12,3 13.5,7.5 18,6.5 15,9.5 16,14 12,11.5 8,14 9,9.5 6,6.5 10.5,7.5' fill='%23ffff00'/%3E%3C/svg%3E") 12 8, grabbing;
+  }
 }
 
 @keyframes fade-in {
