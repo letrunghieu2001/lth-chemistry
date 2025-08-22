@@ -305,14 +305,14 @@ const AchievementsSection = () => {
             Cảm Nhận Từ Học Sinh
           </h3>
 
-          <div className="relative max-w-7xl mx-auto">
+          <div className="relative max-w-6xl mx-auto">
             {/* Main carousel container with overflow for side fade effect */}
             <div className="relative">
               {/* Left fade overlay */}
-              <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-secondary/30 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute left-0 top-0 w-40 h-full bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none"></div>
               
               {/* Right fade overlay */}
-              <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-secondary/30 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute right-0 top-0 w-40 h-full bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none"></div>
               
               <div 
                 className={`overflow-hidden px-16 select-none ${
@@ -339,7 +339,7 @@ const AchievementsSection = () => {
                     isTransitioning ? 'transition-none' : ''
                   }`}
                   style={{ 
-                    transform: `translateX(calc(-${currentSlide * 33.333}% + ${dragOffset}px))` 
+                    transform: `translateX(calc(-${currentSlide * 50}% + ${dragOffset}px))` 
                   }}
                 >
                   {extendedTestimonials.map((testimonial, index) => {
@@ -350,55 +350,67 @@ const AchievementsSection = () => {
                     return (
                       <div 
                         key={`${testimonial.name}-${index}`} 
-                        className={`w-1/3 flex-shrink-0 px-3 transition-all duration-500 ${
-                          isCenter ? 'opacity-100 scale-110 z-10' : 
-                          isAdjacent ? 'opacity-70 scale-95' : 
-                          'opacity-40 scale-85'
+                        className={`flex-shrink-0 px-4 transition-all duration-500 ${
+                          isCenter ? 'w-2/3 opacity-100 scale-100 z-10' : 
+                          isAdjacent ? 'w-1/2 opacity-50 scale-90' : 
+                          'w-1/2 opacity-20 scale-80'
                         }`}
                       >
                         <Card className={`border-2 transition-all duration-300 h-full ${
-                          isCenter ? 'border-primary/30 shadow-xl bg-card' : 'border-transparent hover:border-primary/10'
+                          isCenter ? 'border-primary/30 shadow-2xl bg-card' : 'border-transparent'
                         }`}>
-                          <CardContent className="p-6 text-center h-full flex flex-col justify-between">
+                          <CardContent className={`text-center h-full flex flex-col justify-between ${
+                            isCenter ? 'p-8' : 'p-6'
+                          }`}>
                             <div>
                               <div className="flex justify-center mb-4">
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className="h-4 w-4 text-gold fill-current"
+                                    className={`text-gold fill-current ${
+                                      isCenter ? 'h-5 w-5' : 'h-4 w-4'
+                                    }`}
                                   />
                                 ))}
                               </div>
 
-                              <p className={`font-vietnam text-muted-foreground mb-4 italic leading-relaxed ${
-                                isCenter ? 'text-base' : 'text-sm line-clamp-3'
+                              <p className={`font-vietnam text-muted-foreground mb-6 italic leading-relaxed ${
+                                isCenter ? 'text-lg' : 'text-sm line-clamp-3'
                               }`}>
                                 "{testimonial.content}"
                               </p>
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                               <div className={`font-quicksand font-bold gradient-text ${
-                                isCenter ? 'text-xl' : 'text-lg'
+                                isCenter ? 'text-2xl' : 'text-lg'
                               }`}>
                                 {testimonial.name}
                               </div>
                               
-                              <div className="w-12 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto"></div>
+                              <div className={`bg-gradient-to-r from-primary/60 to-primary/20 mx-auto ${
+                                isCenter ? 'w-16 h-px' : 'w-12 h-px'
+                              }`}></div>
                               
                               <div className="flex items-center justify-center space-x-2">
                                 <img
                                   src={testimonial.universityLogo}
                                   alt={`Logo ${testimonial.university}`}
-                                  className="w-6 h-6 object-contain"
+                                  className={`object-contain ${
+                                    isCenter ? 'w-8 h-8' : 'w-6 h-6'
+                                  }`}
                                   title={`${testimonial.university} - ${testimonial.name} đạt ${testimonial.score}`}
                                 />
-                                <div className="font-vietnam text-xs font-medium text-primary">
+                                <div className={`font-vietnam font-medium text-primary ${
+                                  isCenter ? 'text-sm' : 'text-xs'
+                                }`}>
                                   {testimonial.university}
                                 </div>
                               </div>
                               
-                              <div className="flex flex-col items-center space-y-1 text-xs text-muted-foreground">
+                              <div className={`flex flex-col items-center space-y-1 text-muted-foreground ${
+                                isCenter ? 'text-sm' : 'text-xs'
+                              }`}>
                                 <span className="font-vietnam font-medium">
                                   {testimonial.score}
                                 </span>
@@ -406,10 +418,12 @@ const AchievementsSection = () => {
                                   <img
                                     src={testimonial.schoolLogo}
                                     alt={`Logo trường THPT ${testimonial.school}`}
-                                    className="w-4 h-4 object-contain"
+                                    className={`object-contain ${
+                                      isCenter ? 'w-5 h-5' : 'w-4 h-4'
+                                    }`}
                                     title={`${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
                                   />
-                                  <span className="font-vietnam text-xs">Cựu học sinh {testimonial.school}</span>
+                                  <span className="font-vietnam">Cựu học sinh {testimonial.school}</span>
                                 </div>
                               </div>
                             </div>
