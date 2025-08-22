@@ -20,8 +20,8 @@ const AchievementsSection = () => {
       school: "THPT Nguyễn Thị Minh Khai",
       schoolLogo: "/highschool-logos/ntmk-logo.png",
       score: "9.75 điểm Hóa Kỳ thi THPT Quốc gia 2025",
-      university: "Đại học Y Hà Nội",
-      universityLogo: "/university-logos/hmu-logo.png",
+      university: "Đại học Y Thái Bình",
+      universityLogo: "/lovable-uploads/0af2065a-5831-4955-a2cd-780295646c0f.png",
       content:
         "Bộ đề chuyên sâu và các phương pháp giải nhanh của thầy là chìa khóa giúp em tối ưu hóa điểm số từ 9 lên 9.75. Thầy luôn có những cách tiếp cận bài toán rất độc đáo và hiệu quả.",
     },
