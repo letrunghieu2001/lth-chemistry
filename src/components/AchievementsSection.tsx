@@ -340,35 +340,39 @@ const AchievementsSection = () => {
                       key={`${testimonial.name}-${index}`} 
                       className="w-full flex-shrink-0"
                     >
-                      <Card className="mx-4 border-2 border-primary/20 hover:border-primary/30 transition-all duration-300 shadow-lg h-[500px]">
-                        <CardContent className="p-8 text-center h-full flex flex-col justify-between">
-                          <div className="flex-1 flex flex-col justify-center">
-                            <div className="flex justify-center mb-6">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className="h-5 w-5 text-gold fill-current"
-                                />
-                              ))}
-                            </div>
+                      <Card className="mx-4 border-2 border-primary/20 hover:border-primary/30 transition-all duration-300 shadow-lg h-[420px]">
+                        <CardContent className="p-6 text-center h-full flex flex-col">
+                          {/* Stars */}
+                          <div className="flex justify-center mb-4">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className="h-4 w-4 text-gold fill-current"
+                              />
+                            ))}
+                          </div>
 
-                            <p className="font-vietnam text-lg text-muted-foreground mb-8 italic leading-relaxed line-clamp-4">
+                          {/* Quote */}
+                          <div className="flex-1 flex items-center justify-center mb-4">
+                            <p className="font-vietnam text-base text-muted-foreground italic leading-relaxed">
                               "{testimonial.content}"
                             </p>
                           </div>
 
-                          <div className="space-y-4">
-                            <div className="font-quicksand font-bold text-2xl gradient-text">
+                          {/* User Info */}
+                          <div className="space-y-3">
+                            <div className="font-quicksand font-bold text-xl gradient-text">
                               {testimonial.name}
                             </div>
                             
-                            <div className="w-16 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto"></div>
+                            <div className="w-12 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto"></div>
                             
-                            <div className="flex items-center justify-center space-x-3">
+                            {/* University */}
+                            <div className="flex items-center justify-center space-x-2">
                               <img
                                 src={testimonial.universityLogo}
                                 alt={`Logo ${testimonial.university}`}
-                                className="w-8 h-8 object-contain"
+                                className="w-6 h-6 object-contain"
                                 title={`${testimonial.university} - ${testimonial.name} đạt ${testimonial.score}`}
                               />
                               <div className="font-vietnam text-sm font-medium text-primary">
@@ -376,19 +380,19 @@ const AchievementsSection = () => {
                               </div>
                             </div>
                             
-                            <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-                              <span className="font-vietnam font-medium">
+                            {/* Score and School */}
+                            <div className="space-y-1 text-sm text-muted-foreground">
+                              <div className="font-vietnam font-medium">
                                 {testimonial.score}
-                              </span>
-                              <span>•</span>
-                              <div className="flex items-center space-x-2">
+                              </div>
+                              <div className="flex items-center justify-center space-x-1">
                                 <img
                                   src={testimonial.schoolLogo}
                                   alt={`Logo trường THPT ${testimonial.school}`}
-                                  className="w-5 h-5 object-contain"
+                                  className="w-4 h-4 object-contain"
                                   title={`${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
                                 />
-                                <span className="font-vietnam">Cựu học sinh {testimonial.school}</span>
+                                <span className="font-vietnam text-xs">Cựu học sinh {testimonial.school}</span>
                               </div>
                             </div>
                           </div>
