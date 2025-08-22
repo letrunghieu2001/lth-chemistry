@@ -83,8 +83,7 @@ const CoursesSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-quicksand font-bold text-3xl md:text-4xl mb-4">
-            Thông Tin <span className="gradient-text">Khóa Học</span> & Cơ Sở
-            Vật Chất
+            Thông Tin <span className="gradient-text">Khóa Học</span>
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-2xl mx-auto">
             Các khóa học được thiết kế phù hợp với từng cấp độ và nhu cầu học
@@ -202,52 +201,6 @@ const CoursesSection = () => {
             </TabsContent>
           ))}
         </Tabs>
-
-        {/* Facilities */}
-        <div className="mt-16 animate-fade-in">
-          <h3 className="font-quicksand font-bold text-2xl text-center mb-8">
-            Cơ Sở Vật Chất Hiện Đại
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="text-center hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-6">
-                <div className="text-4xl mb-4">🏫</div>
-                <h4 className="font-vietnam font-semibold text-lg mb-2">
-                  Phòng Học Hiện Đại
-                </h4>
-                <p className="font-vietnam text-sm text-muted-foreground">
-                  Phòng học được trang bị đầy đủ tiện nghi, máy chiếu, bảng
-                  thông minh
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-6">
-                <div className="text-4xl mb-4">🧪</div>
-                <h4 className="font-vietnam font-semibold text-lg mb-2">
-                  Phòng Thí Nghiệm
-                </h4>
-                <p className="font-vietnam text-sm text-muted-foreground">
-                  Thí nghiệm thực hành giúp học sinh hiểu sâu hơn về lý thuyết
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-6">
-                <div className="text-4xl mb-4">📚</div>
-                <h4 className="font-vietnam font-semibold text-lg mb-2">
-                  Thư Viện Tài Liệu
-                </h4>
-                <p className="font-vietnam text-sm text-muted-foreground">
-                  Bộ sưu tập tài liệu, đề thi phong phú và cập nhật liên tục
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
       </div>
     </section>
   );
