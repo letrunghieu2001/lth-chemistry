@@ -305,17 +305,10 @@ const AchievementsSection = () => {
             Cảm Nhận Từ Học Sinh
           </h3>
 
-          <div className="relative max-w-6xl mx-auto">
-            {/* Main carousel container with overflow for side fade effect */}
-            <div className="relative">
-              {/* Left fade overlay */}
-              <div className="absolute left-0 top-0 w-40 h-full bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none"></div>
-              
-              {/* Right fade overlay */}
-              <div className="absolute right-0 top-0 w-40 h-full bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none"></div>
-              
+          <div className="relative max-w-4xl mx-auto">
+            <div className="overflow-hidden rounded-2xl">
               <div 
-                className={`overflow-hidden px-16 select-none ${
+                className={`cursor-grab-vietnam active:cursor-grabbing-vietnam select-none ${
                   isDragging ? 'cursor-grabbing-vietnam' : 'cursor-grab-vietnam'
                 }`}
                 onMouseDown={(e) => {
@@ -339,99 +332,68 @@ const AchievementsSection = () => {
                     isTransitioning ? 'transition-none' : ''
                   }`}
                   style={{ 
-                    transform: `translateX(calc(-${currentSlide * 50}% + ${dragOffset}px))` 
+                    transform: `translateX(calc(-${currentSlide * 100}% + ${dragOffset}px))` 
                   }}
                 >
-                  {extendedTestimonials.map((testimonial, index) => {
-                    // Calculate if this is the center position
-                    const isCenter = index === currentSlide;
-                    const isAdjacent = Math.abs(index - currentSlide) === 1;
-                    
-                    return (
-                      <div 
-                        key={`${testimonial.name}-${index}`} 
-                        className={`flex-shrink-0 px-4 transition-all duration-500 ${
-                          isCenter ? 'w-2/3 opacity-100 scale-100 z-10' : 
-                          isAdjacent ? 'w-1/2 opacity-50 scale-90' : 
-                          'w-1/2 opacity-20 scale-80'
-                        }`}
-                      >
-                        <Card className={`border-2 transition-all duration-300 h-full ${
-                          isCenter ? 'border-primary/30 shadow-2xl bg-card' : 'border-transparent'
-                        }`}>
-                          <CardContent className={`text-center h-full flex flex-col justify-between ${
-                            isCenter ? 'p-8' : 'p-6'
-                          }`}>
-                            <div>
-                              <div className="flex justify-center mb-4">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star
-                                    key={i}
-                                    className={`text-gold fill-current ${
-                                      isCenter ? 'h-5 w-5' : 'h-4 w-4'
-                                    }`}
-                                  />
-                                ))}
-                              </div>
+                  {extendedTestimonials.map((testimonial, index) => (
+                    <div 
+                      key={`${testimonial.name}-${index}`} 
+                      className="w-full flex-shrink-0"
+                    >
+                      <Card className="mx-4 border-2 border-primary/20 hover:border-primary/30 transition-all duration-300 shadow-lg">
+                        <CardContent className="p-8 text-center">
+                          <div className="flex justify-center mb-6">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className="h-5 w-5 text-gold fill-current"
+                              />
+                            ))}
+                          </div>
 
-                              <p className={`font-vietnam text-muted-foreground mb-6 italic leading-relaxed ${
-                                isCenter ? 'text-lg' : 'text-sm line-clamp-3'
-                              }`}>
-                                "{testimonial.content}"
-                              </p>
+                          <p className="font-vietnam text-lg text-muted-foreground mb-8 italic leading-relaxed">
+                            "{testimonial.content}"
+                          </p>
+
+                          <div className="space-y-4">
+                            <div className="font-quicksand font-bold text-2xl gradient-text">
+                              {testimonial.name}
                             </div>
-
-                            <div className="space-y-3">
-                              <div className={`font-quicksand font-bold gradient-text ${
-                                isCenter ? 'text-2xl' : 'text-lg'
-                              }`}>
-                                {testimonial.name}
+                            
+                            <div className="w-16 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto"></div>
+                            
+                            <div className="flex items-center justify-center space-x-3">
+                              <img
+                                src={testimonial.universityLogo}
+                                alt={`Logo ${testimonial.university}`}
+                                className="w-8 h-8 object-contain"
+                                title={`${testimonial.university} - ${testimonial.name} đạt ${testimonial.score}`}
+                              />
+                              <div className="font-vietnam text-sm font-medium text-primary">
+                                {testimonial.university}
                               </div>
-                              
-                              <div className={`bg-gradient-to-r from-primary/60 to-primary/20 mx-auto ${
-                                isCenter ? 'w-16 h-px' : 'w-12 h-px'
-                              }`}></div>
-                              
-                              <div className="flex items-center justify-center space-x-2">
+                            </div>
+                            
+                            <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
+                              <span className="font-vietnam font-medium">
+                                {testimonial.score}
+                              </span>
+                              <span>•</span>
+                              <div className="flex items-center space-x-2">
                                 <img
-                                  src={testimonial.universityLogo}
-                                  alt={`Logo ${testimonial.university}`}
-                                  className={`object-contain ${
-                                    isCenter ? 'w-8 h-8' : 'w-6 h-6'
-                                  }`}
-                                  title={`${testimonial.university} - ${testimonial.name} đạt ${testimonial.score}`}
+                                  src={testimonial.schoolLogo}
+                                  alt={`Logo trường THPT ${testimonial.school}`}
+                                  className="w-5 h-5 object-contain"
+                                  title={`${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
                                 />
-                                <div className={`font-vietnam font-medium text-primary ${
-                                  isCenter ? 'text-sm' : 'text-xs'
-                                }`}>
-                                  {testimonial.university}
-                                </div>
-                              </div>
-                              
-                              <div className={`flex flex-col items-center space-y-1 text-muted-foreground ${
-                                isCenter ? 'text-sm' : 'text-xs'
-                              }`}>
-                                <span className="font-vietnam font-medium">
-                                  {testimonial.score}
-                                </span>
-                                <div className="flex items-center space-x-1">
-                                  <img
-                                    src={testimonial.schoolLogo}
-                                    alt={`Logo trường THPT ${testimonial.school}`}
-                                    className={`object-contain ${
-                                      isCenter ? 'w-5 h-5' : 'w-4 h-4'
-                                    }`}
-                                    title={`${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
-                                  />
-                                  <span className="font-vietnam">Cựu học sinh {testimonial.school}</span>
-                                </div>
+                                <span className="font-vietnam">Cựu học sinh {testimonial.school}</span>
                               </div>
                             </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    );
-                  })}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
