@@ -343,24 +343,21 @@ const AchievementsSection = () => {
                   }}
                 >
                   {extendedTestimonials.map((testimonial, index) => {
-                    // Calculate actual position in original array for highlighting
-                    const actualIndex = (index - 3 + totalSlides) % totalSlides;
-                    const centerIndex = (currentSlide - 3 + totalSlides) % totalSlides;
-                    
-                    const isActive = index === currentSlide;
+                    // Calculate if this is the center position
+                    const isCenter = index === currentSlide;
                     const isAdjacent = Math.abs(index - currentSlide) === 1;
                     
                     return (
                       <div 
-                        key={`${actualIndex}-${index}`} 
+                        key={`${testimonial.name}-${index}`} 
                         className={`w-1/3 flex-shrink-0 px-3 transition-all duration-500 ${
-                          isActive ? 'opacity-100 scale-110 z-10' : 
+                          isCenter ? 'opacity-100 scale-110 z-10' : 
                           isAdjacent ? 'opacity-70 scale-95' : 
                           'opacity-40 scale-85'
                         }`}
                       >
                         <Card className={`border-2 transition-all duration-300 h-full ${
-                          isActive ? 'border-primary/30 shadow-xl bg-white' : 'border-transparent hover:border-primary/10'
+                          isCenter ? 'border-primary/30 shadow-xl bg-card' : 'border-transparent hover:border-primary/10'
                         }`}>
                           <CardContent className="p-6 text-center h-full flex flex-col justify-between">
                             <div>
@@ -374,7 +371,7 @@ const AchievementsSection = () => {
                               </div>
 
                               <p className={`font-vietnam text-muted-foreground mb-4 italic leading-relaxed ${
-                                isActive ? 'text-base' : 'text-sm line-clamp-3'
+                                isCenter ? 'text-base' : 'text-sm line-clamp-3'
                               }`}>
                                 "{testimonial.content}"
                               </p>
@@ -382,7 +379,7 @@ const AchievementsSection = () => {
 
                             <div className="space-y-2">
                               <div className={`font-quicksand font-bold gradient-text ${
-                                isActive ? 'text-xl' : 'text-lg'
+                                isCenter ? 'text-xl' : 'text-lg'
                               }`}>
                                 {testimonial.name}
                               </div>
