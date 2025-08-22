@@ -5,6 +5,9 @@ import { useState, useRef, useEffect, useMemo } from "react";
 const AchievementsSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideInterval = useRef<NodeJS.Timeout | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
 
   // Fisher-Yates shuffle algorithm
   const shuffleArray = <T,>(array: T[]): T[] => {
@@ -152,17 +155,57 @@ const AchievementsSection = () => {
   // Randomize testimonials order on each page load
   const testimonials = useMemo(() => shuffleArray(originalTestimonials), []);
 
-  useEffect(() => {
+  // Drag handlers
+  const handleDragStart = (clientX: number) => {
+    setIsDragging(true);
+    setDragStart(clientX);
+    if (slideInterval.current) {
+      clearInterval(slideInterval.current);
+    }
+  };
+
+  const handleDragMove = (clientX: number) => {
+    if (!isDragging) return;
+    const offset = clientX - dragStart;
+    setDragOffset(offset);
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    const threshold = 100; // minimum drag distance to trigger slide
+    if (Math.abs(dragOffset) > threshold) {
+      if (dragOffset > 0) {
+        // Drag right - previous slide
+        setCurrentSlide((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+      } else {
+        // Drag left - next slide
+        setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+      }
+    }
+    
+    setDragOffset(0);
+    
+    // Restart auto-play
     slideInterval.current = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % testimonials.length);
     }, 4000);
+  };
+
+  useEffect(() => {
+    if (!isDragging) {
+      slideInterval.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+      }, 4000);
+    }
 
     return () => {
       if (slideInterval.current) {
         clearInterval(slideInterval.current);
       }
     };
-  }, [testimonials.length]);
+  }, [testimonials.length, isDragging]);
 
   return (
     <section id="achievements" className="py-20 bg-secondary/30">
@@ -229,79 +272,122 @@ const AchievementsSection = () => {
             Cảm Nhận Từ Học Sinh
           </h3>
 
-          <div className="relative max-w-4xl mx-auto">
-            <div className="overflow-hidden rounded-2xl">
-              <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          <div className="relative max-w-6xl mx-auto">
+            {/* Main carousel container with overflow for side fade effect */}
+            <div className="relative">
+              {/* Left fade overlay */}
+              <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-secondary/30 to-transparent z-10 pointer-events-none"></div>
+              
+              {/* Right fade overlay */}
+              <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-secondary/30 to-transparent z-10 pointer-events-none"></div>
+              
+              <div 
+                className="overflow-hidden cursor-grab active:cursor-grabbing px-10"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  handleDragStart(e.clientX);
+                }}
+                onMouseMove={(e) => handleDragMove(e.clientX)}
+                onMouseUp={handleDragEnd}
+                onMouseLeave={handleDragEnd}
+                onTouchStart={(e) => {
+                  handleDragStart(e.touches[0].clientX);
+                }}
+                onTouchMove={(e) => {
+                  e.preventDefault();
+                  handleDragMove(e.touches[0].clientX);
+                }}
+                onTouchEnd={handleDragEnd}
               >
-                {testimonials.map((testimonial, index) => (
-                  <div key={index} className="w-full flex-shrink-0">
-                    <Card className="mx-4 border-2 hover:border-primary/20 transition-all duration-300">
-                      <CardContent className="p-8 text-center">
-                        <div className="flex justify-center mb-4">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="h-5 w-5 text-gold fill-current"
-                            />
-                          ))}
-                        </div>
-
-                        <p className="font-vietnam text-lg text-muted-foreground mb-6 italic leading-relaxed">
-                          "{testimonial.content}"
-                        </p>
-
-                        <div className="space-y-3">
-                          <div className="font-quicksand font-bold text-xl gradient-text">
-                            {testimonial.name}
-                          </div>
-                          
-                          <div className="w-16 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto"></div>
-                          
-                          <div className="flex items-center justify-center space-x-3">
-                            <img
-                              src={testimonial.universityLogo}
-                              alt={`Logo ${testimonial.university} - Trường đại học mà ${testimonial.name} đã đậu vào nhờ học tại LTH Chemistry`}
-                              className="w-8 h-8 object-contain"
-                              title={`${testimonial.university} - ${testimonial.name} đạt ${testimonial.score}`}
-                            />
-                            <div className="font-vietnam text-sm font-medium text-primary">
-                              {testimonial.university}
+                <div
+                  className="flex transition-transform duration-500 ease-out"
+                  style={{ 
+                    transform: `translateX(calc(-${currentSlide * 33.333}% + ${dragOffset}px))` 
+                  }}
+                >
+                  {testimonials.map((testimonial, index) => {
+                    const isActive = index === currentSlide;
+                    const isAdjacent = Math.abs(index - currentSlide) === 1 || 
+                                     (currentSlide === 0 && index === testimonials.length - 1) ||
+                                     (currentSlide === testimonials.length - 1 && index === 0);
+                    
+                    return (
+                      <div 
+                        key={index} 
+                        className={`w-1/3 flex-shrink-0 px-2 transition-all duration-500 ${
+                          isActive ? 'opacity-100 scale-100' : 
+                          isAdjacent ? 'opacity-60 scale-95' : 
+                          'opacity-30 scale-90'
+                        }`}
+                      >
+                        <Card className={`border-2 transition-all duration-300 ${
+                          isActive ? 'border-primary/20 shadow-lg' : 'border-transparent hover:border-primary/10'
+                        }`}>
+                          <CardContent className="p-6 text-center">
+                            <div className="flex justify-center mb-4">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className="h-4 w-4 text-gold fill-current"
+                                />
+                              ))}
                             </div>
-                          </div>
-                          
-                          <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-                            <span className="font-vietnam font-medium">
-                              {testimonial.score}
-                            </span>
-                            <span>•</span>
-                            <div className="flex items-center space-x-2">
-                              <img
-                                src={testimonial.schoolLogo}
-                                alt={`Logo trường THPT ${testimonial.school} - Nơi ${testimonial.name} học trước khi vào LTH Chemistry`}
-                                className="w-5 h-5 object-contain"
-                                title={`${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
-                              />
-                              <span className="font-vietnam">Cựu học sinh {testimonial.school}</span>
+
+                            <p className="font-vietnam text-sm md:text-base text-muted-foreground mb-4 italic leading-relaxed line-clamp-4">
+                              "{testimonial.content}"
+                            </p>
+
+                            <div className="space-y-2">
+                              <div className="font-quicksand font-bold text-lg gradient-text">
+                                {testimonial.name}
+                              </div>
+                              
+                              <div className="w-12 h-px bg-gradient-to-r from-primary/60 to-primary/20 mx-auto"></div>
+                              
+                              <div className="flex items-center justify-center space-x-2">
+                                <img
+                                  src={testimonial.universityLogo}
+                                  alt={`Logo ${testimonial.university}`}
+                                  className="w-6 h-6 object-contain"
+                                  title={`${testimonial.university} - ${testimonial.name} đạt ${testimonial.score}`}
+                                />
+                                <div className="font-vietnam text-xs font-medium text-primary">
+                                  {testimonial.university}
+                                </div>
+                              </div>
+                              
+                              <div className="flex flex-col items-center space-y-1 text-xs text-muted-foreground">
+                                <span className="font-vietnam font-medium">
+                                  {testimonial.score}
+                                </span>
+                                <div className="flex items-center space-x-1">
+                                  <img
+                                    src={testimonial.schoolLogo}
+                                    alt={`Logo trường THPT ${testimonial.school}`}
+                                    className="w-4 h-4 object-contain"
+                                    title={`${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
+                                  />
+                                  <span className="font-vietnam text-xs">Cựu học sinh {testimonial.school}</span>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
+                          </CardContent>
+                        </Card>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
-            {/* Dots indicator */}
+            {/* Navigation dots */}
             <div className="flex justify-center mt-6 space-x-2">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentSlide ? "bg-primary" : "bg-muted"
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === currentSlide ? "bg-primary w-6" : "bg-muted hover:bg-muted-foreground/50"
                   }`}
                 />
               ))}
