@@ -340,20 +340,22 @@ const AchievementsSection = () => {
                       key={`${testimonial.name}-${index}`} 
                       className="w-full flex-shrink-0"
                     >
-                      <Card className="mx-4 border-2 border-primary/20 hover:border-primary/30 transition-all duration-300 shadow-lg">
-                        <CardContent className="p-8 text-center">
-                          <div className="flex justify-center mb-6">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className="h-5 w-5 text-gold fill-current"
-                              />
-                            ))}
-                          </div>
+                      <Card className="mx-4 border-2 border-primary/20 hover:border-primary/30 transition-all duration-300 shadow-lg h-[500px]">
+                        <CardContent className="p-8 text-center h-full flex flex-col justify-between">
+                          <div className="flex-1 flex flex-col justify-center">
+                            <div className="flex justify-center mb-6">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className="h-5 w-5 text-gold fill-current"
+                                />
+                              ))}
+                            </div>
 
-                          <p className="font-vietnam text-lg text-muted-foreground mb-8 italic leading-relaxed">
-                            "{testimonial.content}"
-                          </p>
+                            <p className="font-vietnam text-lg text-muted-foreground mb-8 italic leading-relaxed line-clamp-4">
+                              "{testimonial.content}"
+                            </p>
+                          </div>
 
                           <div className="space-y-4">
                             <div className="font-quicksand font-bold text-2xl gradient-text">
