@@ -149,12 +149,21 @@ const AchievementsSection = () => {
     { name: "Đại học Sư Phạm Hà Nội", logo: "/university-logos/hnue-logo.png" },
   ];
   
-  // Start from center position
-  const [currentSlide, setCurrentSlide] = useState(() => Math.floor(testimonials.length / 2));
+  // Start from center position with proper infinite scroll setup
+  const totalSlides = testimonials.length;
+  const [currentSlide, setCurrentSlide] = useState(3 + Math.floor(totalSlides / 2)); // Start at center of original items
   const slideInterval = useRef<NodeJS.Timeout | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Create infinite loop by adding duplicates at both ends
+  const extendedTestimonials = [
+    ...testimonials.slice(-3), // Last 3 items at the beginning
+    ...testimonials,           // Original items
+    ...testimonials.slice(0, 3) // First 3 items at the end
+  ];
 
   // Drag handlers
   const handleDragStart = (clientX: number) => {
@@ -175,14 +184,14 @@ const AchievementsSection = () => {
     if (!isDragging) return;
     setIsDragging(false);
     
-    const threshold = 100; // minimum drag distance to trigger slide
+    const threshold = 100;
     if (Math.abs(dragOffset) > threshold) {
       if (dragOffset > 0) {
         // Drag right - previous slide
-        setCurrentSlide((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+        setCurrentSlide(prev => prev - 1);
       } else {
-        // Drag left - next slide
-        setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+        // Drag left - next slide  
+        setCurrentSlide(prev => prev + 1);
       }
     }
     
@@ -190,14 +199,18 @@ const AchievementsSection = () => {
     
     // Restart auto-play
     slideInterval.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+      setCurrentSlide(prev => prev + 1);
     }, 4000);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index + 3); // Add offset for duplicates
   };
 
   useEffect(() => {
     if (!isDragging) {
       slideInterval.current = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+        setCurrentSlide(prev => prev + 1);
       }, 4000);
     }
 
@@ -206,7 +219,26 @@ const AchievementsSection = () => {
         clearInterval(slideInterval.current);
       }
     };
-  }, [testimonials.length, isDragging]);
+  }, [isDragging]);
+
+  // Handle infinite scroll reset
+  useEffect(() => {
+    if (currentSlide >= totalSlides + 3) {
+      // Reset to beginning
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentSlide(3);
+      }, 500);
+      setIsTransitioning(true);
+    } else if (currentSlide < 3) {
+      // Reset to end
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentSlide(totalSlides + 2);
+      }, 500);
+      setIsTransitioning(true);
+    }
+  }, [currentSlide, totalSlides]);
 
   return (
     <section id="achievements" className="py-20 bg-secondary/30">
@@ -273,17 +305,17 @@ const AchievementsSection = () => {
             Cảm Nhận Từ Học Sinh
           </h3>
 
-          <div className="relative max-w-6xl mx-auto">
+          <div className="relative max-w-7xl mx-auto">
             {/* Main carousel container with overflow for side fade effect */}
             <div className="relative">
               {/* Left fade overlay */}
-              <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-secondary/30 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-secondary/30 to-transparent z-10 pointer-events-none"></div>
               
               {/* Right fade overlay */}
-              <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-secondary/30 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-secondary/30 to-transparent z-10 pointer-events-none"></div>
               
               <div 
-                className={`overflow-hidden px-10 select-none ${
+                className={`overflow-hidden px-16 select-none ${
                   isDragging ? 'cursor-grabbing-vietnam' : 'cursor-grab-vietnam'
                 }`}
                 onMouseDown={(e) => {
@@ -303,45 +335,55 @@ const AchievementsSection = () => {
                 onTouchEnd={handleDragEnd}
               >
                 <div
-                  className="flex transition-transform duration-500 ease-out"
+                  className={`flex transition-transform duration-500 ease-out ${
+                    isTransitioning ? 'transition-none' : ''
+                  }`}
                   style={{ 
                     transform: `translateX(calc(-${currentSlide * 33.333}% + ${dragOffset}px))` 
                   }}
                 >
-                  {testimonials.map((testimonial, index) => {
+                  {extendedTestimonials.map((testimonial, index) => {
+                    // Calculate actual position in original array for highlighting
+                    const actualIndex = (index - 3 + totalSlides) % totalSlides;
+                    const centerIndex = (currentSlide - 3 + totalSlides) % totalSlides;
+                    
                     const isActive = index === currentSlide;
-                    const isAdjacent = Math.abs(index - currentSlide) === 1 || 
-                                     (currentSlide === 0 && index === testimonials.length - 1) ||
-                                     (currentSlide === testimonials.length - 1 && index === 0);
+                    const isAdjacent = Math.abs(index - currentSlide) === 1;
                     
                     return (
                       <div 
-                        key={index} 
-                        className={`w-1/3 flex-shrink-0 px-2 transition-all duration-500 ${
-                          isActive ? 'opacity-100 scale-100' : 
-                          isAdjacent ? 'opacity-60 scale-95' : 
-                          'opacity-30 scale-90'
+                        key={`${actualIndex}-${index}`} 
+                        className={`w-1/3 flex-shrink-0 px-3 transition-all duration-500 ${
+                          isActive ? 'opacity-100 scale-110 z-10' : 
+                          isAdjacent ? 'opacity-70 scale-95' : 
+                          'opacity-40 scale-85'
                         }`}
                       >
-                        <Card className={`border-2 transition-all duration-300 ${
-                          isActive ? 'border-primary/20 shadow-lg' : 'border-transparent hover:border-primary/10'
+                        <Card className={`border-2 transition-all duration-300 h-full ${
+                          isActive ? 'border-primary/30 shadow-xl bg-white' : 'border-transparent hover:border-primary/10'
                         }`}>
-                          <CardContent className="p-6 text-center">
-                            <div className="flex justify-center mb-4">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className="h-4 w-4 text-gold fill-current"
-                                />
-                              ))}
+                          <CardContent className="p-6 text-center h-full flex flex-col justify-between">
+                            <div>
+                              <div className="flex justify-center mb-4">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className="h-4 w-4 text-gold fill-current"
+                                  />
+                                ))}
+                              </div>
+
+                              <p className={`font-vietnam text-muted-foreground mb-4 italic leading-relaxed ${
+                                isActive ? 'text-base' : 'text-sm line-clamp-3'
+                              }`}>
+                                "{testimonial.content}"
+                              </p>
                             </div>
 
-                            <p className="font-vietnam text-sm md:text-base text-muted-foreground mb-4 italic leading-relaxed line-clamp-4">
-                              "{testimonial.content}"
-                            </p>
-
                             <div className="space-y-2">
-                              <div className="font-quicksand font-bold text-lg gradient-text">
+                              <div className={`font-quicksand font-bold gradient-text ${
+                                isActive ? 'text-xl' : 'text-lg'
+                              }`}>
                                 {testimonial.name}
                               </div>
                               
@@ -385,15 +427,18 @@ const AchievementsSection = () => {
 
             {/* Navigation dots */}
             <div className="flex justify-center mt-6 space-x-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentSlide ? "bg-primary w-6" : "bg-muted hover:bg-muted-foreground/50"
-                  }`}
-                />
-              ))}
+              {testimonials.map((_, index) => {
+                const actualCurrentIndex = (currentSlide - 3 + totalSlides) % totalSlides;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === actualCurrentIndex ? "bg-primary w-6" : "bg-muted hover:bg-muted-foreground/50"
+                    }`}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
