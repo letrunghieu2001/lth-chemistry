@@ -19,7 +19,7 @@ const AchievementsSection = () => {
       name: "Trần Thu Phương",
       school: "THPT Nguyễn Thị Minh Khai",
       schoolLogo: "/highschool-logos/ntmk-logo.png",
-      score: "9.75 điểm Hóa Kỳ thi THPT Quốc gia 2025",
+      score: "9.75 điểm Hóa Kỳ thi THPTQG 2025",
       university: "Đại học Y Thái Bình",
       universityLogo: "/lovable-uploads/0af2065a-5831-4955-a2cd-780295646c0f.png",
       content:
@@ -29,17 +29,17 @@ const AchievementsSection = () => {
       name: "Nguyễn Khánh Vân",
       school: "THPT Nguyễn Thị Minh Khai",
       schoolLogo: "/highschool-logos/ntmk-logo.png",
-      score: "9.5 điểm Hóa Kỳ thi THPT Quốc gia 2025",
+      score: "9.75 điểm Hóa Kỳ thi THPTQG 2025",
       university: "Đại học Y Hà Nội",
       universityLogo: "/university-logos/hmu-logo.png",
       content:
-        "Từ một đứa sợ Hóa, em chưa bao giờ nghĩ mình có thể đạt 9.5 điểm. Phương pháp dạy của thầy không chỉ giúp em hiểu bài mà còn truyền cho em niềm yêu thích môn học này.",
+        "Từ một đứa sợ Hóa, em chưa bao giờ nghĩ mình có thể đạt 9.75 điểm. Phương pháp dạy của thầy không chỉ giúp em hiểu bài mà còn truyền cho em niềm yêu thích môn học này.",
     },
     {
       name: "Trần Minh Hiếu",
       school: "THPT Phạm Hồng Thái",
       schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
-      score: "9.25 điểm Hóa Kỳ thi THPT Quốc gia 2025",
+      score: "9.25 điểm Hóa Kỳ thi THPTQG 2025",
       university: "Đại học Y Hà Nội",
       universityLogo: "/university-logos/hmu-logo.png",
       content:
@@ -49,7 +49,7 @@ const AchievementsSection = () => {
       name: "Nguyễn Bá Minh",
       school: "THPT Đinh Tiên Hoàng",
       schoolLogo: "/highschool-logos/dth-logo.png",
-      score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2021",
+      score: "9.0 điểm Hóa Kỳ thi THPTQG 2021",
       university: "Đại học Bách Khoa Hà Nội",
       universityLogo: "/university-logos/hust-logo.png",
       content:
@@ -59,7 +59,7 @@ const AchievementsSection = () => {
       name: "Phạm Lê Minh Nhật",
       school: "THPT Nguyễn Trãi",
       schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
-      score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2024",
+      score: "9.0 điểm Hóa Kỳ thi THPTQG 2024",
       university: "Đại học Kinh Tế Quốc dân",
       universityLogo: "/university-logos/neu-logo.png",
       content:
@@ -69,7 +69,7 @@ const AchievementsSection = () => {
       name: "Đỗ Trung Vĩnh",
       school: "THPT Chuyên Chu Văn An",
       schoolLogo: "/highschool-logos/chu-van-an-logo.png",
-      score: "9.0 điểm Hóa Kỳ thi THPT Quốc gia 2023",
+      score: "9.0 điểm Hóa Kỳ thi THPTQG 2023",
       university: "Đại học Kinh tế Quốc dân",
       universityLogo: "/university-logos/neu-logo.png",
       content:
@@ -79,7 +79,7 @@ const AchievementsSection = () => {
       name: "Ngô Quốc Khánh",
       school: "THPT Nguyễn Trãi",
       schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
-      score: "8.5 điểm Hóa Kỳ thi THPT Quốc gia 2024",
+      score: "8.5 điểm Hóa Kỳ thi THPTQG 2024",
       university: "Đại học Khoa học tự nhiên",
       universityLogo: "/university-logos/vnu-hanoi-logo.png",
       content:
@@ -89,7 +89,7 @@ const AchievementsSection = () => {
       name: "Nguyễn Phúc Minh",
       school: "THPT Phạm Hồng Thái",
       schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
-      score: "8,5 điểm Hóa Kỳ thi THPT Quốc gia 2025",
+      score: "8.5 điểm Hóa Kỳ thi THPTQG 2025",
       university: "Đại học Kinh tế Quốc dân",
       universityLogo: "/university-logos/neu-logo.png",
       content:
@@ -99,7 +99,7 @@ const AchievementsSection = () => {
       name: "Lê Minh Trang",
       school: "THPT Đống Đa",
       schoolLogo: "/highschool-logos/dong-da-logo.png",
-      score: "8.0 điểm Hóa Kỳ thi THPT Quốc gia 2021",
+      score: "8.0 điểm Hóa Kỳ thi THPTQG 2021",
       university: "Đại học Kinh tế Quốc dân",
       universityLogo: "/university-logos/neu-logo.png",
       content:
@@ -109,7 +109,7 @@ const AchievementsSection = () => {
       name: "Phạm Vũ Gia Huy",
       school: "THPT Đống Đa",
       schoolLogo: "/highschool-logos/dong-da-logo.png",
-      score: "8.0 điểm Hóa Kỳ thi THPT Quốc gia 2022",
+      score: "8.0 điểm Hóa Kỳ thi THPTQG 2022",
       university: "Đại học Khoa học tự nhiên",
       universityLogo: "/university-logos/vnu-hanoi-logo.png",
       content:
@@ -308,8 +308,8 @@ const AchievementsSection = () => {
           <div className="relative max-w-4xl mx-auto">
             <div className="overflow-hidden rounded-2xl">
               <div 
-                className={`cursor-grab-vietnam active:cursor-grabbing-vietnam select-none ${
-                  isDragging ? 'cursor-grabbing-vietnam' : 'cursor-grab-vietnam'
+                className={`cursor-grab active:cursor-grabbing-vietnam select-none ${
+                  isDragging ? 'cursor-grabbing-vietnam' : 'cursor-grab'
                 }`}
                 onMouseDown={(e) => {
                   e.preventDefault();
