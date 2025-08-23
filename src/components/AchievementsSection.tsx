@@ -308,8 +308,8 @@ const AchievementsSection = () => {
           <div className="relative max-w-4xl mx-auto">
             <div className="overflow-hidden rounded-2xl">
               <div 
-                className={`cursor-grab active:cursor-grabbing-vietnam select-none ${
-                  isDragging ? 'cursor-grabbing-vietnam' : 'cursor-grab'
+                className={`cursor-grab active:cursor-grabbing select-none ${
+                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
                 onMouseDown={(e) => {
                   e.preventDefault();
