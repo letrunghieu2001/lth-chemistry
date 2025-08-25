@@ -42,7 +42,7 @@ const CoursesSection = () => {
     },
     "lop-12": {
       title: "Lớp 12",
-      subtitle: "Luyện thi THPT Quốc gia",
+      subtitle: "Luyện thi THPTQG",
       description:
         "Ôn tập toàn diện, luyện đề thi THPT, đảm bảo điểm số cao trong kỳ thi.",
       schedule: "Thứ 2, 4, 6, 7",
@@ -51,7 +51,7 @@ const CoursesSection = () => {
       content: [
         "Bám sát chương trình GDPT 2018 của Bộ giáo dục và đào tạo",
         "Ôn tập toàn bộ kiến thức 3 năm THPT",
-        "Luyện đề thi THPT Quốc gia các năm",
+        "Luyện đề thi THPTQG các năm",
         "Kỹ thuật làm bài thi trắc nghiệm",
         "Bài tập nâng cao và phát triển",
         "Tư vấn chiến lược làm bài",
