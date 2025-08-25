@@ -19,7 +19,7 @@ const BenefitsSection = () => {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
       title: "Kết Quả Xuất Sắc",
       description:
-        "90% học sinh đạt điểm 8+ môn Hóa, nhiều em đậu vào các trường đại học top đầu trong cả nước.",
+        "80% học sinh đạt điểm 9+ môn Hóa, nhiều em đậu vào các trường đại học top đầu trong cả nước.",
     },
     {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
