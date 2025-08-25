@@ -122,7 +122,7 @@ const AchievementsSection = () => {
   
   // Statistics
   const stats = [
-    { number: "90%+", label: "Học sinh đạt điểm 8+ môn Hóa" },
+    { number: "80%+", label: "Học sinh đạt điểm 9+ môn Hóa" },
     { number: "95%+", label: "Học sinh đậu vào trường top" },
     { number: "5+", label: "Năm kinh nghiệm giảng dạy" },
     { number: "100%", label: "Tỷ lệ hài lòng của phụ huynh" },
