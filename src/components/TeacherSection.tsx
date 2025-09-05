@@ -55,19 +55,11 @@ const TeacherSection = () => {
                     <Book className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Nền Tảng Kiến Thức Đỉnh Cao
+                        Nền Tảng Học Thuật Vững Chắc
                       </h4>
-                      <div className="font-vietnam text-muted-foreground space-y-3">
-                        <p>
-                          • Cựu học sinh lớp chuyên Hóa - THPT Chuyên Khoa Học Tự Nhiên (ĐHQGHN), một trong những "cái nôi" đào tạo nhân tài hàng đầu Việt Nam.
-                        </p>
-                        <p>
-                          • Luôn duy trì GPA Hóa học trên 9.8 và GPA tổng kết trên 9.4 suốt 3 năm cấp 3.
-                        </p>
-                        <p>
-                          • Vinh dự nhận danh hiệu "Học sinh xuất sắc toàn khóa" khối chuyên Hóa năm 2019.
-                        </p>
-                      </div>
+                      <p className="font-vietnam text-muted-foreground">
+                        Cựu học sinh chuyên Hóa THPT Chuyên KHTN (ĐHQGHN) với GPA Hóa học 9.8+, đạt danh hiệu "Học sinh xuất sắc toàn khóa" năm 2019.
+                      </p>
                     </div>
                   </div>
 
@@ -78,16 +70,11 @@ const TeacherSection = () => {
                     />
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Tư Duy Sư Phạm Hiện Đại & Đa Chiều
+                        Phương Pháp Giảng Dạy Độc Đáo
                       </h4>
-                      <div className="font-vietnam text-muted-foreground space-y-3">
-                        <p>
-                          • Tốt nghiệp 2 bằng Cử nhân loại Giỏi tại Đại học Kinh Tế Quốc Dân: Quản trị Kinh doanh & Công nghệ thông tin.
-                        </p>
-                        <p>
-                          • Sự kết hợp độc đáo này mang đến một phương pháp giảng dạy logic, hệ thống, dễ hiểu của một chuyên gia IT và khả năng truyền đạt, thấu hiểu tâm lý học sinh của một nhà quản trị.
-                        </p>
-                      </div>
+                      <p className="font-vietnam text-muted-foreground">
+                        Kết hợp 2 bằng Cử nhân loại Giỏi (Quản trị Kinh doanh & CNTT) tạo nên phương pháp giảng dạy logic, hệ thống và dễ tiếp thu.
+                      </p>
                     </div>
                   </div>
 
@@ -95,10 +82,10 @@ const TeacherSection = () => {
                     <Calendar className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Kinh Nghiệm Giảng Dạy
+                        Kinh Nghiệm Thực Tiễn
                       </h4>
                       <p className="font-vietnam text-muted-foreground">
-                        Hơn 6 năm kinh nghiệm giảng dạy Hóa học với đam mê cháy bỏng. Đã giúp hàng trăm học sinh đạt điểm cao và đậu vào các trường đại học uy tín.
+                        6+ năm giảng dạy Hóa học và hiện tại đang làm Business Analyst tại dự án Nền tảng Trường học số Quốc gia, ứng dụng tư duy phân tích vào thiết kế bài giảng khoa học.
                       </p>
                     </div>
                   </div>
@@ -107,10 +94,10 @@ const TeacherSection = () => {
                     <MessageCircle className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Cam Kết
+                        Cam Kết Đồng Hành
                       </h4>
                       <p className="font-vietnam text-muted-foreground">
-                        Không chỉ là một người thầy, mà còn là một người anh, một người cố vấn tận tâm trên con đường học tập của mỗi học viên. Luôn đồng hành và hỗ trợ 24/7.
+                        Hỗ trợ học viên 24/7, không chỉ là giảng viên mà còn là người cố vấn tận tâm trên hành trình chinh phục Hóa học.
                       </p>
                     </div>
                   </div>

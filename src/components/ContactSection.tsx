@@ -3,9 +3,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageCircle, Phone, Calendar, MessagesSquare } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const ContactSection = () => {
   const [activeTab, setActiveTab] = useState("zalo");
+  const { toast } = useToast();
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast({
+        title: "Đã sao chép!",
+        description: `${label} đã được sao chép vào bộ nhớ tạm`,
+      });
+    });
+  };
 
   return (
     <section id="contact" className="py-20 bg-secondary/50">
@@ -89,7 +100,10 @@ const ContactSection = () => {
 
                     {/* Contact Info */}
                     <div className="space-y-4">
-                      <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 border border-primary/20">
+                      <div 
+                        className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 border border-primary/20 cursor-pointer hover:border-primary/40 transition-all duration-200"
+                        onClick={() => copyToClipboard("0942225766", "Số điện thoại")}
+                      >
                         <div className="flex items-center justify-center space-x-3 mb-3">
                           <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
                             <Phone className="h-5 w-5 text-primary" />
@@ -162,7 +176,10 @@ const ContactSection = () => {
                         Liên hệ ngay
                       </Button>
 
-                      <div className="bg-primary/10 rounded-lg p-4">
+                      <div 
+                        className="bg-primary/10 rounded-lg p-4 cursor-pointer hover:bg-primary/20 transition-all duration-200"
+                        onClick={() => copyToClipboard("https://www.facebook.com/thl.201", "Link Facebook")}
+                      >
                         <div className="font-vietnam font-semibold mb-1">
                           Facebook
                         </div>
@@ -205,7 +222,10 @@ const ContactSection = () => {
                         </p>
                       </div>
                       
-                      <div className="bg-gray-50 rounded-lg p-4 mb-4 border">
+                      <div 
+                        className="bg-gray-50 rounded-lg p-4 mb-4 border cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                        onClick={() => copyToClipboard("chemistrylth@gmail.com", "Email doanh nghiệp")}
+                      >
                         <div className="font-vietnam text-center text-primary font-semibold break-all">
                           chemistrylth@gmail.com
                         </div>
@@ -238,7 +258,10 @@ const ContactSection = () => {
                         </p>
                       </div>
                       
-                      <div className="bg-gray-50 rounded-lg p-4 mb-4 border">
+                      <div 
+                        className="bg-gray-50 rounded-lg p-4 mb-4 border cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                        onClick={() => copyToClipboard("letrunghieu2001@gmail.com", "Email cá nhân")}
+                      >
                         <div className="font-vietnam text-center text-secondary-foreground font-semibold break-all">
                           letrunghieu2001@gmail.com
                         </div>
@@ -280,7 +303,10 @@ const ContactSection = () => {
                   <strong>Cơ sở 2:</strong> Số 44D, ngõ 66 Hồ Tùng Mậu, P. Phú
                   Diễn, Hà Nội
                 </div>
-                <div className="font-vietnam">
+                <div 
+                  className="font-vietnam cursor-pointer hover:bg-primary/5 p-2 rounded transition-all duration-200"
+                  onClick={() => copyToClipboard("0942225766", "Hotline")}
+                >
                   <strong>Hotline:</strong>{" "}
                   <span className="text-primary font-semibold">0942225766</span>
                 </div>
