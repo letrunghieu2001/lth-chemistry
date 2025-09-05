@@ -37,7 +37,7 @@ const TeacherSection = () => {
                 className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float"
                 style={{ animationDelay: "1s" }}
               >
-                Học sinh xuất sắc
+                Giáo viên xuất sắc
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@ const TeacherSection = () => {
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          GPA Hóa học 9.8+ - Học sinh xuất sắc toàn khóa 2019
+                          GPA Hóa học luôn đạt 9.8+ - Học sinh xuất sắc toàn khóa 2019
                         </li>
                       </ul>
                     </div>
@@ -77,11 +77,7 @@ const TeacherSection = () => {
                       <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          2 bằng Cử nhân loại Giỏi tại Đại Học Kinh Tế Quốc Dân
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          Chuyên ngành: Quản trị Kinh doanh & Công nghệ thông tin
+                          2 bằng Cử nhân loại Giỏi tại Đại Học Kinh Tế Quốc Dân, chuyên ngành: Quản trị Kinh doanh & Công nghệ thông tin
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
@@ -118,9 +114,16 @@ const TeacherSection = () => {
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
                         Cam Kết Đồng Hành
                       </h4>
-                      <p className="font-vietnam text-muted-foreground">
-                        Hỗ trợ học viên 24/7, không chỉ là giảng viên mà còn là người cố vấn tận tâm trên hành trình chinh phục Hóa học.
-                      </p>
+                                            <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          Hỗ trợ học viên 24/7
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          Vừa là giáo viên, vừa là người cố vấn tận tâm trên hành trình chinh phục Hóa học.
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
