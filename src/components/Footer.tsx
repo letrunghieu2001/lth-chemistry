@@ -30,8 +30,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="font-vietnam text-sm opacity-80 leading-relaxed">
-              Trung tâm dạy Hóa học chất lượng cao, giúp học sinh cấp 3 đạt điểm
-              số xuất sắc và vào được trường đại học mơ ước.
+              Môi trường luyện thi Hóa học ưu việt, giúp học sinh cấp 3 nắm vững kiến thức, đạt điểm số xuất sắc và vào được trường đại học mơ ước.
             </p>
           </div>
 

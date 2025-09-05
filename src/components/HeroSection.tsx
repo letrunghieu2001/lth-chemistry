@@ -41,8 +41,9 @@ const HeroSection = () => {
             </h1>
 
             <p className="font-vietnam text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
-              Phương pháp giảng dạy Hóa học hiệu quả của thầy Lê Trung Hiếu - 6+ năm kinh nghiệm. 
-              Giúp học sinh cấp 3 nắm vững kiến thức, tự tin làm bài và đạt điểm cao trong các kỳ thi.
+              Phương pháp giảng dạy Hóa học hiệu quả của thầy Lê Trung Hiếu - 6+
+              năm kinh nghiệm. Giúp học sinh cấp 3 nắm vững kiến thức, tự tin
+              làm bài và đạt điểm cao trong các kỳ thi.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -109,8 +110,8 @@ const HeroSection = () => {
                     loop
                     playsInline
                     className="w-full h-full object-cover rounded-full"
-                    aria-label="LTH Chemistry - Video giới thiệu trung tâm dạy Hóa học chất lượng cao"
-                    title="LTH Chemistry - Trung tâm dạy Hóa học cấp 3 với phương pháp hiệu quả"
+                    aria-label="LTH Chemistry - Video giới thiệu lớp học dạy Hóa học chất lượng cao"
+                    title="LTH Chemistry - Lớp học dạy Hóa học cấp 3 với phương pháp hiệu quả"
                   />
                   <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/30 via-gold/30 to-primary-dark/30 opacity-50 blur-lg animate-pulse"></div>

@@ -34,16 +34,16 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <img
               src="/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png"
-              alt="LTH Chemistry - Logo trung tâm dạy Hóa học cấp 3 chất lượng cao"
+              alt="LTH Chemistry - Logo lớp học dạy Hóa học cấp 3 chất lượng cao"
               className="h-12 w-auto animate-float"
-              title="LTH Chemistry - Trung tâm dạy Hóa học uy tín với thầy Lê Trung Hiếu"
+              title="LTH Chemistry - Lớp học dạy Hóa học uy tín với thầy Lê Trung Hiếu"
             />
             <div className="hidden md:block">
               <div className="font-quicksand font-bold text-xl gradient-text">
                 LTH Chemistry
               </div>
               <p className="text-sm text-muted-foreground font-vietnam">
-                Trung tâm dạy Hóa học cấp 3 chất lượng cao
+                Lớp học dạy Hóa học cấp 3 chất lượng cao
               </p>
             </div>
           </div>

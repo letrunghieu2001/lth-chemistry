@@ -20,8 +20,8 @@
     <!-- Main images -->
     <image:image>
       <image:loc>https://lth-chemistry.lovable.app/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png</image:loc>
-      <image:title>LTH Chemistry Logo - Trung tâm dạy Hóa học cấp 3</image:title>
-      <image:caption>Logo của LTH Chemistry - Trung tâm dạy Hóa học chất lượng cao cho học sinh cấp 3</image:caption>
+      <image:title>LTH Chemistry Logo - Khơi dậy Đam mê – Chinh phục Điểm số</image:title>
+      <image:caption>Logo của LTH Chemistry - TKhơi dậy Đam mê – Chinh phục Điểm số</image:caption>
     </image:image>
     
     <image:image>
@@ -33,8 +33,8 @@
     <!-- Hero video -->
     <video:video>
       <video:thumbnail_loc>https://lth-chemistry.lovable.app/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png</video:thumbnail_loc>
-      <video:title>LTH Chemistry - Video giới thiệu trung tâm</video:title>
-      <video:description>Video giới thiệu LTH Chemistry - Trung tâm dạy Hóa học cấp 3 với phương pháp hiệu quả, 90% học sinh đạt điểm 8+</video:description>
+      <video:title>LTH Chemistry - Video giới thiệu </video:title>
+      <video:description>Video giới thiệu LTH Chemistry</video:description>
       <video:content_loc>https://lth-chemistry.lovable.app/lovable-uploads/Video_Ready_Add_a_Wave.mp4</video:content_loc>
       <video:duration>30</video:duration>
     </video:video>
