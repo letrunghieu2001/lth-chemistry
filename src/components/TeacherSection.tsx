@@ -51,80 +51,76 @@ const TeacherSection = () => {
                 </h3>
 
                 <div className="space-y-6">
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
-                        <Book className="h-5 w-5 text-primary mr-2" />
-                        Nền Tảng Học Thuật Vững Chắc
-                      </h4>
-                      <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          Cựu học sinh chuyên Hóa THPT Chuyên KHTN (ĐHQGHN)
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          GPA Hóa học luôn đạt 9.8+ - Học sinh xuất sắc toàn khóa 2019
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
-                        <Star className="h-5 w-5 text-gold mr-2" fill="currentColor" />
-                        Phương Pháp Giảng Dạy Độc Đáo
-                      </h4>
-                      <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          2 bằng Cử nhân loại Giỏi tại Đại Học Kinh Tế Quốc Dân, chuyên ngành: Quản trị Kinh doanh & Công nghệ thông tin
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          Phương pháp giảng dạy logic, hệ thống và dễ tiếp thu
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
-                        <Calendar className="h-5 w-5 text-primary mr-2" />
-                        Kinh Nghiệm Thực Tiễn
-                      </h4>
-                      <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          6+ năm giảng dạy Hóa học chuyên sâu
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          Thành viên đội ngũ phát triển Nền tảng Trường học số Quốc gia
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          Ứng dụng tư duy phân tích vào thiết kế bài giảng và hệ thống
-                        </li>
-                      </ul>
-                    </div>
+                  <div>
+                    <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
+                      <Book className="h-5 w-5 text-primary mr-2" />
+                      Nền Tảng Học Thuật Vững Chắc
+                    </h4>
+                    <ul className="font-vietnam text-muted-foreground space-y-2">
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        Cựu học sinh chuyên Hóa THPT Chuyên KHTN (ĐHQGHN)
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        GPA Hóa học luôn đạt 9.8+ - Học sinh xuất sắc toàn khóa 2019
+                      </li>
+                    </ul>
                   </div>
 
-                  <div className="flex items-start space-x-4">
-                    <MessageCircle className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Cam Kết Đồng Hành
-                      </h4>
-                                            <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          Hỗ trợ học viên 24/7
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          Vừa là giáo viên, vừa là người cố vấn tận tâm trên hành trình chinh phục Hóa học.
-                        </li>
-                      </ul>
-                    </div>
+                  <div>
+                    <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
+                      <Star className="h-5 w-5 text-gold mr-2" fill="currentColor" />
+                      Phương Pháp Giảng Dạy Độc Đáo
+                    </h4>
+                    <ul className="font-vietnam text-muted-foreground space-y-2">
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        2 bằng Cử nhân loại Giỏi tại Đại Học Kinh Tế Quốc Dân, chuyên ngành: Quản trị Kinh doanh & Công nghệ thông tin
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        Phương pháp giảng dạy logic, hệ thống và dễ tiếp thu
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
+                      <Calendar className="h-5 w-5 text-primary mr-2" />
+                      Kinh Nghiệm Thực Tiễn
+                    </h4>
+                    <ul className="font-vietnam text-muted-foreground space-y-2">
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        6+ năm giảng dạy Hóa học chuyên sâu
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        Thành viên đội ngũ phát triển Nền tảng Trường học số Quốc gia
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        Ứng dụng tư duy phân tích vào thiết kế bài giảng và hệ thống
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
+                      <MessageCircle className="h-5 w-5 text-primary mr-2" />
+                      Cam Kết Đồng Hành
+                    </h4>
+                    <ul className="font-vietnam text-muted-foreground space-y-2">
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        Hỗ trợ học viên 24/7
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary mr-3 mt-1">•</span>
+                        Vừa là giáo viên, vừa là người cố vấn tận tâm trên hành trình chinh phục Hóa học
+                      </li>
+                    </ul>
                   </div>
                 </div>
 
