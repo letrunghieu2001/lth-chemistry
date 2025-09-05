@@ -51,42 +51,64 @@ const TeacherSection = () => {
                 </h3>
 
                 <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <Book className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+                  <div className="space-y-6">
                     <div>
-                      <h4 className="font-vietnam font-semibold text-lg mb-2">
+                      <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
+                        <Book className="h-5 w-5 text-primary mr-2" />
                         Nền Tảng Học Thuật Vững Chắc
                       </h4>
-                      <p className="font-vietnam text-muted-foreground">
-                        Cựu học sinh chuyên Hóa THPT Chuyên KHTN (ĐHQGHN) với GPA Hóa học 9.8+, đạt danh hiệu "Học sinh xuất sắc toàn khóa" năm 2019.
-                      </p>
+                      <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          Cựu học sinh chuyên Hóa THPT Chuyên KHTN (ĐHQGHN)
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          GPA Hóa học 9.8+ - Học sinh xuất sắc toàn khóa 2019
+                        </li>
+                      </ul>
                     </div>
-                  </div>
 
-                  <div className="flex items-start space-x-4">
-                    <Star
-                      className="h-6 w-6 text-gold mt-1 flex-shrink-0"
-                      fill="currentColor"
-                    />
                     <div>
-                      <h4 className="font-vietnam font-semibold text-lg mb-2">
+                      <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
+                        <Star className="h-5 w-5 text-gold mr-2" fill="currentColor" />
                         Phương Pháp Giảng Dạy Độc Đáo
                       </h4>
-                      <p className="font-vietnam text-muted-foreground">
-                        Kết hợp 2 bằng Cử nhân loại Giỏi (Quản trị Kinh doanh & CNTT) tạo nên phương pháp giảng dạy logic, hệ thống và dễ tiếp thu.
-                      </p>
+                      <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          2 bằng Cử nhân loại Giỏi tại Đại Học Kinh Tế Quốc Dân
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          Chuyên ngành: Quản trị Kinh doanh & Công nghệ thông tin
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          Phương pháp giảng dạy logic, hệ thống và dễ tiếp thu
+                        </li>
+                      </ul>
                     </div>
-                  </div>
 
-                  <div className="flex items-start space-x-4">
-                    <Calendar className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                     <div>
-                      <h4 className="font-vietnam font-semibold text-lg mb-2">
+                      <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
+                        <Calendar className="h-5 w-5 text-primary mr-2" />
                         Kinh Nghiệm Thực Tiễn
                       </h4>
-                      <p className="font-vietnam text-muted-foreground">
-                        6+ năm giảng dạy Hóa học và hiện tại đang làm Business Analyst tại dự án Nền tảng Trường học số Quốc gia, ứng dụng tư duy phân tích vào thiết kế bài giảng khoa học.
-                      </p>
+                      <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          6+ năm giảng dạy Hóa học chuyên sâu
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          Thành viên đội ngũ phát triển Nền tảng Trường học số Quốc gia
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          Ứng dụng tư duy phân tích vào thiết kế bài giảng và hệ thống
+                        </li>
+                      </ul>
                     </div>
                   </div>
 
