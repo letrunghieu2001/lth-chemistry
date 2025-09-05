@@ -43,7 +43,7 @@ const Header = () => {
                 LTH Chemistry
               </div>
               <p className="text-sm text-muted-foreground font-vietnam">
-                Lớp học dạy Hóa học cấp 3 chất lượng cao
+                Khơi dậy Đam mê – Chinh phục Điểm số
               </p>
             </div>
           </div>
