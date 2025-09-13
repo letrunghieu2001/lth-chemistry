@@ -35,14 +35,14 @@ const HeroSection = () => {
             <h1 className="font-quicksand font-bold text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight">
               <span className="gradient-text">LTH Chemistry</span>
               <br />
-              <span className="text-foreground">Khơi Dậy Đam Mê Hóa Học</span>
+              <span className="text-foreground">Khơi Dậy Đam Mê</span>
               <br />
-              <span className="text-primary-dark">Chinh Phục Điểm Số Chemistry</span>
+              <span className="text-primary-dark">Chinh Phục Điểm Số</span>
             </h1>
 
             <p className="font-vietnam text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
-              Học hóa học (chemistry) hiệu quả với phương pháp giảng dạy độc đáo của thầy Lê Trung Hiếu - LTH Chemistry. 6+ 
-              năm kinh nghiệm giúp học sinh cấp 3 nắm vững kiến thức hóa học, tự tin 
+              Phương pháp giảng dạy Hóa học hiệu quả của thầy Lê Trung Hiếu - 6+
+              năm kinh nghiệm. Giúp học sinh cấp 3 nắm vững kiến thức, tự tin
               làm bài và đạt điểm cao trong các kỳ thi.
             </p>
 
@@ -110,8 +110,8 @@ const HeroSection = () => {
                     loop
                     playsInline
                     className="w-full h-full object-cover rounded-full"
-                    aria-label="LTH Chemistry - Video giới thiệu lớp học dạy Hóa học (chemistry) chất lượng cao với thầy Lê Trung Hiếu"
-                    title="LTH Chemistry - Lớp học dạy Hóa học cấp 3 với phương pháp chemistry hiệu quả"
+                    aria-label="LTH Chemistry - Video giới thiệu lớp học dạy Hóa học chất lượng cao"
+                    title="LTH Chemistry - Lớp học dạy Hóa học cấp 3 với phương pháp hiệu quả"
                   />
                   <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/30 via-gold/30 to-primary-dark/30 opacity-50 blur-lg animate-pulse"></div>
