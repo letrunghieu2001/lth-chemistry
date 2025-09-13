@@ -8,11 +8,11 @@ const TeacherSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-quicksand font-bold text-3xl md:text-4xl mb-4">
-            Về Giảng Viên -{" "}
-            <span className="gradient-text">Thầy Lê Trung Hiếu</span>
+            Về Giảng Viên Chemistry -{" "}
+            <span className="gradient-text">Thầy Lê Trung Hiếu - LTH</span>
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-3xl mx-auto">
-            Với hơn 6 năm kinh nghiệm giảng dạy và đam mê cháy bỏng với Hóa học, thầy không chỉ là một người thầy, mà còn là một người anh, một người cố vấn tận tâm trên con đường học tập của mỗi học viên.
+            Với hơn 6 năm kinh nghiệm giảng dạy hóa học (chemistry), thầy LTH không chỉ là một người thầy, mà còn là một người anh, một người cố vấn tận tâm trên con đường học tập chemistry của mỗi học viên.
           </p>
         </div>
 
@@ -23,7 +23,7 @@ const TeacherSection = () => {
               <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-primary/10 to-primary-dark/10 p-2 flex items-center justify-center">
                 <img
                   src="/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png"
-                  alt="Thầy Lê Trung Hiếu - Giảng viên Hóa học 6+ năm kinh nghiệm, cựu học sinh chuyên Hóa ĐHQGHN"
+                  alt="Thầy Lê Trung Hiếu - LTH Chemistry, giảng viên Hóa học (chemistry) 6+ năm kinh nghiệm, cựu học sinh chuyên Hóa ĐHQGHN"
                   className="w-full h-full rounded-2xl object-cover"
                   title="Thầy Lê Trung Hiếu - Giảng viên Hóa học chuyên nghiệp tại LTH Chemistry"
                 />
