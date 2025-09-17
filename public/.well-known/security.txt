@@ -1,7 +1,7 @@
 Contact: mailto:chemistrylth@gmail.com
 Expires: 2025-12-31T23:59:59.000Z
 Preferred-Languages: vi, en
-Canonical: https://lth-chemistry.lovable.app/.well-known/security.txt
-Policy: https://lth-chemistry.lovable.app/security-policy
-Hiring: https://lth-chemistry.lovable.app/careers
-Acknowledgments: https://lth-chemistry.lovable.app/thanks
+Canonical: https://lthchemitry.lovable.app/.well-known/security.txt
+Policy: https://lthchemitry.lovable.app/security-policy
+Hiring: https://lthchemitry.lovable.app/careers
+Acknowledgments: https://lthchemitry.lovable.app/thanks
