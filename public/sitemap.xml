@@ -12,30 +12,30 @@
   
   <!-- Homepage -->
   <url>
-    <loc>https://lthchemitry.lovable.app/</loc>
+    <loc>https://lthchemistry.lovable.app/</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     
     <!-- Main images -->
     <image:image>
-      <image:loc>https://lthchemitry.lovable.app/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png</image:loc>
+      <image:loc>https://lthchemistry.lovable.app/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png</image:loc>
       <image:title>LTH Chemistry Logo - Khơi dậy Đam mê – Chinh phục Điểm số</image:title>
       <image:caption>Logo của LTH Chemistry - TKhơi dậy Đam mê – Chinh phục Điểm số</image:caption>
     </image:image>
     
     <image:image>
-      <image:loc>https://lthchemitry.lovable.app/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png</image:loc>
+      <image:loc>https://lthchemistry.lovable.app/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png</image:loc>
       <image:title>Thầy Lê Trung Hiếu - Giảng viên Hóa học</image:title>
       <image:caption>Thầy Lê Trung Hiếu - Giảng viên Hóa học 6+ năm kinh nghiệm tại LTH Chemistry</image:caption>
     </image:image>
     
     <!-- Hero video -->
     <video:video>
-      <video:thumbnail_loc>https://lthchemitry.lovable.app/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png</video:thumbnail_loc>
+      <video:thumbnail_loc>https://lthchemistry.lovable.app/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png</video:thumbnail_loc>
       <video:title>LTH Chemistry - Video giới thiệu </video:title>
       <video:description>Video giới thiệu LTH Chemistry</video:description>
-      <video:content_loc>https://lthchemitry.lovable.app/lovable-uploads/Video_Ready_Add_a_Wave.mp4</video:content_loc>
+      <video:content_loc>https://lthchemistry.lovable.app/lovable-uploads/Video_Ready_Add_a_Wave.mp4</video:content_loc>
       <video:duration>30</video:duration>
     </video:video>
   </url>
