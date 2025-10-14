@@ -178,10 +178,22 @@ const ContactSection = () => {
 
                       <div 
                         className="bg-primary/10 rounded-lg p-4 cursor-pointer hover:bg-primary/20 transition-all duration-200"
-                        onClick={() => copyToClipboard("https://www.facebook.com/thl.201", "Link Facebook")}
+                        onClick={() => copyToClipboard("https://www.facebook.com/lthchemistry/", "Link Facebook Page")}
                       >
                         <div className="font-vietnam font-semibold mb-1">
-                          Facebook
+                          Facebook Page
+                        </div>
+                        <div className="font-vietnam text-sm text-muted-foreground">
+                          https://www.facebook.com/lthchemistry/
+                        </div>
+                      </div>
+
+                      <div 
+                        className="bg-primary/10 rounded-lg p-4 cursor-pointer hover:bg-primary/20 transition-all duration-200"
+                        onClick={() => copyToClipboard("https://www.facebook.com/thl.201", "Link Facebook cá nhân")}
+                      >
+                        <div className="font-vietnam font-semibold mb-1">
+                          Facebook cá nhân
                         </div>
                         <div className="font-vietnam text-sm text-muted-foreground">
                           https://www.facebook.com/thl.201
