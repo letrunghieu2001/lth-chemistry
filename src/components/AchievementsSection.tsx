@@ -117,8 +117,14 @@ const AchievementsSection = () => {
     },
   ];
 
-  // Randomize testimonials order on each page load
-  const testimonials = useMemo(() => shuffleArray(originalTestimonials), []);
+  // Sort testimonials by score from highest to lowest
+  const testimonials = useMemo(() => {
+    return [...originalTestimonials].sort((a, b) => {
+      const scoreA = parseFloat(a.score.match(/[\d.]+/)?.[0] || '0');
+      const scoreB = parseFloat(b.score.match(/[\d.]+/)?.[0] || '0');
+      return scoreB - scoreA; // Descending order
+    });
+  }, []);
   
   // Statistics
   const stats = [
