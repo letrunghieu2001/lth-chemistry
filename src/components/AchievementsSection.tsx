@@ -6,16 +6,6 @@ const AchievementsSection = () => {
   // Student testimonials in custom order
   const testimonials = [
     {
-      name: "Trần Minh Hiếu",
-      school: "THPT Phạm Hồng Thái",
-      schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
-      score: "9.25 điểm Hóa Kỳ thi THPTQG 2025",
-      university: "Đại học Y Hà Nội",
-      universityLogo: "/university-logos/hmu-logo.png",
-      content:
-        "Đồng hành cùng thầy từ năm lớp 8, em đã được xây dựng một nền tảng Hóa học vững chắc từ con số 0. Sự tận tâm và kiên nhẫn của thầy là động lực lớn nhất giúp em đạt được kết quả hôm nay.",
-    },
-    {
       name: "Nguyễn Khánh Vân",
       school: "THPT Nguyễn Thị Minh Khai",
       schoolLogo: "/highschool-logos/ntmk-logo.png",
@@ -24,6 +14,16 @@ const AchievementsSection = () => {
       universityLogo: "/university-logos/hmu-logo.png",
       content:
         "Từ một đứa sợ Hóa, em chưa bao giờ nghĩ mình có thể đạt 9.75 điểm. Phương pháp dạy của thầy không chỉ giúp em hiểu bài mà còn truyền cho em niềm yêu thích môn học này.",
+    },
+    {
+      name: "Trần Minh Hiếu",
+      school: "THPT Phạm Hồng Thái",
+      schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
+      score: "9.25 điểm Hóa Kỳ thi THPTQG 2025",
+      university: "Đại học Y Hà Nội",
+      universityLogo: "/university-logos/hmu-logo.png",
+      content:
+        "Đồng hành cùng thầy từ năm lớp 8, em đã được xây dựng một nền tảng Hóa học vững chắc từ con số 0. Sự tận tâm và kiên nhẫn của thầy là động lực lớn nhất giúp em đạt được kết quả hôm nay.",
     },
     {
       name: "Nguyễn Bá Minh",
