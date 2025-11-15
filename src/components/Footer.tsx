@@ -168,10 +168,22 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-6 border-t border-primary-foreground/20 text-center">
-          <p className="font-vietnam text-sm opacity-80">
-            © 2025 LTH Chemistry. All Rights Reserved.
-          </p>
+        <div className="mt-12 pt-6 border-t border-primary-foreground/20">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="flex items-center space-x-3">
+              <img
+                src="/lovable-uploads/logo-boped.png"
+                alt="Boped Logo"
+                className="h-12 w-12 rounded-full object-cover"
+              />
+              <p className="font-vietnam text-sm opacity-80">
+                Website được phát triển bởi <span className="font-semibold">Boped</span>
+              </p>
+            </div>
+            <p className="font-vietnam text-sm opacity-80">
+              © 2025 LTH Chemistry. All Rights Reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
