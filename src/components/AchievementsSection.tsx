@@ -3,28 +3,8 @@ import { Star } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 
 const AchievementsSection = () => {
-  // Fisher-Yates shuffle algorithm
-  const shuffleArray = <T,>(array: T[]): T[] => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
-  // Student testimonials with high schools (original order)
-  const originalTestimonials = [
-    {
-      name: "Trần Thu Phương",
-      school: "THPT Nguyễn Thị Minh Khai",
-      schoolLogo: "/highschool-logos/ntmk-logo.png",
-      score: "9.75 điểm Hóa Kỳ thi THPTQG 2025",
-      university: "Đại học Y Thái Bình",
-      universityLogo: "/lovable-uploads/0af2065a-5831-4955-a2cd-780295646c0f.png",
-      content:
-        "Bộ đề chuyên sâu và các phương pháp giải nhanh của thầy là chìa khóa giúp em tối ưu hóa điểm số từ 9 lên 9.75. Thầy luôn có những cách tiếp cận bài toán rất độc đáo và hiệu quả.",
-    },
+  // Student testimonials in custom order
+  const testimonials = [
     {
       name: "Nguyễn Khánh Vân",
       school: "THPT Nguyễn Thị Minh Khai",
@@ -56,14 +36,24 @@ const AchievementsSection = () => {
         "Thầy Hiếu dạy em cách tư duy như một kỹ sư, hiểu sâu bản chất vấn đề thay vì học vẹt. Các bài giảng về hóa vô cơ và điện phân của thầy thực sự đỉnh cao.",
     },
     {
-      name: "Phạm Lê Minh Nhật",
-      school: "THPT Nguyễn Trãi",
-      schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
-      score: "9.0 điểm Hóa Kỳ thi THPTQG 2024",
-      university: "Đại học Kinh Tế Quốc dân",
+      name: "Nguyễn Phúc Minh",
+      school: "THPT Phạm Hồng Thái",
+      schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
+      score: "8.5 điểm Hóa Kỳ thi THPTQG 2025",
+      university: "Đại học Kinh tế Quốc dân",
       universityLogo: "/university-logos/neu-logo.png",
       content:
-        "Mỗi buổi học với thầy đều rất vui và nhiều năng lượng. Thầy biến những công thức khô khan trở nên thú vị, giúp em tiếp thu kiến thức một cách tự nhiên mà không hề áp lực.",
+        "Em đã theo học thầy từ những ngày đầu tiên của lớp 8. Thầy đã dẫn dắt em từ một người hoàn toàn mất gốc trở nên yêu thích và chinh phục được môn Hóa. Em thực sự biết ơn thầy.",
+    },
+    {
+      name: "Trần Thu Phương",
+      school: "THPT Nguyễn Thị Minh Khai",
+      schoolLogo: "/highschool-logos/ntmk-logo.png",
+      score: "9.75 điểm Hóa Kỳ thi THPTQG 2025",
+      university: "Đại học Y Thái Bình",
+      universityLogo: "/lovable-uploads/0af2065a-5831-4955-a2cd-780295646c0f.png",
+      content:
+        "Bộ đề chuyên sâu và các phương pháp giải nhanh của thầy là chìa khóa giúp em tối ưu hóa điểm số từ 9 lên 9.75. Thầy luôn có những cách tiếp cận bài toán rất độc đáo và hiệu quả.",
     },
     {
       name: "Đỗ Trung Vĩnh",
@@ -76,26 +66,6 @@ const AchievementsSection = () => {
         "Dù là học sinh chuyên Hóa, em vẫn học được rất nhiều từ hệ thống kiến thức và các dạng bài nâng cao của thầy. Thầy giúp em lấp đầy những lỗ hổng kiến thức nhỏ nhất.",
     },
     {
-      name: "Ngô Quốc Khánh",
-      school: "THPT Nguyễn Trãi",
-      schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
-      score: "8.5 điểm Hóa Kỳ thi THPTQG 2024",
-      university: "Đại học Khoa học tự nhiên",
-      universityLogo: "/university-logos/vnu-hanoi-logo.png",
-      content:
-        "Thật không thể tin được! Chỉ trong 2 tháng học cấp tốc với thầy, em đã đi từ không biết gì về Hóa đến việc tự tin đạt 8.5 điểm. Lộ trình của thầy thực sự quá hiệu quả.",
-    },
-    {
-      name: "Nguyễn Phúc Minh",
-      school: "THPT Phạm Hồng Thái",
-      schoolLogo: "/highschool-logos/pham-hong-thai-logo.png",
-      score: "8.5 điểm Hóa Kỳ thi THPTQG 2025",
-      university: "Đại học Kinh tế Quốc dân",
-      universityLogo: "/university-logos/neu-logo.png",
-      content:
-        "Em đã theo học thầy từ những ngày đầu tiên của lớp 8. Thầy đã dẫn dắt em từ một người hoàn toàn mất gốc trở nên yêu thích và chinh phục được môn Hóa. Em thực sự biết ơn thầy.",
-    },
-    {
       name: "Lê Minh Trang",
       school: "THPT Đống Đa",
       schoolLogo: "/highschool-logos/dong-da-logo.png",
@@ -104,6 +74,26 @@ const AchievementsSection = () => {
       universityLogo: "/university-logos/neu-logo.png",
       content:
         "Em bắt đầu học thầy với số điểm chỉ 5-6. Thầy đã kiên nhẫn dạy lại cho em từ những kiến thức nền tảng nhất. Đạt được 8.0 điểm là một kỳ tích và sự tiến bộ vượt bậc đối với em.",
+    },
+    {
+      name: "Phạm Lê Minh Nhật",
+      school: "THPT Nguyễn Trãi",
+      schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
+      score: "9.0 điểm Hóa Kỳ thi THPTQG 2024",
+      university: "Đại học Kinh Tế Quốc dân",
+      universityLogo: "/university-logos/neu-logo.png",
+      content:
+        "Mỗi buổi học với thầy đều rất vui và nhiều năng lượng. Thầy biến những công thức khô khan trở nên thú vị, giúp em tiếp thu kiến thức một cách tự nhiên mà không hề áp lực.",
+    },
+    {
+      name: "Ngô Quốc Khánh",
+      school: "THPT Nguyễn Trãi",
+      schoolLogo: "/highschool-logos/nguyen-trai-logo.png",
+      score: "8.5 điểm Hóa Kỳ thi THPTQG 2024",
+      university: "Đại học Khoa học tự nhiên",
+      universityLogo: "/university-logos/vnu-hanoi-logo.png",
+      content:
+        "Thật không thể tin được! Chỉ trong 2 tháng học cấp tốc với thầy, em đã đi từ không biết gì về Hóa đến việc tự tin đạt 8.5 điểm. Lộ trình của thầy thực sự quá hiệu quả.",
     },
     {
       name: "Phạm Vũ Gia Huy",
@@ -116,9 +106,6 @@ const AchievementsSection = () => {
         "Nhờ có thầy, em đã vượt qua được nỗi sợ môn Hóa và đạt được kết quả 8.0 điểm. Cách giảng dạy sinh động và dễ hiểu của thầy đã giúp em xây dựng nền tảng vững chắc để theo đuổi ngành khoa học.",
     },
   ];
-
-  // Randomize testimonials order on each page load
-  const testimonials = useMemo(() => shuffleArray(originalTestimonials), []);
   
   // Statistics
   const stats = [
