@@ -12,30 +12,30 @@
   
   <!-- Homepage -->
   <url>
-    <loc>https://lth-chemistry.lovable.app/</loc>
-    <lastmod>2025-01-05</lastmod>
+    <loc>https://lthchemistry.lovable.app/</loc>
+    <lastmod>2026-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     
     <!-- Main images -->
     <image:image>
-      <image:loc>https://lth-chemistry.lovable.app/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png</image:loc>
-      <image:title>LTH Chemistry Logo - Khơi dậy Đam mê – Chinh phục Điểm số</image:title>
-      <image:caption>Logo của LTH Chemistry - TKhơi dậy Đam mê – Chinh phục Điểm số</image:caption>
+      <image:loc>https://lthchemistry.lovable.app/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png</image:loc>
+      <image:title>LTH Chemistry Logo - Dạy Hóa Học Cấp 3 Tại Hà Nội</image:title>
+      <image:caption>Logo của LTH Chemistry - Dạy hóa học cấp 3, luyện thi đại học tại Hà Nội</image:caption>
     </image:image>
     
     <image:image>
-      <image:loc>https://lth-chemistry.lovable.app/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png</image:loc>
-      <image:title>Thầy Lê Trung Hiếu - Giảng viên Hóa học</image:title>
-      <image:caption>Thầy Lê Trung Hiếu - Giảng viên Hóa học 6+ năm kinh nghiệm tại LTH Chemistry</image:caption>
+      <image:loc>https://lthchemistry.lovable.app/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png</image:loc>
+      <image:title>Thầy Lê Trung Hiếu - Gia sư Hóa học Hà Nội</image:title>
+      <image:caption>Thầy Lê Trung Hiếu - Giảng viên dạy hóa học 6+ năm kinh nghiệm tại LTH Chemistry Hà Nội</image:caption>
     </image:image>
     
     <!-- Hero video -->
     <video:video>
-      <video:thumbnail_loc>https://lth-chemistry.lovable.app/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png</video:thumbnail_loc>
-      <video:title>LTH Chemistry - Video giới thiệu </video:title>
-      <video:description>Video giới thiệu LTH Chemistry</video:description>
-      <video:content_loc>https://lth-chemistry.lovable.app/lovable-uploads/Video_Ready_Add_a_Wave.mp4</video:content_loc>
+      <video:thumbnail_loc>https://lthchemistry.lovable.app/lovable-uploads/296625a8-a982-414c-a91b-493ea9f62b60.png</video:thumbnail_loc>
+      <video:title>LTH Chemistry - Dạy Hóa Học Cấp 3 Tại Hà Nội</video:title>
+      <video:description>Video giới thiệu LTH Chemistry - Dạy hóa học cấp 3, luyện thi đại học tại Hà Nội</video:description>
+      <video:content_loc>https://lthchemistry.lovable.app/lovable-uploads/Video_Ready_Add_a_Wave.mp4</video:content_loc>
       <video:duration>30</video:duration>
     </video:video>
   </url>

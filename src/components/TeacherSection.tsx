@@ -114,7 +114,7 @@ const TeacherSection = () => {
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
                         Cam Kết Đồng Hành
                       </h4>
-                                            <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
+                        <ul className="font-vietnam text-muted-foreground space-y-2">
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
                           Hỗ trợ học viên 24/7
