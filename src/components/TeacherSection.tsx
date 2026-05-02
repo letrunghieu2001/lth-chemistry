@@ -128,7 +128,7 @@ const TeacherSection = () => {
                   </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t">
+                <div className="mt-8 pt-6 border-t space-y-3">
                   <Button
                     onClick={() =>
                       document
@@ -138,6 +138,19 @@ const TeacherSection = () => {
                     className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-3 rounded-full"
                   >
                     Kết Nối Với Thầy Ngay
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors font-vietnam font-semibold py-3 rounded-full"
+                  >
+                    <a
+                      href="https://bob-portfolio.lovable.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Xem Portfolio Của Thầy
+                    </a>
                   </Button>
                 </div>
               </CardContent>
