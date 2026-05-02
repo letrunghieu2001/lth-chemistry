@@ -308,12 +308,10 @@ const ContactSection = () => {
               </h3>
               <div className="space-y-3">
                 <div className="font-vietnam">
-                  <strong>Cơ sở 1:</strong> Số 28, ngách 371/9 Kim Mã, P. Giảng
-                  Võ, Hà Nội
+                  <strong>Cơ sở 1:</strong> Phố Kim Mã, P. Giảng Võ, Hà Nội
                 </div>
                 <div className="font-vietnam">
-                  <strong>Cơ sở 2:</strong> Số 44D, ngõ 66 Hồ Tùng Mậu, P. Phú
-                  Diễn, Hà Nội
+                  <strong>Cơ sở 2:</strong> Phố Hồ Tùng Mậu, P. Phú Diễn, Hà Nội
                 </div>
                 <div 
                   className="font-vietnam cursor-pointer hover:bg-primary/5 p-2 rounded transition-all duration-200"

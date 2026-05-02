@@ -139,7 +139,7 @@ const AchievementsSection = () => {
   // Start from center position with proper infinite scroll setup
   const totalSlides = testimonials.length;
   const [currentSlide, setCurrentSlide] = useState(3 + Math.floor(totalSlides / 2)); // Start at center of original items
-  const slideInterval = useRef<NodeJS.Timeout | null>(null);
+  const slideInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
