@@ -1,0 +1,13 @@
+# LTH Chemistry
+
+> Dạy Hóa học cấp 3 tại Hà Nội — luyện thi THPTQG cùng Thầy Lê Trung Hiếu. 80% Học sinh đạt điểm 9+ môn Hóa.
+
+LTH Chemistry là lớp dạy Hóa học cấp 3 (lớp 10, 11, 12) và luyện thi THPTQG môn Hóa tại Hà Nội, do Thầy Lê Trung Hiếu giảng dạy. Cơ sở tại Phố Kim Mã (Quận Ba Đình) và Phố Hồ Tùng Mậu (Quận Bắc Từ Liêm), phục vụ học sinh các quận Ba Đình, Cầu Giấy, Đống Đa, Thanh Xuân, Bắc Từ Liêm, Tây Hồ.
+
+## Pages
+
+- [Trang chủ](/): Giới thiệu LTH Chemistry, thông tin về Thầy Lê Trung Hiếu, các khóa học Hóa cấp 3, thành tích học sinh và thông tin liên hệ.
+
+## Optional
+
+- [Sitemap](/sitemap.xml): Danh sách URL cho công cụ tìm kiếm.
