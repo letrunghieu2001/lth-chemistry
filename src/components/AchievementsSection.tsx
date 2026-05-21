@@ -399,6 +399,7 @@ const AchievementsSection = () => {
                   <button
                     key={index}
                     onClick={() => goToSlide(index)}
+                    aria-label={`Xem cảm nhận ${index + 1}`}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${
                       index === actualCurrentIndex ? "bg-primary w-6" : "bg-muted hover:bg-muted-foreground/50"
                     }`}
