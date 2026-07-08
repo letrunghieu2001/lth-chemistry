@@ -1,6 +1,6 @@
 {
-  "thcs_grade_index": 0,
-  "thpt_grade_index": 0,
+  "thcs_grade_index": 1,
+  "thpt_grade_index": 1,
   "thcs_chapter": {
     "6": 1,
     "7": 1,
@@ -12,6 +12,6 @@
     "11": 1,
     "12": 1
   },
-  "last_post_date": null,
-  "posts_count": 0
+  "last_post_date": "2026-07-08",
+  "posts_count": 2
 }
