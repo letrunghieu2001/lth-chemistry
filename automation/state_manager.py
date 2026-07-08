@@ -1,0 +1,112 @@
+"""
+State manager: tracks grade rotation, chapter progression, and post history.
+"""
+
+import json
+import logging
+from datetime import datetime, timezone, timedelta
+
+from config import (
+    STATE_FILE,
+    THCS_GRADES,
+    THPT_GRADES,
+    DAILY_POST_TYPES,
+)
+
+logger = logging.getLogger(__name__)
+
+VN_TZ = timezone(timedelta(hours=7))
+
+
+def load_state() -> dict:
+    """Load state from JSON file, or return defaults if missing."""
+    try:
+        with open(STATE_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        logger.warning("State file not found or corrupt, using defaults.")
+        return _default_state()
+
+
+def save_state(state: dict) -> None:
+    """Write state back to JSON file."""
+    with open(STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump(state, f, indent=2, ensure_ascii=False)
+    logger.info("State saved to %s", STATE_FILE)
+
+
+def get_today_info(state: dict) -> dict:
+    """
+    Determine what to post today based on current state.
+
+    Returns dict with:
+        date, weekday, post_type,
+        thcs_grade, thcs_chapter,
+        thpt_grade, thpt_chapter,
+        thcs_group (THCS/THPT label for display)
+    """
+    now = datetime.now(VN_TZ)
+    weekday = now.weekday()  # 0=Mon … 6=Sun
+    post_type = DAILY_POST_TYPES.get(weekday, "review_question")
+
+    thcs_idx = state.get("thcs_grade_index", 0) % len(THCS_GRADES)
+    thpt_idx = state.get("thpt_grade_index", 0) % len(THPT_GRADES)
+
+    thcs_grade = THCS_GRADES[thcs_idx]
+    thpt_grade = THPT_GRADES[thpt_idx]
+
+    thcs_chapters = state.get("thcs_chapter", {})
+    thpt_chapters = state.get("thpt_chapter", {})
+
+    thcs_chapter = thcs_chapters.get(str(thcs_grade), 1)
+    thpt_chapter = thpt_chapters.get(str(thpt_grade), 1)
+
+    return {
+        "date": now.strftime("%Y-%m-%d"),
+        "date_display": now.strftime("%d/%m/%Y"),
+        "weekday": weekday,
+        "post_type": post_type,
+        "thcs_grade": thcs_grade,
+        "thcs_chapter": thcs_chapter,
+        "thpt_grade": thpt_grade,
+        "thpt_chapter": thpt_chapter,
+    }
+
+
+def advance_state(state: dict) -> dict:
+    """
+    Advance the rotation after posting.
+    - Rotate THCS grade index: 6 → 7 → 8 → 9 → 6 …
+    - Rotate THPT grade index: 10 → 11 → 12 → 10 …
+    - Update post count and last date.
+    """
+    now = datetime.now(VN_TZ)
+
+    state["thcs_grade_index"] = (state.get("thcs_grade_index", 0) + 1) % len(THCS_GRADES)
+    state["thpt_grade_index"] = (state.get("thpt_grade_index", 0) + 1) % len(THPT_GRADES)
+    state["last_post_date"] = now.strftime("%Y-%m-%d")
+    state["posts_count"] = state.get("posts_count", 0) + 2  # 2 posts per day
+
+    return state
+
+
+def should_post_today(state: dict) -> bool:
+    """Check if we already posted today (prevent double-posting)."""
+    now = datetime.now(VN_TZ)
+    today = now.strftime("%Y-%m-%d")
+    last = state.get("last_post_date")
+    if last == today:
+        logger.info("Already posted today (%s). Skipping.", today)
+        return False
+    return True
+
+
+def _default_state() -> dict:
+    return {
+        "thcs_grade_index": 0,
+        "thpt_grade_index": 0,
+        "thcs_chapter": {"6": 1, "7": 1, "8": 1, "9": 1},
+        "thpt_chapter": {"10": 1, "11": 1, "12": 1},
+        "last_post_date": None,
+        "posts_count": 0,
+    }

@@ -1,0 +1,177 @@
+"""
+Facebook poster: publishes photos with captions to a Facebook Page
+via the Graph API.
+"""
+
+import logging
+from datetime import datetime, timezone, timedelta
+
+import requests
+
+from config import FB_PAGE_ACCESS_TOKEN, FB_PAGE_ID
+
+logger = logging.getLogger(__name__)
+
+GRAPH_API_BASE = "https://graph.facebook.com/v25.0"
+VN_TZ = timezone(timedelta(hours=7))
+
+
+def _validate_credentials() -> bool:
+    """Check that Facebook credentials are configured."""
+    if not FB_PAGE_ACCESS_TOKEN:
+        logger.error("FB_PAGE_ACCESS_TOKEN not set.")
+        return False
+    if not FB_PAGE_ID:
+        logger.error("FB_PAGE_ID not set.")
+        return False
+    return True
+
+
+def post_photo_now(image_path: str, caption: str) -> dict | None:
+    """
+    Post a photo with caption to the Facebook Page immediately.
+
+    Args:
+        image_path: Local path to the image file.
+        caption: The post caption text.
+
+    Returns:
+        API response dict with post_id, or None on failure.
+    """
+    if not _validate_credentials():
+        return None
+
+    url = f"{GRAPH_API_BASE}/{FB_PAGE_ID}/photos"
+
+    try:
+        with open(image_path, "rb") as img_file:
+            response = requests.post(
+                url,
+                data={
+                    "caption": caption,
+                    "access_token": FB_PAGE_ACCESS_TOKEN,
+                },
+                files={
+                    "source": ("post_image.png", img_file, "image/png"),
+                },
+                timeout=60,
+            )
+
+        result = response.json()
+
+        if "id" in result:
+            logger.info("Posted successfully. Post ID: %s", result["id"])
+            return result
+        else:
+            logger.error("Facebook API error: %s", result)
+            return None
+
+    except requests.RequestException as exc:
+        logger.error("Network error posting to Facebook: %s", exc)
+        return None
+    except FileNotFoundError:
+        logger.error("Image file not found: %s", image_path)
+        return None
+
+
+def schedule_photo(image_path: str, caption: str,
+                   hour: int, minute: int = 0) -> dict | None:
+    """
+    Schedule a photo post for a specific time today (Vietnam time).
+
+    Args:
+        image_path: Local path to the image file.
+        caption: The post caption text.
+        hour: Hour in Vietnam time (0-23).
+        minute: Minute (0-59).
+
+    Returns:
+        API response dict, or None on failure.
+    """
+    if not _validate_credentials():
+        return None
+
+    # Calculate scheduled Unix timestamp
+    now_vn = datetime.now(VN_TZ)
+    scheduled_time = now_vn.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
+    # If the time has already passed today, post immediately instead
+    if scheduled_time <= now_vn:
+        logger.info("Scheduled time already passed. Posting immediately.")
+        return post_photo_now(image_path, caption)
+
+    unix_timestamp = int(scheduled_time.timestamp())
+
+    url = f"{GRAPH_API_BASE}/{FB_PAGE_ID}/photos"
+
+    try:
+        with open(image_path, "rb") as img_file:
+            response = requests.post(
+                url,
+                data={
+                    "caption": caption,
+                    "access_token": FB_PAGE_ACCESS_TOKEN,
+                    "published": "false",
+                    "scheduled_publish_time": str(unix_timestamp),
+                },
+                files={
+                    "source": ("post_image.png", img_file, "image/png"),
+                },
+                timeout=60,
+            )
+
+        result = response.json()
+
+        if "id" in result:
+            logger.info(
+                "Scheduled post for %02d:%02d VN time. Post ID: %s",
+                hour, minute, result["id"],
+            )
+            return result
+        else:
+            logger.error("Facebook API scheduling error: %s", result)
+            return None
+
+    except requests.RequestException as exc:
+        logger.error("Network error scheduling post: %s", exc)
+        return None
+    except FileNotFoundError:
+        logger.error("Image file not found: %s", image_path)
+        return None
+
+
+def verify_token() -> bool:
+    """
+    Verify the Page Access Token is still valid.
+    Returns True if valid, False otherwise.
+    """
+    if not FB_PAGE_ACCESS_TOKEN:
+        return False
+
+    url = f"{GRAPH_API_BASE}/debug_token"
+    try:
+        response = requests.get(
+            url,
+            params={
+                "input_token": FB_PAGE_ACCESS_TOKEN,
+                "access_token": FB_PAGE_ACCESS_TOKEN,
+            },
+            timeout=15,
+        )
+        data = response.json().get("data", {})
+        is_valid = data.get("is_valid", False)
+
+        if not is_valid:
+            logger.error(
+                "Facebook token is INVALID or EXPIRED. "
+                "Please generate a new token. Error: %s",
+                data.get("error", {}).get("message", "Unknown"),
+            )
+        else:
+            logger.info("Facebook token is valid.")
+
+        return is_valid
+
+    except requests.RequestException as exc:
+        logger.error("Failed to verify token: %s", exc)
+        return False
