@@ -34,12 +34,13 @@ logging.basicConfig(
 logger = logging.getLogger("daily_post")
 
 
-def run(dry_run: bool = False) -> bool:
+def run(dry_run: bool = False, force: bool = False) -> bool:
     """
     Execute the daily post pipeline.
 
     Args:
         dry_run: If True, generate content and images but don't post to Facebook.
+        force: If True, skip the already-posted-today check.
 
     Returns:
         True if successful, False otherwise.
@@ -51,7 +52,7 @@ def run(dry_run: bool = False) -> bool:
     # ── Step 0: Load state and check if we already posted today ───
     state = load_state()
 
-    if not should_post_today(state):
+    if not force and not should_post_today(state):
         return True  # Not an error, just already done
 
     # ── Step 0.5: Verify Facebook token ───────────────────────────
@@ -161,9 +162,14 @@ def main() -> None:
         action="store_true",
         help="Generate content and images without posting to Facebook.",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Force run even if already posted today (for testing).",
+    )
     args = parser.parse_args()
 
-    success = run(dry_run=args.dry_run)
+    success = run(dry_run=args.dry_run, force=args.force)
     sys.exit(0 if success else 1)
 
 

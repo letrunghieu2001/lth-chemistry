@@ -54,7 +54,7 @@ jobs:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            python daily_post.py --dry-run
+            python daily_post.py --dry-run --force
           else
             python daily_post.py
           fi
