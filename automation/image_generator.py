@@ -84,14 +84,18 @@ def _overlay_logo(img: Image.Image) -> Image.Image:
 # ── AI Image Generation (Gemini 3.1 Flash Image) ─────────────────────
 
 def _generate_ai_image(image_prompt: str) -> Image.Image | None:
-    """Generate an image using Gemini 3.1 Flash Image (Nano Banana 2)."""
+    """Generate an image using Gemini 3.1 Flash Image (Nano Banana 2).
+
+    Uses the official generateContent API (legacy path) which is still
+    supported alongside the newer Interactions API.
+    See: https://ai.google.dev/gemini-api/docs/generate-content/image-generation
+    """
     if not GEMINI_API_KEY:
         logger.warning("GEMINI_API_KEY not set, skipping AI image generation.")
         return None
 
     try:
         from google import genai
-        from google.genai.types import GenerateContentConfig, Modality
     except ImportError:
         logger.warning("google-genai not installed, skipping AI image gen.")
         return None
@@ -99,20 +103,20 @@ def _generate_ai_image(image_prompt: str) -> Image.Image | None:
     try:
         client = genai.Client(api_key=GEMINI_API_KEY)
 
+        # Official docs pattern: pass contents as list, iterate response.parts
         response = client.models.generate_content(
             model="gemini-3.1-flash-image",
-            contents=image_prompt,
-            config=GenerateContentConfig(
-                response_modalities=[Modality.TEXT, Modality.IMAGE],
-            ),
+            contents=[image_prompt],
         )
 
-        # Extract image from response parts
-        for part in response.candidates[0].content.parts:
+        # Extract image using the official part.as_image() helper
+        for part in response.parts:
             if part.inline_data is not None:
-                image = Image.open(BytesIO(part.inline_data.data))
+                image = part.as_image()
                 logger.info("AI image generated successfully (%dx%d).", image.width, image.height)
                 return image
+            elif part.text is not None:
+                logger.info("AI text response: %s", part.text[:200])
 
         logger.warning("No image data in Gemini response.")
         return None
