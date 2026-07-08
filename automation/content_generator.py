@@ -117,30 +117,46 @@ def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
 # ── Backend 2: OpenRouter API (HTTP) ─────────────────────────────────
 
 def _call_openrouter(system_prompt: str, user_prompt: str) -> str | None:
-    """Call Gemini Flash via OpenRouter's REST API."""
-    resp = http_requests.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://lthchemistry.com",
-            "X-Title": "LTH Chemistry Auto Post",
-        },
-        json={
-            "model": "google/gemini-2.0-flash-exp:free",
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            "temperature": 0.8,
-            "max_tokens": 4096,
-            "response_format": {"type": "json_object"},
-        },
-        timeout=120,
-    )
-    resp.raise_for_status()
-    data = resp.json()
-    return data["choices"][0]["message"]["content"].strip()
+    """Call a free model via OpenRouter's REST API."""
+    # Try models in order: specific free model first, then free router
+    models_to_try = [
+        "google/gemini-2.5-flash-preview-05-20",  # often available free
+        "openrouter/free",                          # auto-picks best free model
+    ]
+
+    last_error = None
+    for model in models_to_try:
+        try:
+            resp = http_requests.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://lthchemistry.com",
+                    "X-Title": "LTH Chemistry Auto Post",
+                },
+                json={
+                    "model": model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    "temperature": 0.8,
+                    "max_tokens": 4096,
+                    "response_format": {"type": "json_object"},
+                },
+                timeout=120,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return data["choices"][0]["message"]["content"].strip()
+        except Exception as exc:
+            logger.warning("[OpenRouter] Model %s failed: %s", model, exc)
+            last_error = exc
+
+    if last_error:
+        raise last_error
+    return None
 
 
 # ── Main entry point ─────────────────────────────────────────────────
