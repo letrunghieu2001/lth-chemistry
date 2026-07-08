@@ -34,7 +34,7 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <img
               src="/lovable-uploads/a9ca5b60-c7ef-4893-878f-1d0dc280940e.png"
-              alt="LTH Chemistry - Logo lớp học dạy Hóa học cấp 3 chất lượng cao"
+              alt="LTH Chemistry - Logo lớp học dạy Hóa học THCS chuyên & THPT chất lượng cao"
               className="h-12 w-auto animate-float"
               title="LTH Chemistry - Lớp học dạy Hóa học uy tín với thầy Lê Trung Hiếu"
             />

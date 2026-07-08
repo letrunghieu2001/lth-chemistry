@@ -236,7 +236,7 @@ const AchievementsSection = () => {
             <span className="gradient-text">Thành Quả</span> Nói Lên Tất Cả
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-2xl mx-auto">
-            Những con số và câu chuyện thành công của các học sinh LTH Chemistry
+            Những con số và câu chuyện của các em học trò – minh chứng sống động nhất cho chất lượng giảng dạy tại LTH Chemistry
           </p>
         </div>
 
@@ -263,7 +263,7 @@ const AchievementsSection = () => {
         {/* Universities Section */}
         <div className="mb-16 animate-fade-in">
           <h3 className="font-quicksand font-bold text-2xl text-center mb-8">
-            Học Sinh Của Chúng Tôi Đã Đậu Vào
+            Học Trò LTH Chemistry Đã Đậu Vào
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {universities.map((university, index) => (
@@ -378,7 +378,7 @@ const AchievementsSection = () => {
                                 src={testimonial.schoolLogo}
                                 alt={`Logo trường THPT ${testimonial.school}`}
                                 className="w-4 h-4 object-contain"
-                                title={`${testimonial.school} - Trường cấp 3 của ${testimonial.name}`}
+                                title={`${testimonial.school} - Trường THPT của ${testimonial.name}`}
                               />
                               <span className="font-vietnam text-xs text-muted-foreground">Cựu học sinh {testimonial.school}</span>
                             </div>

@@ -5,27 +5,27 @@ const BenefitsSection = () => {
   const benefits = [
     {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
-      title: "Phương Pháp Hiệu Quả",
+      title: "Phương Pháp Đã Được Kiểm Chứng",
       description:
-        "Phương pháp giảng dạy được chứng minh hiệu quả, giúp học sinh nắm vững kiến thức và áp dụng thành thạo.",
+        "Cách dạy của thầy Hiếu đi từ gốc, giúp các em thực sự hiểu bản chất thay vì học thuộc lòng. Kiến thức nắm chắc thì bài nào cũng giải được.",
     },
     {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
-      title: "Giảng Viên Chuyên Nghiệp",
+      title: "Thầy Giáo Tâm Huyết",
       description:
-        "Thầy Lê Trung Hiếu với nhiều năm kinh nghiệm, am hiểu tâm lý học sinh và phương pháp truyền đạt hiệu quả.",
+        "Thầy Lê Trung Hiếu – hơn 6 năm kinh nghiệm, cựu học sinh chuyên Hóa THPT Chuyên Khoa Học Tự Nhiên - ĐHQGHN. Thầy hiểu học sinh cần gì và biết cách truyền đạt sao cho dễ nhớ nhất.",
     },
     {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
-      title: "Kết Quả Xuất Sắc",
+      title: "Kết Quả Nói Lên Tất Cả",
       description:
-        "80% học sinh đạt điểm 9+ môn Hóa, nhiều em đậu vào các trường đại học top đầu trong cả nước.",
+        "80% học sinh đạt 9+ điểm Hóa, nhiều em đậu vào trường đại học top đầu. Đó là minh chứng rõ ràng nhất cho chất lượng giảng dạy.",
     },
     {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
-      title: "Theo Dõi Sát Sao",
+      title: "Đồng Hành Từng Bước",
       description:
-        "Theo dõi tiến độ học tập của từng học sinh, đưa ra lộ trình học tập phù hợp với từng em.",
+        "Mỗi em đều có lộ trình riêng phù hợp với trình độ và mục tiêu. Thầy theo sát từng bước tiến bộ, không em nào bị bỏ lại phía sau.",
     },
   ];
 
@@ -35,12 +35,11 @@ const BenefitsSection = () => {
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-quicksand font-bold text-3xl md:text-4xl mb-4">
             Tại Sao Chọn{" "}
-            <span className="gradient-text">LTH Chemistry</span>{" "}
-            Để Học Hóa Cấp 3?
+            <span className="gradient-text">LTH Chemistry</span>?
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-2xl mx-auto">
-            Những lợi ích cốt lõi giúp học sinh thành công và đạt được mục tiêu
-            học tập
+            Những lý do giúp học sinh từ THCS đến THPT đều tin tưởng và đạt
+            kết quả vượt mong đợi
           </p>
         </div>
 

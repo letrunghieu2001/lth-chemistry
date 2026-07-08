@@ -41,9 +41,9 @@ const HeroSection = () => {
             </h1>
 
             <p className="font-vietnam text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
-              Phương pháp giảng dạy Hóa học hiệu quả của thầy Lê Trung Hiếu - 6+
-              năm kinh nghiệm. Giúp học sinh cấp 3 nắm vững kiến thức, tự tin
-              làm bài và đạt điểm cao trong các kỳ thi.
+              Lớp học Hóa học của thầy Lê Trung Hiếu – hơn 6 năm đồng hành
+              cùng học sinh từ THCS luyện thi chuyên đến THPT lớp 10, 11, 12.
+              Giúp các em hiểu sâu, nắm chắc và tự tin chinh phục mọi kỳ thi.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -81,7 +81,7 @@ const HeroSection = () => {
               </div>
               <div className="text-center">
                 <div className="font-quicksand font-bold text-2xl gradient-text">
-                  5+
+                  6+
                 </div>
                 <div className="font-vietnam text-sm text-muted-foreground">
                   Năm kinh nghiệm
@@ -92,7 +92,7 @@ const HeroSection = () => {
                   95%+
                 </div>
                 <div className="font-vietnam text-sm text-muted-foreground">
-                  Học sinh đậu vào trường top
+                  Học sinh đậu trường top
                 </div>
               </div>
             </div>
@@ -100,33 +100,32 @@ const HeroSection = () => {
 
           {/* Right Content */}
           <div className="flex-1 flex justify-center lg:justify-end animate-slide-up">
-            <div className="relative">
-              <div className="w-80 h-80 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-primary/20 to-primary-dark/20 flex items-center justify-center animate-float p-4">
-                <div className="relative w-full h-full rounded-full overflow-hidden shadow-2xl border-4 border-white/10 backdrop-blur-sm">
-                  <video
-                    src="/lovable-uploads/Video_Ready_Add_a_Wave.mp4"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover rounded-full"
-                    aria-label="LTH Chemistry - Video giới thiệu lớp học dạy Hóa học chất lượng cao"
-                    title="LTH Chemistry - Lớp học dạy Hóa học cấp 3 với phương pháp hiệu quả"
-                  />
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
-                  <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/30 via-gold/30 to-primary-dark/30 opacity-50 blur-lg animate-pulse"></div>
-                </div>
+            <div className="relative w-80 md:w-[26rem] lg:w-[30rem]">
+              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10">
+                <video
+                  src="/lovable-uploads/ống_nghiệm_hơi_d_hóa_rồi_tôi.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                  aria-label="LTH Chemistry – Video giới thiệu lớp học Hóa học chuyên sâu"
+                  title="LTH Chemistry – Lớp học Hóa học THCS chuyên & THPT cùng thầy Lê Trung Hiếu"
+                />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
               </div>
+              {/* Glow effect */}
+              <div className="absolute -inset-2 rounded-2xl bg-gradient-to-r from-primary/20 via-gold/20 to-primary-dark/20 opacity-50 blur-xl -z-10 animate-pulse"></div>
 
               {/* Floating badges */}
-              <div className="absolute -top-4 -right-4 bg-gold text-gold-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float">
+              <div className="absolute -top-4 -right-4 bg-gold text-gold-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float z-10">
                 Chất lượng cao
               </div>
               <div
-                className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float"
+                className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float z-10"
                 style={{ animationDelay: "1s" }}
               >
-                Đội ngũ chuyên nghiệp
+                Thầy trò đồng hành
               </div>
             </div>
           </div>

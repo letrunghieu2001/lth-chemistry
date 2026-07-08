@@ -227,10 +227,10 @@ const ContactSection = () => {
                           <MessageCircle className="h-6 w-6 text-primary" />
                         </div>
                         <h4 className="font-vietnam font-bold text-lg text-primary mb-1">
-                          Email Doanh Nghiệp
+                          Email LTH Chemistry
                         </h4>
                         <p className="font-vietnam text-sm text-muted-foreground">
-                          Liên hệ chính thức
+                          Liên hệ lớp học
                         </p>
                       </div>
                       

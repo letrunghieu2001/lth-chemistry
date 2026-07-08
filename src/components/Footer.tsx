@@ -30,7 +30,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="font-vietnam text-sm opacity-80 leading-relaxed">
-              Môi trường luyện thi Hóa học ưu việt, giúp học sinh cấp 3 nắm vững kiến thức, đạt điểm số xuất sắc và vào được trường đại học mơ ước.
+              Lớp học Hóa học chuyên sâu, đồng hành cùng học sinh từ THCS luyện thi chuyên đến THPT lớp 10–12 trên hành trình chinh phục điểm số và vào trường đại học mơ ước.
             </p>
           </div>
 
@@ -119,7 +119,7 @@ const Footer = () => {
           {/* Social Media */}
           <div>
             <h4 className="font-quicksand font-bold text-lg mb-4">
-              Kết Nối Với Chúng Tôi
+              Kết Nối Với Thầy
             </h4>
             <div className="space-y-3">
               <a
@@ -159,7 +159,7 @@ const Footer = () => {
 
             <div className="mt-6 pt-6 border-t border-primary-foreground/20">
               <p className="font-vietnam text-xs opacity-60">
-                Theo dõi chúng tôi để cập nhật thông tin mới nhất về khóa học và
+                Theo dõi thầy để cập nhật thông tin mới nhất về khóa học và
                 các chương trình ưu đãi.
               </p>
             </div>

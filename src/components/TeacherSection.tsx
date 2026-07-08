@@ -8,11 +8,13 @@ const TeacherSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-quicksand font-bold text-3xl md:text-4xl mb-4">
-            Về Giảng Viên -{" "}
+            Người Dẫn Dắt –{" "}
             <span className="gradient-text">Thầy Lê Trung Hiếu</span>
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-3xl mx-auto">
-            Với hơn 6 năm kinh nghiệm giảng dạy và đam mê cháy bỏng với Hóa học, thầy không chỉ là một người thầy, mà còn là một người anh, một người cố vấn tận tâm trên con đường học tập của mỗi học viên.
+            Hơn 6 năm gắn bó với bục giảng, thầy Hiếu không chỉ dạy kiến thức
+            mà còn truyền cho các em ngọn lửa đam mê với Hóa học. Với thầy,
+            mỗi học trò đều là một câu chuyện riêng cần được lắng nghe và đồng hành.
           </p>
         </div>
 
@@ -23,9 +25,9 @@ const TeacherSection = () => {
               <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-primary/10 to-primary-dark/10 p-2 flex items-center justify-center">
                 <img
                   src="/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png"
-                  alt="Thầy Lê Trung Hiếu - Giảng viên Hóa học 6+ năm kinh nghiệm, cựu học sinh chuyên Hóa ĐHQGHN"
+                  alt="Thầy Lê Trung Hiếu – Thầy giáo dạy Hóa học hơn 6 năm kinh nghiệm, cựu học sinh chuyên Hóa ĐHQGHN"
                   className="w-full h-full rounded-2xl object-cover"
-                  title="Thầy Lê Trung Hiếu - Giảng viên Hóa học chuyên nghiệp tại LTH Chemistry"
+                  title="Thầy Lê Trung Hiếu – Dạy Hóa THCS chuyên & THPT tại LTH Chemistry"
                 />
               </div>
 
@@ -37,7 +39,7 @@ const TeacherSection = () => {
                 className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float"
                 style={{ animationDelay: "1s" }}
               >
-                Giáo viên xuất sắc
+                Thầy giáo tâm huyết
               </div>
             </div>
           </div>
@@ -47,7 +49,7 @@ const TeacherSection = () => {
             <Card className="border-2 hover:border-primary/20 transition-all duration-300">
               <CardContent className="p-8">
                 <h3 className="font-quicksand font-bold text-2xl mb-6 gradient-text">
-                  Thông Tin Chi Tiết
+                  Về Thầy Hiếu
                 </h3>
 
                 <div className="space-y-6">
@@ -55,7 +57,7 @@ const TeacherSection = () => {
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
                         <Book className="h-5 w-5 text-primary mr-2" />
-                        Nền Tảng Học Thuật Vững Chắc
+                        Nền Tảng Học Thuật
                       </h4>
                       <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
                         <li className="flex items-start">
@@ -64,7 +66,26 @@ const TeacherSection = () => {
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          GPA Hóa học luôn đạt 9.8+ - Học sinh xuất sắc toàn khóa 2019
+                          GPA Hóa học luôn đạt 9.8+ – Học sinh xuất sắc toàn khóa 2019
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          <span className="inline-flex items-center flex-wrap gap-1">
+                            Thành viên đội ngũ phát triển
+                            <a
+                              href="https://truonghocsoquocgia.vn"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-primary hover:text-primary-dark underline underline-offset-2 font-medium transition-colors"
+                            >
+                              <img
+                                src="/lovable-uploads/logo-512x512.png"
+                                alt="Logo Trường học số Quốc gia"
+                                className="w-5 h-5 object-contain inline-block"
+                              />
+                              Nền tảng Trường học số Quốc gia
+                            </a>
+                          </span>
                         </li>
                       </ul>
                     </div>
@@ -72,16 +93,16 @@ const TeacherSection = () => {
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
                         <Star className="h-5 w-5 text-gold mr-2" fill="currentColor" />
-                        Phương Pháp Giảng Dạy Độc Đáo
+                        Tư Duy Giảng Dạy Khác Biệt
                       </h4>
                       <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          2 bằng Cử nhân loại Giỏi tại Đại Học Kinh Tế Quốc Dân, chuyên ngành: Quản trị Kinh doanh & Công nghệ thông tin
+                          2 bằng Cử nhân loại Giỏi tại ĐH Kinh Tế Quốc Dân (Quản trị Kinh doanh & Công nghệ thông tin)
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          Phương pháp giảng dạy logic, hệ thống và dễ tiếp thu
+                          Kết hợp tư duy logic hệ thống với phương pháp truyền đạt gần gũi, dễ tiếp thu
                         </li>
                       </ul>
                     </div>
@@ -89,20 +110,16 @@ const TeacherSection = () => {
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-3 flex items-center">
                         <Calendar className="h-5 w-5 text-primary mr-2" />
-                        Kinh Nghiệm Thực Tiễn
+                        Hành Trình Giảng Dạy
                       </h4>
                       <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          6+ năm giảng dạy Hóa học chuyên sâu
+                          Hơn 6 năm dạy Hóa học cho học sinh THCS luyện thi chuyên và THPT lớp 10–12
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          Thành viên đội ngũ phát triển Nền tảng Trường học số Quốc gia
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-primary mr-2 mt-1">•</span>
-                          Ứng dụng tư duy phân tích vào thiết kế bài giảng và hệ thống
+                          Ứng dụng tư duy phân tích vào thiết kế bài giảng và hệ thống lộ trình học tập
                         </li>
                       </ul>
                     </div>
@@ -112,37 +129,37 @@ const TeacherSection = () => {
                     <MessageCircle className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-vietnam font-semibold text-lg mb-2">
-                        Cam Kết Đồng Hành
+                        Cam Kết Với Học Trò
                       </h4>
                         <ul className="font-vietnam text-muted-foreground space-y-2">
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          Hỗ trợ học viên 24/7
+                          Hỗ trợ học trò bất cứ lúc nào qua Zalo, Messenger
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          Vừa là giáo viên, vừa là người cố vấn tận tâm trên hành trình chinh phục Hóa học.
+                          Không chỉ là thầy giáo, mà còn là người anh đồng hành trên mỗi chặng đường học tập
                         </li>
                       </ul>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t space-y-3">
+                <div className="mt-8 pt-6 border-t flex flex-col sm:flex-row gap-3">
                   <Button
                     onClick={() =>
                       document
                         .getElementById("contact")
                         ?.scrollIntoView({ behavior: "smooth" })
                     }
-                    className="w-full gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-3 rounded-full"
+                    className="flex-1 gradient-bg hover:opacity-90 transition-opacity font-vietnam font-semibold py-3 rounded-full"
                   >
                     Kết Nối Với Thầy Ngay
                   </Button>
                   <Button
                     asChild
                     variant="outline"
-                    className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors font-vietnam font-semibold py-3 rounded-full"
+                    className="flex-1 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors font-vietnam font-semibold py-3 rounded-full"
                   >
                     <a
                       href="https://bob-portfolio.lovable.app/"
