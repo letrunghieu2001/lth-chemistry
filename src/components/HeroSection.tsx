@@ -103,7 +103,7 @@ const HeroSection = () => {
             <div className="relative w-80 md:w-[26rem] lg:w-[30rem]">
               <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10">
                 <video
-                  src="/lovable-uploads/ống_nghiệm_hơi_d_hóa_rồi_tôi.mp4"
+                  src="/lovable-uploads/hero-chemistry-lab.mp4"
                   autoPlay
                   muted
                   loop
