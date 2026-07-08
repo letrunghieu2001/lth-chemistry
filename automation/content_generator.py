@@ -123,7 +123,7 @@ def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
     )
 
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-3.5-flash",
         contents=user_prompt,
         config=config,
     )
