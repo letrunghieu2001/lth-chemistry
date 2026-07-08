@@ -59,6 +59,15 @@ jobs:
             python daily_post.py
           fi
 
+      - name: Upload generated images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-posts-${{ github.run_number }}
+          path: automation/output/
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Commit state changes
         run: |
           git config user.name "LTH Chemistry Bot"

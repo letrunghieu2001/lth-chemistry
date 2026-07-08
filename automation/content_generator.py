@@ -48,7 +48,7 @@ def _build_user_prompt(today_info: dict) -> str:
 
     return f"""Hôm nay là ngày {today_info['date_display']}.
 
-Hãy tạo 2 bài đăng Facebook cho LTH Chemistry:
+Hãy tạo 2 bài đăng Facebook cho LTH Chemistry (Thầy Hiếu - gia sư Hóa học tại Hà Nội):
 
 **Bài 1 - THCS:**
 - Đối tượng: Lớp {today_info['thcs_grade']} (KHTN - Kết nối tri thức)
@@ -60,30 +60,46 @@ Hãy tạo 2 bài đăng Facebook cho LTH Chemistry:
 - Chương hiện tại: Chương {today_info['thpt_chapter']}
 - Loại bài: {post_label}
 
-Trả về JSON với cấu trúc sau (KHÔNG bọc trong markdown code block):
+## QUY TẮC BẮT BUỘC (PHẢI TUÂN THỦ):
+
+### Giọng văn:
+- Viết bằng giọng Thầy Hiếu: mentor gần gũi, vui vẻ, đam mê hóa học
+- Xưng "thầy" hoặc "mình", gọi học sinh là "em", "các em", "bạn"
+- Dùng emoji VỪA PHẢI (3-5 emoji/bài), KHÔNG spam emoji
+- Caption phải tự nhiên như người thật viết, TUYỆT ĐỐI KHÔNG giống AI
+
+### Chính tả tiếng Việt (RẤT QUAN TRỌNG):
+- Kiểm tra kỹ chính tả trước khi trả về
+- Không viết tắt vô nghĩa, không dùng teencode
+- Dấu câu đúng chuẩn tiếng Việt
+- Công thức hóa học phải 100% chính xác (VD: H₂SO₄, NaOH, Fe₂O₃)
+
+### Cấu trúc caption:
+1. Hook mở đầu gây tò mò (1-2 dòng)
+2. Nội dung chính: kiến thức / mẹo / câu hỏi (phần chính)
+3. CTA kết thúc: khuyến khích comment, tag bạn, hoặc nhắn thầy
+
+### Hashtags:
+- 5-8 hashtags liên quan
+- Luôn bao gồm: #LTHChemistry #HoaHoc #GiaSuHoaHoc
+
+Trả về JSON (KHÔNG bọc trong markdown code block):
 {{
   "thcs_post": {{
-    "caption": "Nội dung caption Facebook đầy đủ, dưới 280 từ, bao gồm hook, nội dung chính, CTA",
-    "hashtags": "Danh sách hashtags cách nhau bằng dấu cách",
-    "image_title": "Tiêu đề ngắn hiển thị trên ảnh (tối đa 8 từ)",
-    "image_content": "Nội dung chính hiển thị trên ảnh (tối đa 40 từ, có thể là câu hỏi, công thức, fact...)",
+    "caption": "Nội dung caption đầy đủ, 150-280 từ",
+    "hashtags": "#LTHChemistry #HoaHoc ... (cách nhau bằng dấu cách)",
+    "image_title": "Tiêu đề trên ảnh (tối đa 8 từ)",
+    "image_content": "Nội dung chính trên ảnh (tối đa 35 từ, có thể là câu hỏi/công thức/fact)",
     "grade_label": "KHTN Lớp {today_info['thcs_grade']}"
   }},
   "thpt_post": {{
-    "caption": "Nội dung caption Facebook đầy đủ, dưới 280 từ, bao gồm hook, nội dung chính, CTA",
-    "hashtags": "Danh sách hashtags cách nhau bằng dấu cách",
-    "image_title": "Tiêu đề ngắn hiển thị trên ảnh (tối đa 8 từ)",
-    "image_content": "Nội dung chính hiển thị trên ảnh (tối đa 40 từ)",
+    "caption": "Nội dung caption đầy đủ, 150-280 từ",
+    "hashtags": "#LTHChemistry #HoaHoc ... (cách nhau bằng dấu cách)",
+    "image_title": "Tiêu đề trên ảnh (tối đa 8 từ)",
+    "image_content": "Nội dung chính trên ảnh (tối đa 35 từ)",
     "grade_label": "Hóa Học Lớp {today_info['thpt_grade']}"
   }}
-}}
-
-Nhớ:
-- Viết bằng giọng Thầy Hiếu (mentor, gần gũi, dùng emoji vừa phải)
-- Caption phải tự nhiên, KHÔNG giống AI viết
-- Công thức hóa học phải chính xác
-- Kết thúc bằng CTA rõ ràng (comment, share, tag bạn)
-"""
+}}"""
 
 
 # ── Backend 1: Gemini Direct (google-genai SDK) ──────────────────────
@@ -117,11 +133,13 @@ def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
 # ── Backend 2: OpenRouter API (HTTP) ─────────────────────────────────
 
 def _call_openrouter(system_prompt: str, user_prompt: str) -> str | None:
-    """Call a free model via OpenRouter's REST API."""
-    # Try models in order: specific free model first, then free router
+    """Call AI model via OpenRouter's REST API."""
+    # Try models in order of quality (paid first, free fallback)
     models_to_try = [
-        "google/gemini-2.5-flash-preview-05-20",  # often available free
-        "openrouter/free",                          # auto-picks best free model
+        "google/gemini-3.5-flash",                   # best quality (paid, ~$0.001/req)
+        "google/gemini-2.5-flash",                    # good quality (paid)
+        "google/gemini-2.5-flash-preview-05-20",      # preview (might be free)
+        "openrouter/free",                             # auto free router (fallback)
     ]
 
     last_error = None
