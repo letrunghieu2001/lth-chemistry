@@ -21,7 +21,10 @@ FONT_REGULAR = FONT_DIR / "BeVietnamPro-Regular.ttf"
 FONT_BOLD = FONT_DIR / "BeVietnamPro-Bold.ttf"
 
 # ── API Keys (from environment / GitHub Secrets) ──────────────────────
+# Primary: Gemini API direct (aistudio.google.com)
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+# Fallback: OpenRouter (openrouter.ai) — free tier available
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 FB_PAGE_ACCESS_TOKEN = os.environ.get("FB_PAGE_ACCESS_TOKEN", "")
 FB_PAGE_ID = os.environ.get("FB_PAGE_ID", "")
 

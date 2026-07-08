@@ -14,15 +14,52 @@ Bạn không cần làm gì sau khi setup xong.
 
 ---
 
-## Bước 1: Lấy Gemini API Key (30 giây)
+## Bước 1: Lấy Gemini API Key (2 phút)
+
+### 1.1 Tạo API Key
 
 1. Truy cập: https://aistudio.google.com/apikey
-2. Đăng nhập bằng tài khoản Google
+2. Đăng nhập bằng **tài khoản Google cá nhân** (Gmail thường, không phải Google Workspace/công ty)
 3. Nhấn **"Create API Key"**
-4. Chọn project bất kỳ (hoặc tạo mới)
+4. Chọn **"Create API key in new project"** (khuyến nghị) hoặc chọn project có sẵn
 5. **Copy API key** (dạng `AIzaSy...`) – lưu lại, sẽ dùng ở Bước 4
 
-> ⚠️ Free tier cho phép 15 requests/phút, 1500 requests/ngày. Hệ thống chỉ dùng 2 requests/ngày.
+> ⚠️ **Nếu dùng tài khoản Google Workspace (công ty/trường):** Admin có thể đã chặn quyền tạo API key. Hãy dùng Gmail cá nhân thay thế.
+
+### 1.2 Kiểm tra API Key hoạt động
+
+Mở **trình duyệt**, dán URL sau (thay `YOUR_API_KEY` bằng key vừa tạo):
+
+```
+https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_API_KEY
+```
+
+- Nếu trả về danh sách models (JSON dài) → API key OK ✅
+- Nếu báo `API_KEY_INVALID` → key sai, tạo lại
+- Nếu báo `PERMISSION_DENIED` → tài khoản bị hạn chế, thử Gmail cá nhân khác
+
+### 1.3 Xử lý lỗi Quota (429)
+
+Nếu gặp lỗi `429 You exceeded your current quota`:
+
+1. **Kiểm tra usage:** Vào https://aistudio.google.com → xem usage dashboard
+2. **Tạo project mới:** Vào lại https://aistudio.google.com/apikey → nhấn **"Create API key in new project"** (mỗi project có quota riêng)
+3. **Đợi reset:** Free tier reset quota mỗi phút (RPM) và mỗi ngày (RPD). Nếu vừa test nhiều lần, đợi 1-2 phút rồi thử lại
+4. **Kiểm tra model:** Hệ thống dùng `gemini-2.0-flash` (miễn phí). Nếu project của bạn bị giới hạn, thử tạo key ở project mới
+
+> 💡 **Free tier:** 15 requests/phút, 1500 requests/ngày, 1 triệu tokens/phút. Hệ thống chỉ dùng **1 request/ngày** — rất dư dả.
+
+### 1.4 Backup: Dùng OpenRouter (nếu Gemini vẫn bị quota 0)
+
+Nếu API key Gemini vẫn báo `limit: 0`, hãy dùng **OpenRouter** làm backup — miễn phí, không cần thẻ tín dụng:
+
+1. Truy cập: https://openrouter.ai
+2. Đăng nhập bằng Google/GitHub
+3. Vào **Dashboard** → **Keys** → nhấn **"Create Key"**
+4. Copy API key (dạng `sk-or-v1-...`)
+5. Thêm vào GitHub Secrets với tên: **`OPENROUTER_API_KEY`**
+
+> ✅ Hệ thống sẽ tự ưu tiên Gemini trước. Nếu Gemini fail → tự chuyển sang OpenRouter. Bạn có thể cấu hình cả 2 key cùng lúc để đảm bảo không bao giờ bị gián đoạn.
 
 ---
 

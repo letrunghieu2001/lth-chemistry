@@ -1,16 +1,21 @@
 """
-Content generator: calls Gemini API with the LTH Chemistry skill prompt.
-Returns structured content for both THCS and THPT posts.
+Content generator: calls Gemini API (direct or via OpenRouter) with the
+LTH Chemistry skill prompt.  Returns structured content for THCS & THPT posts.
+
+Supports two backends:
+  1. google-genai SDK (primary, requires GEMINI_API_KEY)
+  2. OpenRouter API   (fallback, requires OPENROUTER_API_KEY)
 """
 
 import json
 import logging
 import time
 
-import google.generativeai as genai
+import requests as http_requests  # renamed to avoid collision
 
 from config import (
     GEMINI_API_KEY,
+    OPENROUTER_API_KEY,
     SKILL_FILE,
     CURRICULUM_FILE,
     POST_TYPE_LABELS,
@@ -18,10 +23,11 @@ from config import (
 
 logger = logging.getLogger(__name__)
 
-# Maximum retries for API calls
 MAX_RETRIES = 3
-RETRY_DELAY = 5  # seconds
+RETRY_DELAY = 10  # seconds
 
+
+# ── Prompt builders ───────────────────────────────────────────────────
 
 def _load_skill_prompt() -> str:
     """Load the SKILL.md and curriculum-map.md as system instructions."""
@@ -80,63 +86,135 @@ Nhớ:
 """
 
 
+# ── Backend 1: Gemini Direct (google-genai SDK) ──────────────────────
+
+def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
+    """Call Gemini via the official google-genai SDK."""
+    try:
+        from google import genai
+        from google.genai import types
+    except ImportError:
+        logger.warning("google-genai not installed, skipping direct Gemini.")
+        return None
+
+    client = genai.Client(api_key=GEMINI_API_KEY)
+
+    config = types.GenerateContentConfig(
+        system_instruction=system_prompt,
+        response_mime_type="application/json",
+        temperature=0.8,
+        max_output_tokens=4096,
+    )
+
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=user_prompt,
+        config=config,
+    )
+    return response.text.strip()
+
+
+# ── Backend 2: OpenRouter API (HTTP) ─────────────────────────────────
+
+def _call_openrouter(system_prompt: str, user_prompt: str) -> str | None:
+    """Call Gemini Flash via OpenRouter's REST API."""
+    resp = http_requests.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://lthchemistry.com",
+            "X-Title": "LTH Chemistry Auto Post",
+        },
+        json={
+            "model": "google/gemini-2.0-flash-exp:free",
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            "temperature": 0.8,
+            "max_tokens": 4096,
+            "response_format": {"type": "json_object"},
+        },
+        timeout=120,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    return data["choices"][0]["message"]["content"].strip()
+
+
+# ── Main entry point ─────────────────────────────────────────────────
+
 def generate_content(today_info: dict) -> dict | None:
     """
     Generate content for today's posts using Gemini API.
 
+    Tries direct Gemini first; if that fails, falls back to OpenRouter.
     Returns dict with 'thcs_post' and 'thpt_post' keys, or None on failure.
     """
-    if not GEMINI_API_KEY:
-        logger.error("GEMINI_API_KEY not set. Cannot generate content.")
-        return None
+    # Determine which backends are available
+    backends = []
+    if GEMINI_API_KEY:
+        backends.append(("Gemini Direct", _call_gemini_direct))
+    if OPENROUTER_API_KEY:
+        backends.append(("OpenRouter", _call_openrouter))
 
-    genai.configure(api_key=GEMINI_API_KEY)
+    if not backends:
+        logger.error(
+            "No API key configured. Set GEMINI_API_KEY or OPENROUTER_API_KEY."
+        )
+        return None
 
     system_prompt = _load_skill_prompt()
     user_prompt = _build_user_prompt(today_info)
 
-    model = genai.GenerativeModel(
-        model_name="gemini-2.0-flash",
-        system_instruction=system_prompt,
-        generation_config=genai.GenerationConfig(
-            response_mime_type="application/json",
-            temperature=0.8,
-            max_output_tokens=4096,
-        ),
-    )
+    for backend_name, call_fn in backends:
+        for attempt in range(1, MAX_RETRIES + 1):
+            try:
+                logger.info(
+                    "[%s] Calling API (attempt %d/%d)...",
+                    backend_name, attempt, MAX_RETRIES,
+                )
+                raw_text = call_fn(system_prompt, user_prompt)
+                if not raw_text:
+                    raise ValueError("Empty response from API")
 
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            logger.info("Calling Gemini API (attempt %d/%d)...", attempt, MAX_RETRIES)
-            response = model.generate_content(user_prompt)
+                # Clean markdown fences if model wraps output
+                if raw_text.startswith("```"):
+                    raw_text = raw_text.strip("`").strip()
+                    if raw_text.startswith("json"):
+                        raw_text = raw_text[4:].strip()
 
-            raw_text = response.text.strip()
-            content = json.loads(raw_text)
+                content = json.loads(raw_text)
 
-            # Validate structure
-            if "thcs_post" not in content or "thpt_post" not in content:
-                logger.error("Response missing required keys. Raw: %s", raw_text[:500])
-                continue
-
-            for key in ["thcs_post", "thpt_post"]:
-                post = content[key]
-                required = ["caption", "hashtags", "image_title", "image_content", "grade_label"]
-                missing = [f for f in required if f not in post]
-                if missing:
-                    logger.error("Post '%s' missing fields: %s", key, missing)
+                # Validate structure
+                if "thcs_post" not in content or "thpt_post" not in content:
+                    logger.error("Response missing required keys.")
                     continue
 
-            logger.info("Content generated successfully.")
-            return content
+                for key in ["thcs_post", "thpt_post"]:
+                    post = content[key]
+                    required = ["caption", "hashtags", "image_title",
+                                "image_content", "grade_label"]
+                    missing = [f for f in required if f not in post]
+                    if missing:
+                        logger.error("Post '%s' missing fields: %s", key, missing)
+                        continue
 
-        except json.JSONDecodeError as exc:
-            logger.error("Failed to parse JSON response: %s", exc)
-        except Exception as exc:
-            logger.error("Gemini API error: %s", exc)
+                logger.info("[%s] Content generated successfully.", backend_name)
+                return content
 
-        if attempt < MAX_RETRIES:
-            logger.info("Retrying in %d seconds...", RETRY_DELAY)
-            time.sleep(RETRY_DELAY)
+            except json.JSONDecodeError as exc:
+                logger.error("[%s] JSON parse error: %s", backend_name, exc)
+            except Exception as exc:
+                logger.error("[%s] API error: %s", backend_name, exc)
 
-    logger.error("All %d attempts failed. Skipping today.", MAX_RETRIES)
+            if attempt < MAX_RETRIES:
+                wait = RETRY_DELAY * attempt
+                logger.info("Retrying in %d seconds...", wait)
+                time.sleep(wait)
+
+        logger.warning("[%s] All attempts failed. Trying next backend...", backend_name)
+
+    logger.error("All backends failed. Skipping today.")
     return None
