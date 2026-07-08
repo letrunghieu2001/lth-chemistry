@@ -43,23 +43,24 @@ LOGO_MAX_HEIGHT = 80
 THCS_GRADES = [6, 7, 8, 9]
 THPT_GRADES = [10, 11, 12]
 
-# ── Post types by day of week (0=Monday … 6=Sunday) ──────────────────
-DAILY_POST_TYPES = {
-    0: "review_question",
-    1: "common_mistakes",
-    2: "chemistry_around_us",
-    3: "mnemonic_tips",
-    4: "quiz_poll",
-    5: "fun_facts",
-    6: "exam_countdown",
+# ── Post types with weights for random selection ──────────────────────
+# Higher weight = more frequent. quiz_mcq gets 3x priority.
+POST_TYPE_WEIGHTS = {
+    "quiz_mcq": 3,
+    "review_question": 1,
+    "common_mistakes": 1,
+    "chemistry_around_us": 1,
+    "mnemonic_tips": 1,
+    "fun_facts": 1,
+    "exam_countdown": 1,
 }
 
 POST_TYPE_LABELS = {
+    "quiz_mcq": "TRẮC NGHIỆM HÓA HỌC",
     "review_question": "CÂU HỎI ÔN TẬP",
     "common_mistakes": "SAI LẦM HAY GẶP",
     "chemistry_around_us": "HÓA HỌC QUANH TA",
     "mnemonic_tips": "MẸO GHI NHỚ",
-    "quiz_poll": "ĐỐ VUI HÓA HỌC",
     "fun_facts": "CÓ BIẾT KHÔNG?",
     "exam_countdown": "COUNTDOWN THI",
 }
@@ -80,8 +81,14 @@ COLORS = {
     "gold": "#f1c40f",
 }
 
-# ── Template color schemes per post type ──────────────────────────────
+# ── Template color schemes per post type (used by Pillow fallback) ────
 TEMPLATE_COLORS = {
+    "quiz_mcq": {
+        "bg_top": "#6c3483",
+        "bg_bottom": "#4a235a",
+        "accent": "#d2b4de",
+        "text": "#ffffff",
+    },
     "review_question": {
         "bg_top": "#0d7377",
         "bg_bottom": "#0a5c5f",
@@ -105,12 +112,6 @@ TEMPLATE_COLORS = {
         "bg_bottom": "#d68910",
         "accent": "#fdebd0",
         "text": "#1a1a4e",
-    },
-    "quiz_poll": {
-        "bg_top": "#6c3483",
-        "bg_bottom": "#4a235a",
-        "accent": "#d2b4de",
-        "text": "#ffffff",
     },
     "fun_facts": {
         "bg_top": "#1a2744",

@@ -41,10 +41,50 @@ def _load_skill_prompt() -> str:
     return "\n\n---\n\n".join(parts)
 
 
+def _build_quiz_section(group: str, grade: int, chapter: int) -> str:
+    """Build the quiz-specific prompt section for quiz_mcq post type."""
+    return f"""- Loại bài: TRẮC NGHIỆM HÓA HỌC
+- YÊU CẦU ĐẶC BIỆT cho trắc nghiệm:
+  + Tạo 1 câu hỏi trắc nghiệm 4 đáp án (A, B, C, D)
+  + Câu hỏi phải rõ ràng, chính xác, phù hợp trình độ Lớp {grade} Chương {chapter}
+  + Chỉ có DUY NHẤT 1 đáp án đúng
+  + Trả về thêm fields: "question", "options" (list 4 string), "answer" (chỉ chữ A/B/C/D), "explanation"
+  + image_prompt phải mô tả ảnh quiz card hiện đại với câu hỏi + 4 đáp án hiển thị rõ
+  + Caption: hook hỏi, KHÔNG tiết lộ đáp án trong caption chính, đáp án để ở cuối sau dấu "---"
+"""
+
+
+def _build_normal_section(post_type: str, grade: int, chapter: int) -> str:
+    """Build the normal prompt section for non-quiz post types."""
+    post_label = POST_TYPE_LABELS.get(post_type, post_type)
+    return f"""- Loại bài: {post_label}
+"""
+
+
 def _build_user_prompt(today_info: dict) -> str:
     """Build the user prompt telling the AI what to generate today."""
-    post_type = today_info["post_type"]
-    post_label = POST_TYPE_LABELS.get(post_type, post_type)
+    thcs_type = today_info["thcs_post_type"]
+    thpt_type = today_info["thpt_post_type"]
+
+    # Build type-specific sections
+    if thcs_type == "quiz_mcq":
+        thcs_section = _build_quiz_section("THCS", today_info["thcs_grade"], today_info["thcs_chapter"])
+    else:
+        thcs_section = _build_normal_section(thcs_type, today_info["thcs_grade"], today_info["thcs_chapter"])
+
+    if thpt_type == "quiz_mcq":
+        thpt_section = _build_quiz_section("THPT", today_info["thpt_grade"], today_info["thpt_chapter"])
+    else:
+        thpt_section = _build_normal_section(thpt_type, today_info["thpt_grade"], today_info["thpt_chapter"])
+
+    # Quiz JSON fields
+    quiz_fields_example = ""
+    if thcs_type == "quiz_mcq" or thpt_type == "quiz_mcq":
+        quiz_fields_example = """
+    "question": "Câu hỏi trắc nghiệm (CHỈ có khi loại bài là TRẮC NGHIỆM)",
+    "options": ["A. ...", "B. ...", "C. ...", "D. ..."],
+    "answer": "B",
+    "explanation": "Giải thích ngắn gọn tại sao đáp án đúng","""
 
     return f"""Hôm nay là ngày {today_info['date_display']}.
 
@@ -53,12 +93,12 @@ Hãy tạo 2 bài đăng Facebook cho LTH Chemistry (Thầy Hiếu - gia sư Hó
 **Bài 1 - THCS:**
 - Đối tượng: Lớp {today_info['thcs_grade']} (KHTN - Kết nối tri thức)
 - Chương hiện tại: Chương {today_info['thcs_chapter']}
-- Loại bài: {post_label}
+{thcs_section}
 
 **Bài 2 - THPT:**
 - Đối tượng: Lớp {today_info['thpt_grade']} (Hóa học - Kết nối tri thức)
 - Chương hiện tại: Chương {today_info['thpt_chapter']}
-- Loại bài: {post_label}
+{thpt_section}
 
 ## QUY TẮC BẮT BUỘC (PHẢI TUÂN THỦ):
 
@@ -83,13 +123,22 @@ Hãy tạo 2 bài đăng Facebook cho LTH Chemistry (Thầy Hiếu - gia sư Hó
 - 5-8 hashtags liên quan
 - Luôn bao gồm: #LTHChemistry #HoaHoc #GiaSuHoaHoc
 
+### image_prompt (BẮT BUỘC cho mỗi bài):
+- Mô tả ảnh minh họa bằng TIẾNG ANH để AI gen ảnh
+- Phong cách: modern, flat illustration, educational, vibrant colors
+- Nếu là trắc nghiệm: mô tả quiz card với câu hỏi + 4 options A/B/C/D rendered trên ảnh
+- Nếu là bài thường: mô tả hình minh họa liên quan đến chủ đề (ống nghiệm, phản ứng, nguyên tố...)
+- KHÔNG yêu cầu text tiếng Việt trong ảnh (trừ công thức hóa học)
+- Thêm "1080x1080, clean white or gradient background, no watermark" vào mỗi prompt
+
 Trả về JSON (KHÔNG bọc trong markdown code block):
 {{
   "thcs_post": {{
     "caption": "Nội dung caption đầy đủ, 150-280 từ",
     "hashtags": "#LTHChemistry #HoaHoc ... (cách nhau bằng dấu cách)",
     "image_title": "Tiêu đề trên ảnh (tối đa 8 từ)",
-    "image_content": "Nội dung chính trên ảnh (tối đa 35 từ, có thể là câu hỏi/công thức/fact)",
+    "image_content": "Nội dung chính trên ảnh (tối đa 35 từ)",
+    "image_prompt": "English description for AI image generation",{quiz_fields_example}
     "grade_label": "KHTN Lớp {today_info['thcs_grade']}"
   }},
   "thpt_post": {{
@@ -97,6 +146,7 @@ Trả về JSON (KHÔNG bọc trong markdown code block):
     "hashtags": "#LTHChemistry #HoaHoc ... (cách nhau bằng dấu cách)",
     "image_title": "Tiêu đề trên ảnh (tối đa 8 từ)",
     "image_content": "Nội dung chính trên ảnh (tối đa 35 từ)",
+    "image_prompt": "English description for AI image generation",{quiz_fields_example}
     "grade_label": "Hóa Học Lớp {today_info['thpt_grade']}"
   }}
 }}"""
@@ -229,7 +279,7 @@ def generate_content(today_info: dict) -> dict | None:
                 for key in ["thcs_post", "thpt_post"]:
                     post = content[key]
                     required = ["caption", "hashtags", "image_title",
-                                "image_content", "grade_label"]
+                                "image_content", "image_prompt", "grade_label"]
                     missing = [f for f in required if f not in post]
                     if missing:
                         logger.error("Post '%s' missing fields: %s", key, missing)

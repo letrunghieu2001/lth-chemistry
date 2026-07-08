@@ -4,8 +4,8 @@ LTH Chemistry – Daily Facebook Post Automation
 
 Main orchestrator that runs daily via GitHub Actions:
 1. Check state (prevent double-posting)
-2. Generate content via Gemini API
-3. Create branded images with logo
+2. Generate content via Gemini API (text + image prompts)
+3. Create AI-generated images with logo overlay
 4. Post to Facebook Page (THCS morning, THPT evening)
 5. Advance rotation state
 """
@@ -19,6 +19,7 @@ from config import (
     THCS_POST_MINUTE,
     THPT_POST_HOUR,
     THPT_POST_MINUTE,
+    POST_TYPE_LABELS,
 )
 from state_manager import load_state, save_state, get_today_info, advance_state, should_post_today
 from content_generator import generate_content
@@ -46,7 +47,7 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
         True if successful, False otherwise.
     """
     logger.info("=" * 60)
-    logger.info("LTH Chemistry Daily Post – Starting")
+    logger.info("LTH Chemistry Daily Post – Starting (v2)")
     logger.info("=" * 60)
 
     # ── Step 0: Load state and check if we already posted today ───
@@ -63,14 +64,18 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
 
     # ── Step 1: Determine today's content parameters ──────────────
     today = get_today_info(state)
+    thcs_label = POST_TYPE_LABELS.get(today["thcs_post_type"], today["thcs_post_type"])
+    thpt_label = POST_TYPE_LABELS.get(today["thpt_post_type"], today["thpt_post_type"])
+
     logger.info(
-        "Today: %s | Type: %s | THCS: Lớp %d Ch.%d | THPT: Lớp %d Ch.%d",
+        "Today: %s | THCS: Lớp %d Ch.%d [%s] | THPT: Lớp %d Ch.%d [%s]",
         today["date_display"],
-        today["post_type"],
         today["thcs_grade"],
         today["thcs_chapter"],
+        thcs_label,
         today["thpt_grade"],
         today["thpt_chapter"],
+        thpt_label,
     )
 
     # ── Step 2: Generate content via Gemini ───────────────────────
@@ -87,22 +92,24 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
     logger.info("THCS caption preview: %s...", thcs["caption"][:80])
     logger.info("THPT caption preview: %s...", thpt["caption"][:80])
 
-    # ── Step 3: Create images ─────────────────────────────────────
+    # ── Step 3: Create images (AI-generated + logo overlay) ───────
     logger.info("Creating images...")
 
     thcs_image = create_post_image(
-        post_type=today["post_type"],
+        post_type=today["thcs_post_type"],
         image_title=thcs["image_title"],
         image_content=thcs["image_content"],
         grade_label=thcs["grade_label"],
+        image_prompt=thcs.get("image_prompt", ""),
         filename=f"{today['date']}_thcs.png",
     )
 
     thpt_image = create_post_image(
-        post_type=today["post_type"],
+        post_type=today["thpt_post_type"],
         image_title=thpt["image_title"],
         image_content=thpt["image_content"],
         grade_label=thpt["grade_label"],
+        image_prompt=thpt.get("image_prompt", ""),
         filename=f"{today['date']}_thpt.png",
     )
 
@@ -116,6 +123,8 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
     if dry_run:
         logger.info("[DRY RUN] Would post THCS at %02d:%02d", THCS_POST_HOUR, THCS_POST_MINUTE)
         logger.info("[DRY RUN] Would post THPT at %02d:%02d", THPT_POST_HOUR, THPT_POST_MINUTE)
+        logger.info("[DRY RUN] THCS type: %s", thcs_label)
+        logger.info("[DRY RUN] THPT type: %s", thpt_label)
         logger.info("[DRY RUN] THCS caption:\n%s\n%s", thcs["caption"], thcs["hashtags"])
         logger.info("[DRY RUN] THPT caption:\n%s\n%s", thpt["caption"], thpt["hashtags"])
     else:
@@ -146,7 +155,7 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
             return False
 
     # ── Step 5: Advance state ─────────────────────────────────────
-    state = advance_state(state)
+    state = advance_state(state, today["thcs_post_type"], today["thpt_post_type"])
     save_state(state)
 
     logger.info("=" * 60)

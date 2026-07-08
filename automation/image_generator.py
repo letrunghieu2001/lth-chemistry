@@ -1,16 +1,17 @@
 """
-Image generator: creates branded post images using Pillow.
-Each post type has a distinct color scheme and layout.
-Logo is always placed at bottom-right.
+Image generator: creates post images using Gemini 3.1 Flash Image (Nano Banana 2).
+Falls back to Pillow-based template if AI image generation fails.
+Logo is always overlaid at bottom-right.
 """
 
 import logging
-import textwrap
+from io import BytesIO
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
 from config import (
+    GEMINI_API_KEY,
     IMAGE_WIDTH,
     IMAGE_HEIGHT,
     LOGO_PATH,
@@ -24,7 +25,6 @@ from config import (
 
 logger = logging.getLogger(__name__)
 
-# Fallback font if custom font not available
 _font_cache: dict[str, ImageFont.FreeTypeFont] = {}
 
 
@@ -53,6 +53,76 @@ def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     hex_color = hex_color.lstrip("#")
     return tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
 
+
+def _overlay_logo(img: Image.Image) -> Image.Image:
+    """Place the LTH Chemistry logo at bottom-right corner."""
+    try:
+        logo = Image.open(LOGO_PATH).convert("RGBA")
+    except (FileNotFoundError, IOError):
+        logger.warning("Logo not found at %s, skipping overlay.", LOGO_PATH)
+        return img
+
+    # Scale logo to fit max height while keeping aspect ratio
+    aspect = logo.width / logo.height
+    new_height = LOGO_MAX_HEIGHT
+    new_width = int(new_height * aspect)
+    logo = logo.resize((new_width, new_height), Image.LANCZOS)
+
+    # Position: bottom-right with padding
+    padding = 30
+    x = img.width - new_width - padding
+    y = img.height - new_height - padding
+
+    # Composite onto image
+    if img.mode != "RGBA":
+        img = img.convert("RGBA")
+    img.paste(logo, (x, y), logo)
+
+    return img
+
+
+# ── AI Image Generation (Gemini 3.1 Flash Image) ─────────────────────
+
+def _generate_ai_image(image_prompt: str) -> Image.Image | None:
+    """Generate an image using Gemini 3.1 Flash Image (Nano Banana 2)."""
+    if not GEMINI_API_KEY:
+        logger.warning("GEMINI_API_KEY not set, skipping AI image generation.")
+        return None
+
+    try:
+        from google import genai
+        from google.genai.types import GenerateContentConfig, Modality
+    except ImportError:
+        logger.warning("google-genai not installed, skipping AI image gen.")
+        return None
+
+    try:
+        client = genai.Client(api_key=GEMINI_API_KEY)
+
+        response = client.models.generate_content(
+            model="gemini-3.1-flash-image",
+            contents=image_prompt,
+            config=GenerateContentConfig(
+                response_modalities=[Modality.TEXT, Modality.IMAGE],
+            ),
+        )
+
+        # Extract image from response parts
+        for part in response.candidates[0].content.parts:
+            if part.inline_data is not None:
+                image = Image.open(BytesIO(part.inline_data.data))
+                logger.info("AI image generated successfully (%dx%d).", image.width, image.height)
+                return image
+
+        logger.warning("No image data in Gemini response.")
+        return None
+
+    except Exception as exc:
+        logger.error("AI image generation failed: %s", exc, exc_info=True)
+        return None
+
+
+# ── Pillow Fallback ──────────────────────────────────────────────────
 
 def _draw_gradient(draw: ImageDraw.ImageDraw, width: int, height: int,
                    top_color: str, bottom_color: str) -> None:
@@ -108,161 +178,134 @@ def _draw_centered_text(draw: ImageDraw.ImageDraw, text: str,
     return y
 
 
-def _overlay_logo(img: Image.Image) -> Image.Image:
-    """Place the LTH Chemistry logo at bottom-right corner."""
-    try:
-        logo = Image.open(LOGO_PATH).convert("RGBA")
-    except (FileNotFoundError, IOError):
-        logger.warning("Logo not found at %s, skipping overlay.", LOGO_PATH)
-        return img
+def _create_pillow_fallback(
+    post_type: str,
+    image_title: str,
+    image_content: str,
+    grade_label: str,
+) -> Image.Image:
+    """Create a Pillow-based template image as fallback."""
+    colors = TEMPLATE_COLORS.get(post_type, TEMPLATE_COLORS["review_question"])
+    type_label = POST_TYPE_LABELS.get(post_type, "LTH CHEMISTRY")
 
-    # Scale logo to fit max height while keeping aspect ratio
-    aspect = logo.width / logo.height
-    new_height = LOGO_MAX_HEIGHT
-    new_width = int(new_height * aspect)
-    logo = logo.resize((new_width, new_height), Image.LANCZOS)
+    img = Image.new("RGBA", (IMAGE_WIDTH, IMAGE_HEIGHT))
+    draw = ImageDraw.Draw(img)
 
-    # Position: bottom-right with padding
-    padding = 30
-    x = IMAGE_WIDTH - new_width - padding
-    y = IMAGE_HEIGHT - new_height - padding
+    _draw_gradient(draw, IMAGE_WIDTH, IMAGE_HEIGHT,
+                   colors["bg_top"], colors["bg_bottom"])
 
-    # Composite onto image
-    if img.mode != "RGBA":
-        img = img.convert("RGBA")
-    img.paste(logo, (x, y), logo)
+    # Top bar
+    accent_rgb = _hex_to_rgb(colors["accent"])
+    draw.rectangle([0, 0, IMAGE_WIDTH, 100], fill=(*accent_rgb, 60))
+    font_type_label = _get_font(bold=True, size=28)
+    bbox = font_type_label.getbbox(type_label)
+    lw = bbox[2] - bbox[0]
+    draw.text(
+        ((IMAGE_WIDTH - lw) // 2, 35),
+        type_label,
+        fill=_hex_to_rgb(colors["text"]),
+        font=font_type_label,
+    )
+
+    # Grade label
+    font_grade = _get_font(bold=False, size=24)
+    bbox = font_grade.getbbox(grade_label)
+    gw = bbox[2] - bbox[0]
+    draw.text(
+        ((IMAGE_WIDTH - gw) // 2, 120),
+        grade_label,
+        fill=(*_hex_to_rgb(colors["accent"]),),
+        font=font_grade,
+    )
+
+    # Divider
+    draw.line(
+        [(IMAGE_WIDTH // 4, 165), (3 * IMAGE_WIDTH // 4, 165)],
+        fill=(*_hex_to_rgb(colors["accent"]),),
+        width=2,
+    )
+
+    # Title
+    font_title = _get_font(bold=True, size=44)
+    title_y = _draw_centered_text(
+        draw, image_title, font_title, 200,
+        colors["text"], IMAGE_WIDTH - 120,
+    )
+
+    # Content
+    font_content = _get_font(bold=False, size=34)
+    content_y = max(title_y + 30, 340)
+    _draw_centered_text(
+        draw, image_content, font_content, content_y,
+        colors["text"], IMAGE_WIDTH - 100,
+    )
+
+    # Bottom bar
+    bottom_bar_y = IMAGE_HEIGHT - 120
+    draw.rectangle(
+        [0, bottom_bar_y, IMAGE_WIDTH, IMAGE_HEIGHT],
+        fill=(*accent_rgb, 40),
+    )
+    font_brand = _get_font(bold=False, size=20)
+    draw.text(
+        (40, bottom_bar_y + 50),
+        "fb.com/LTHChemistry",
+        fill=(*_hex_to_rgb(colors["text"]),),
+        font=font_brand,
+    )
 
     return img
 
 
-def _draw_decorative_circles(draw: ImageDraw.ImageDraw, accent_color: str) -> None:
-    """Add subtle decorative circles for visual interest."""
-    rgb = _hex_to_rgb(accent_color)
-    # Semi-transparent effect via lighter color
-    light = tuple(min(255, c + 100) for c in rgb)
-
-    # Top-left circle (partially off-screen)
-    draw.ellipse([-60, -60, 120, 120], fill=(*light, 30), outline=None)
-    # Bottom-left circle
-    draw.ellipse([-40, IMAGE_HEIGHT - 160, 140, IMAGE_HEIGHT + 40],
-                 fill=(*light, 25), outline=None)
-    # Top-right small circle
-    draw.ellipse([IMAGE_WIDTH - 100, 30, IMAGE_WIDTH - 20, 110],
-                 fill=(*light, 20), outline=None)
-
+# ── Main entry point ─────────────────────────────────────────────────
 
 def create_post_image(
     post_type: str,
     image_title: str,
     image_content: str,
     grade_label: str,
+    image_prompt: str,
     filename: str,
 ) -> Path | None:
     """
-    Create a branded post image.
+    Create a post image using AI generation with Pillow fallback.
 
     Args:
-        post_type: One of the 7 post types (review_question, etc.)
+        post_type: One of the post types (quiz_mcq, review_question, etc.)
         image_title: Short title for the image header
         image_content: Main content text
         grade_label: Grade/subject label (e.g., "Hóa Học Lớp 10")
+        image_prompt: English prompt for AI image generation
         filename: Output filename (without path)
 
     Returns:
         Path to the created image, or None on failure.
     """
     try:
-        colors = TEMPLATE_COLORS.get(post_type, TEMPLATE_COLORS["review_question"])
-        type_label = POST_TYPE_LABELS.get(post_type, "LTH CHEMISTRY")
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        output_path = OUTPUT_DIR / filename
 
-        # Create image with gradient background
-        img = Image.new("RGBA", (IMAGE_WIDTH, IMAGE_HEIGHT))
-        draw = ImageDraw.Draw(img)
+        # Try AI image generation first
+        ai_image = _generate_ai_image(image_prompt)
 
-        _draw_gradient(draw, IMAGE_WIDTH, IMAGE_HEIGHT,
-                       colors["bg_top"], colors["bg_bottom"])
+        if ai_image is not None:
+            # Resize to target dimensions
+            ai_image = ai_image.resize(
+                (IMAGE_WIDTH, IMAGE_HEIGHT), Image.LANCZOS
+            )
+            img = ai_image
+            logger.info("Using AI-generated image.")
+        else:
+            # Fallback to Pillow template
+            logger.info("Falling back to Pillow template.")
+            img = _create_pillow_fallback(
+                post_type, image_title, image_content, grade_label
+            )
 
-        # Decorative elements
-        _draw_decorative_circles(draw, colors["accent"])
-
-        # ── Top bar: post type label ──────────────────────────────
-        top_bar_height = 100
-        accent_rgb = _hex_to_rgb(colors["accent"])
-        draw.rectangle(
-            [0, 0, IMAGE_WIDTH, top_bar_height],
-            fill=(*accent_rgb, 60),
-        )
-
-        font_type_label = _get_font(bold=True, size=28)
-        bbox = font_type_label.getbbox(type_label)
-        lw = bbox[2] - bbox[0]
-        draw.text(
-            ((IMAGE_WIDTH - lw) // 2, 35),
-            type_label,
-            fill=_hex_to_rgb(colors["text"]),
-            font=font_type_label,
-        )
-
-        # ── Grade label (below top bar) ───────────────────────────
-        font_grade = _get_font(bold=False, size=24)
-        bbox = font_grade.getbbox(grade_label)
-        gw = bbox[2] - bbox[0]
-        draw.text(
-            ((IMAGE_WIDTH - gw) // 2, 120),
-            grade_label,
-            fill=(*_hex_to_rgb(colors["accent"]),),
-            font=font_grade,
-        )
-
-        # ── Divider line ──────────────────────────────────────────
-        div_y = 165
-        draw.line(
-            [(IMAGE_WIDTH // 4, div_y), (3 * IMAGE_WIDTH // 4, div_y)],
-            fill=(*_hex_to_rgb(colors["accent"]),),
-            width=2,
-        )
-
-        # ── Image title ──────────────────────────────────────────
-        font_title = _get_font(bold=True, size=44)
-        title_y = _draw_centered_text(
-            draw, image_title, font_title, 200,
-            colors["text"], IMAGE_WIDTH - 120,
-        )
-
-        # ── Main content ─────────────────────────────────────────
-        font_content = _get_font(bold=False, size=34)
-        content_y = max(title_y + 30, 340)
-        _draw_centered_text(
-            draw, image_content, font_content, content_y,
-            colors["text"], IMAGE_WIDTH - 100,
-        )
-
-        # ── Bottom area: branding ─────────────────────────────────
-        bottom_bar_y = IMAGE_HEIGHT - 120
-        draw.rectangle(
-            [0, bottom_bar_y, IMAGE_WIDTH, IMAGE_HEIGHT],
-            fill=(*accent_rgb, 40),
-        )
-
-        font_brand = _get_font(bold=False, size=20)
-        brand_text = "fb.com/LTHChemistry"
-        bbox = font_brand.getbbox(brand_text)
-        bw = bbox[2] - bbox[0]
-        draw.text(
-            (40, bottom_bar_y + 50),
-            brand_text,
-            fill=(*_hex_to_rgb(colors["text"]),),
-            font=font_brand,
-        )
-
-        # ── Overlay logo ─────────────────────────────────────────
+        # Always overlay logo
         img = _overlay_logo(img)
 
-        # ── Save ──────────────────────────────────────────────────
-        output_path = OUTPUT_DIR / filename
-        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-        # Convert to RGB for JPEG/PNG compatibility
+        # Save as PNG
         final = Image.new("RGB", img.size, (255, 255, 255))
         final.paste(img, mask=img.split()[3] if img.mode == "RGBA" else None)
         final.save(str(output_path), "PNG", quality=95)
