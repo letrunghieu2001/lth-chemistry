@@ -1,6 +1,6 @@
 {
-  "thcs_grade_index": 0,
-  "thpt_grade_index": 1,
+  "thcs_grade_index": 1,
+  "thpt_grade_index": 2,
   "thcs_chapter": {
     "6": 1,
     "7": 1,
@@ -12,12 +12,15 @@
     "11": 1,
     "12": 1
   },
-  "last_post_date": "2026-07-08",
-  "posts_count": 8,
+  "last_post_date": "2026-07-13",
+  "posts_count": 10,
   "recent_types": [
     "mnemonic_tips",
     "quiz_mcq",
     "mnemonic_tips",
+    "review_question",
+    "exam_countdown",
     "review_question"
-  ]
+  ],
+  "last_character": "conan"
 }
