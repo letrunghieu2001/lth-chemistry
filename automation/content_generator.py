@@ -102,39 +102,50 @@ Hãy tạo 2 bài đăng Facebook cho LTH Chemistry (Thầy Hiếu - gia sư Hó
 
 ## QUY TẮC BẮT BUỘC (PHẢI TUÂN THỦ):
 
-### Giọng văn:
+### NGUYÊN TẮC QUAN TRỌNG NHẤT: ẢNH LÀ NỘI DUNG CHÍNH!
+- ẢNH là nơi chứa TOÀN BỘ kiến thức, công thức, phương trình, bảng tổng hợp
+- CAPTION chỉ là phần BỔ SUNG nhẹ nhàng, dẫn dắt người xem chú ý vào ảnh
+- TUYỆT ĐỐI KHÔNG viết công thức hóa học trong caption (VD: H₂SO₄, NaOH, Fe₂O₃)
+- TUYỆT ĐỐI KHÔNG viết phương trình hóa học trong caption
+- Mọi công thức, phương trình, sơ đồ → đặt trong image_prompt để AI gen vào ảnh
+
+### Giọng văn caption:
 - Viết bằng giọng Thầy Hiếu: mentor gần gũi, vui vẻ, đam mê hóa học
 - Xưng "thầy" hoặc "mình", gọi học sinh là "em", "các em", "bạn"
 - Dùng emoji VỪA PHẢI (3-5 emoji/bài), KHÔNG spam emoji
 - Caption phải tự nhiên như người thật viết, TUYỆT ĐỐI KHÔNG giống AI
 
-### Chính tả tiếng Việt (RẤT QUAN TRỌNG):
+### Chính tả tiếng Việt:
 - Kiểm tra kỹ chính tả trước khi trả về
 - Không viết tắt vô nghĩa, không dùng teencode
 - Dấu câu đúng chuẩn tiếng Việt
-- Công thức hóa học phải 100% chính xác (VD: H₂SO₄, NaOH, Fe₂O₃)
 
-### Cấu trúc caption:
-1. Hook mở đầu gây tò mò (1-2 dòng)
-2. Nội dung chính: kiến thức / mẹo / câu hỏi (phần chính)
+### Cấu trúc caption (ngắn gọn, 80-150 từ):
+1. Hook mở đầu gây tò mò (1-2 dòng, ví dụ: câu hỏi, fact bất ngờ)
+2. Dẫn dắt nhẹ: gợi ý xem ảnh để hiểu rõ hơn (1-2 dòng)
 3. CTA kết thúc: khuyến khích comment, tag bạn, hoặc nhắn thầy
+- KHÔNG giải thích chi tiết kiến thức trong caption — để ảnh làm việc đó
+- KHÔNG chép lại nội dung ảnh vào caption
 
 ### Hashtags:
 - 5-8 hashtags liên quan
 - Luôn bao gồm: #LTHChemistry #HoaHoc #GiaSuHoaHoc
 
-### image_prompt (BẮT BUỘC cho mỗi bài):
-- Mô tả ảnh minh họa bằng TIẾNG ANH để AI gen ảnh
-- Phong cách: modern, flat illustration, educational, vibrant colors
-- Nếu là trắc nghiệm: mô tả quiz card với câu hỏi + 4 options A/B/C/D rendered trên ảnh
-- Nếu là bài thường: mô tả hình minh họa liên quan đến chủ đề (ống nghiệm, phản ứng, nguyên tố...)
-- KHÔNG yêu cầu text tiếng Việt trong ảnh (trừ công thức hóa học)
-- Thêm "1080x1080, clean white or gradient background, no watermark" vào mỗi prompt
+### image_prompt (MÔ TẢ VISUAL - BẮT BUỘC cho mỗi bài):
+- Mô tả bằng TIẾNG ANH các yếu tố HÌNH ẢNH cho AI gen ảnh minh họa
+- KHÔNG YÊU CẦU text, chữ, số, tiêu đề trong ảnh — text sẽ được overlay riêng
+- Tập trung mô tả: molecular models, chemical structures, beakers, periodic table elements,
+  reaction diagrams, laboratory equipment, chemistry visual metaphors
+- Ví dụ tốt: "molecular model of H2O showing oxygen and hydrogen bonds, surrounded by water droplets,
+  colorful beakers with bubbling liquids, periodic table card for element Na floating nearby"
+- Ví dụ XẤU: "infographic with title 'Nồng độ dung dịch' and text explaining formula C% = mct/mdd"
+- Công thức hóa học chỉ xuất hiện dạng VISUAL (mô hình phân tử, cấu trúc Lewis), KHÔNG phải text
+- Luôn thêm: "1080x1080, no text, no words, no letters, no numbers, visual elements only"
 
 Trả về JSON (KHÔNG bọc trong markdown code block):
 {{
   "thcs_post": {{
-    "caption": "Nội dung caption đầy đủ, 150-280 từ",
+    "caption": "Caption ngắn gọn bổ sung cho ảnh, 80-150 từ, KHÔNG chứa công thức",
     "hashtags": "#LTHChemistry #HoaHoc ... (cách nhau bằng dấu cách)",
     "image_title": "Tiêu đề trên ảnh (tối đa 8 từ)",
     "image_content": "Nội dung chính trên ảnh (tối đa 35 từ)",
@@ -142,7 +153,7 @@ Trả về JSON (KHÔNG bọc trong markdown code block):
     "grade_label": "KHTN Lớp {today_info['thcs_grade']}"
   }},
   "thpt_post": {{
-    "caption": "Nội dung caption đầy đủ, 150-280 từ",
+    "caption": "Caption ngắn gọn bổ sung cho ảnh, 80-150 từ, KHÔNG chứa công thức",
     "hashtags": "#LTHChemistry #HoaHoc ... (cách nhau bằng dấu cách)",
     "image_title": "Tiêu đề trên ảnh (tối đa 8 từ)",
     "image_content": "Nội dung chính trên ảnh (tối đa 35 từ)",
@@ -155,7 +166,10 @@ Trả về JSON (KHÔNG bọc trong markdown code block):
 # ── Backend 1: Gemini Direct (google-genai SDK) ──────────────────────
 
 def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
-    """Call Gemini via the official google-genai SDK."""
+    """Call Gemini via the official google-genai SDK.
+
+    Tries models in priority order, falling back if one is unavailable (503).
+    """
     try:
         from google import genai
         from google.genai import types
@@ -172,12 +186,25 @@ def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
         max_output_tokens=4096,
     )
 
-    response = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents=user_prompt,
-        config=config,
-    )
-    return response.text.strip()
+    # Try models in order: best quality first, then fallback
+    models = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-3.1-flash-lite"]
+
+    for model in models:
+        try:
+            logger.info("Trying model: %s", model)
+            response = client.models.generate_content(
+                model=model,
+                contents=user_prompt,
+                config=config,
+            )
+            return response.text.strip()
+        except Exception as exc:
+            if "503" in str(exc) or "UNAVAILABLE" in str(exc):
+                logger.warning("Model %s unavailable (503), trying next...", model)
+                continue
+            raise  # Re-raise non-503 errors
+
+    raise RuntimeError("All text models unavailable (503).")
 
 
 # ── Backend 2: OpenRouter API (HTTP) ─────────────────────────────────

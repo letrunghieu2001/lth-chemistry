@@ -104,15 +104,22 @@ def get_today_info(state: dict) -> dict:
         "thcs_chapter": thcs_chapter,
         "thpt_grade": thpt_grade,
         "thpt_chapter": thpt_chapter,
+        "last_character": state.get("last_character"),
     }
 
 
-def advance_state(state: dict, thcs_type: str, thpt_type: str) -> dict:
+def advance_state(
+    state: dict,
+    thcs_type: str,
+    thpt_type: str,
+    last_character: str | None = None,
+) -> dict:
     """
     Advance the rotation after posting.
     - Rotate THCS grade index: 6 → 7 → 8 → 9 → 6 …
     - Rotate THPT grade index: 10 → 11 → 12 → 10 …
     - Track recent post types for streak prevention.
+    - Track last chibi guest character to avoid repeats.
     - Update post count and last date.
     """
     now = datetime.now(VN_TZ)
@@ -126,6 +133,10 @@ def advance_state(state: dict, thcs_type: str, thpt_type: str) -> dict:
     recent = state.get("recent_types", [])
     recent.extend([thcs_type, thpt_type])
     state["recent_types"] = recent[-6:]
+
+    # Track last chibi character
+    if last_character:
+        state["last_character"] = last_character
 
     return state
 
@@ -150,4 +161,5 @@ def _default_state() -> dict:
         "last_post_date": None,
         "posts_count": 0,
         "recent_types": [],
+        "last_character": None,
     }

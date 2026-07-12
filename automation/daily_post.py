@@ -95,36 +95,62 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
     # ── Step 3: Create images (AI-generated + logo overlay) ───────
     logger.info("Creating images...")
 
-    thcs_image = create_post_image(
+    last_char = today.get("last_character")
+
+    # Build quiz_data if applicable
+    thcs_quiz = None
+    if today["thcs_post_type"] == "quiz_mcq":
+        thcs_quiz = {
+            "question": thcs.get("question", ""),
+            "options": thcs.get("options", []),
+            "answer": thcs.get("answer", ""),
+        }
+
+    thpt_quiz = None
+    if today["thpt_post_type"] == "quiz_mcq":
+        thpt_quiz = {
+            "question": thpt.get("question", ""),
+            "options": thpt.get("options", []),
+            "answer": thpt.get("answer", ""),
+        }
+
+    thcs_image, thcs_char = create_post_image(
         post_type=today["thcs_post_type"],
         image_title=thcs["image_title"],
         image_content=thcs["image_content"],
         grade_label=thcs["grade_label"],
         image_prompt=thcs.get("image_prompt", ""),
         filename=f"{today['date']}_thcs.png",
+        last_character=last_char,
+        quiz_data=thcs_quiz,
     )
 
-    thpt_image = create_post_image(
+    thpt_image, thpt_char = create_post_image(
         post_type=today["thpt_post_type"],
         image_title=thpt["image_title"],
         image_content=thpt["image_content"],
         grade_label=thpt["grade_label"],
         image_prompt=thpt.get("image_prompt", ""),
         filename=f"{today['date']}_thpt.png",
+        last_character=thcs_char,  # avoid same character in both posts
+        quiz_data=thpt_quiz,
     )
 
     if thcs_image is None or thpt_image is None:
         logger.error("Image generation failed. Skipping today.")
         return False
 
-    logger.info("Images created: %s, %s", thcs_image.name, thpt_image.name)
+    logger.info(
+        "Images created: %s (char: %s), %s (char: %s)",
+        thcs_image.name, thcs_char, thpt_image.name, thpt_char,
+    )
 
     # ── Step 4: Post to Facebook ──────────────────────────────────
     if dry_run:
         logger.info("[DRY RUN] Would post THCS at %02d:%02d", THCS_POST_HOUR, THCS_POST_MINUTE)
         logger.info("[DRY RUN] Would post THPT at %02d:%02d", THPT_POST_HOUR, THPT_POST_MINUTE)
-        logger.info("[DRY RUN] THCS type: %s", thcs_label)
-        logger.info("[DRY RUN] THPT type: %s", thpt_label)
+        logger.info("[DRY RUN] THCS type: %s | character: %s", thcs_label, thcs_char)
+        logger.info("[DRY RUN] THPT type: %s | character: %s", thpt_label, thpt_char)
         logger.info("[DRY RUN] THCS caption:\n%s\n%s", thcs["caption"], thcs["hashtags"])
         logger.info("[DRY RUN] THPT caption:\n%s\n%s", thpt["caption"], thpt["hashtags"])
     else:
@@ -155,7 +181,12 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
             return False
 
     # ── Step 5: Advance state ─────────────────────────────────────
-    state = advance_state(state, today["thcs_post_type"], today["thpt_post_type"])
+    # Track the last character used (THPT char, since it's the most recent)
+    final_char = thpt_char or thcs_char
+    state = advance_state(
+        state, today["thcs_post_type"], today["thpt_post_type"],
+        last_character=final_char,
+    )
     save_state(state)
 
     logger.info("=" * 60)
