@@ -329,7 +329,7 @@ def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
         max_output_tokens=8192,
     )
 
-    models = ["gemini-2.5-flash", "gemini-2.5-flash-lite"]
+    models = ["gemini-3.5-flash", "gemini-2.5-flash"]
     for model in models:
         try:
             logger.info("Trying model: %s", model)
