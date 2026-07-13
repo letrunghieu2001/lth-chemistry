@@ -1,6 +1,6 @@
 {
-  "thcs_grade_index": 1,
-  "thpt_grade_index": 2,
+  "thcs_grade_index": 2,
+  "thpt_grade_index": 0,
   "thcs_chapter": {
     "6": 1,
     "7": 1,
@@ -12,15 +12,20 @@
     "11": 1,
     "12": 1
   },
-  "last_post_date": "2026-07-13",
-  "posts_count": 10,
+  "last_post_date": "2026-07-14",
+  "posts_count": 12,
   "recent_types": [
-    "mnemonic_tips",
-    "quiz_mcq",
     "mnemonic_tips",
     "review_question",
     "exam_countdown",
-    "review_question"
+    "review_question",
+    "chemistry_around_us",
+    "exam_countdown"
   ],
-  "last_character": "conan"
+  "last_character": "conan",
+  "recent_characters": [
+    "elsa",
+    "nobita",
+    "mbappe"
+  ]
 }
