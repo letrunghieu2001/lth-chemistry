@@ -28,5 +28,12 @@ dist-ssr
 .env.*
 automation/.env
 
+# Python
+__pycache__/
+*.pyc
+
+# Automation generated output (images, previews)
+automation/output/
+
 # Test outputs
 test_*.png
