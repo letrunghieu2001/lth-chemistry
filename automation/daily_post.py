@@ -141,49 +141,67 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
         quiz_data=thpt_quiz,
     )
 
-    if thcs_image is None or thpt_image is None:
-        logger.error("Image generation failed. Skipping today.")
+    if thcs_image is None and thpt_image is None:
+        logger.error("Both image generations failed. Skipping today.")
         return False
 
+    if thcs_image is None:
+        logger.warning("THCS image failed, will post THPT only.")
+    if thpt_image is None:
+        logger.warning("THPT image failed, will post THCS only.")
+
     logger.info(
-        "Images created: %s (chars: %s), %s (chars: %s)",
-        thcs_image.name, thcs_chars, thpt_image.name, thpt_chars,
+        "Images created: THCS=%s (chars: %s), THPT=%s (chars: %s)",
+        thcs_image.name if thcs_image else "FAILED", thcs_chars,
+        thpt_image.name if thpt_image else "FAILED", thpt_chars,
     )
 
     # ── Step 4: Post to Facebook ──────────────────────────────────
+    posted_count = 0
+
     if dry_run:
-        logger.info("[DRY RUN] Would post THCS at %02d:%02d", THCS_POST_HOUR, THCS_POST_MINUTE)
-        logger.info("[DRY RUN] Would post THPT at %02d:%02d", THPT_POST_HOUR, THPT_POST_MINUTE)
-        logger.info("[DRY RUN] THCS type: %s | characters: %s", thcs_label, thcs_chars)
-        logger.info("[DRY RUN] THPT type: %s | characters: %s", thpt_label, thpt_chars)
-        logger.info("[DRY RUN] THCS status:\n%s\n%s", thcs["status"], thcs["hashtags"])
-        logger.info("[DRY RUN] THPT status:\n%s\n%s", thpt["status"], thpt["hashtags"])
+        if thcs_image:
+            logger.info("[DRY RUN] Would post THCS at %02d:%02d", THCS_POST_HOUR, THCS_POST_MINUTE)
+            logger.info("[DRY RUN] THCS type: %s | characters: %s", thcs_label, thcs_chars)
+            logger.info("[DRY RUN] THCS status:\n%s\n%s", thcs["status"], thcs["hashtags"])
+            posted_count += 1
+        if thpt_image:
+            logger.info("[DRY RUN] Would post THPT at %02d:%02d", THPT_POST_HOUR, THPT_POST_MINUTE)
+            logger.info("[DRY RUN] THPT type: %s | characters: %s", thpt_label, thpt_chars)
+            logger.info("[DRY RUN] THPT status:\n%s\n%s", thpt["status"], thpt["hashtags"])
+            posted_count += 1
     else:
         # THCS post: schedule for morning
-        thcs_caption = f"{thcs['status']}\n\n{thcs['hashtags']}"
-        thcs_result = schedule_photo(
-            image_path=str(thcs_image),
-            caption=thcs_caption,
-            hour=THCS_POST_HOUR,
-            minute=THCS_POST_MINUTE,
-        )
-
-        if thcs_result is None:
-            logger.error("Failed to post THCS content.")
-            return False
+        if thcs_image:
+            thcs_caption = f"{thcs['status']}\n\n{thcs['hashtags']}"
+            thcs_result = schedule_photo(
+                image_path=str(thcs_image),
+                caption=thcs_caption,
+                hour=THCS_POST_HOUR,
+                minute=THCS_POST_MINUTE,
+            )
+            if thcs_result is None:
+                logger.error("Failed to post THCS content.")
+            else:
+                posted_count += 1
 
         # THPT post: schedule for evening
-        thpt_caption = f"{thpt['status']}\n\n{thpt['hashtags']}"
-        thpt_result = schedule_photo(
-            image_path=str(thpt_image),
-            caption=thpt_caption,
-            hour=THPT_POST_HOUR,
-            minute=THPT_POST_MINUTE,
-        )
+        if thpt_image:
+            thpt_caption = f"{thpt['status']}\n\n{thpt['hashtags']}"
+            thpt_result = schedule_photo(
+                image_path=str(thpt_image),
+                caption=thpt_caption,
+                hour=THPT_POST_HOUR,
+                minute=THPT_POST_MINUTE,
+            )
+            if thpt_result is None:
+                logger.error("Failed to post THPT content.")
+            else:
+                posted_count += 1
 
-        if thpt_result is None:
-            logger.error("Failed to post THPT content.")
-            return False
+    if posted_count == 0 and not dry_run:
+        logger.error("All Facebook posts failed.")
+        return False
 
     # ── Step 5: Advance state ─────────────────────────────────────
     # Track all characters used today (each post uses 2)

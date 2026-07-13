@@ -46,7 +46,7 @@ from config import (
 
 logger = logging.getLogger(__name__)
 
-AI_GEN_MAX_RETRIES = 3
+AI_GEN_MAX_RETRIES = 5
 AI_GEN_RETRY_DELAY = 8
 
 # Models
@@ -301,9 +301,16 @@ def _gen_ai_image(prompt: str) -> Image.Image | None:
         resp = client.models.generate_content(
             model=IMAGE_GEN_MODEL, contents=[prompt],
         )
-        for part in resp.parts:
-            if part.inline_data is not None:
-                return Image.open(BytesIO(part.inline_data.data))
+        # Guard against None parts (safety filters, empty response)
+        parts = getattr(resp, 'parts', None)
+        if not parts:
+            logger.warning("AI image gen returned no parts (possibly blocked by safety filter).")
+            return None
+        for part in parts:
+            inline = getattr(part, 'inline_data', None)
+            if inline is not None and hasattr(inline, 'data'):
+                return Image.open(BytesIO(inline.data))
+        logger.warning("AI image gen returned parts but no image data.")
         return None
     except Exception as exc:
         logger.error("AI image gen failed: %s", exc)
@@ -430,9 +437,18 @@ def create_post_image(
             return None, None
 
         # Step 3 (Stage 2): Generate image + OCR validate (with retries)
+        # On OCR failure, re-compose prompt (Stage 1) every 2 failures
+        # to get a fresh visual approach
         final_image = None
         for attempt in range(1, AI_GEN_MAX_RETRIES + 1):
             logger.info("Generation attempt %d/%d...", attempt, AI_GEN_MAX_RETRIES)
+
+            # Re-compose prompt every 2 failures for fresh approach
+            if attempt > 1 and (attempt - 1) % 2 == 0:
+                logger.info("Re-composing prompt (fresh Stage 1)...")
+                new_prompt = _compose_image_prompt(content_brief)
+                if new_prompt:
+                    composed_prompt = new_prompt
 
             raw_image = _gen_ai_image(composed_prompt)
             if raw_image is None:
@@ -460,7 +476,7 @@ def create_post_image(
                     time.sleep(AI_GEN_RETRY_DELAY)
 
         if final_image is None:
-            logger.error("All generation attempts failed.")
+            logger.error("All %d generation attempts failed.", AI_GEN_MAX_RETRIES)
             return None, None
 
         # Step 4: Logo overlay

@@ -18,6 +18,7 @@ Supports two backends:
 import json
 import logging
 import random
+import re
 import time
 
 import requests as http_requests
@@ -36,6 +37,89 @@ logger = logging.getLogger(__name__)
 
 MAX_RETRIES = 3
 RETRY_DELAY = 10
+
+
+def _repair_json(raw: str) -> str | None:
+    """Attempt to repair truncated JSON from LLM output.
+    
+    Common failures:
+    - Unterminated string (missing closing quote)
+    - Missing closing braces/brackets
+    - Trailing comma before closing brace
+    """
+    text = raw.strip()
+    
+    # Strip markdown code fences
+    if text.startswith("```"):
+        text = text.strip("`").strip()
+        if text.startswith("json"):
+            text = text[4:].strip()
+    
+    # Try parsing as-is first
+    try:
+        json.loads(text)
+        return text
+    except json.JSONDecodeError:
+        pass
+    
+    # Fix unterminated string: find last unmatched quote, close it
+    # Then close any open braces/brackets
+    repaired = text
+    
+    # Close unterminated strings
+    in_string = False
+    escape = False
+    for ch in repaired:
+        if escape:
+            escape = False
+            continue
+        if ch == '\\':
+            escape = True
+            continue
+        if ch == '"':
+            in_string = not in_string
+    if in_string:
+        repaired += '"'
+    
+    # Remove trailing comma before we add closing braces
+    repaired = re.sub(r',\s*$', '', repaired)
+    
+    # Count unmatched braces/brackets and close them
+    opens = 0
+    open_sq = 0
+    in_str = False
+    esc = False
+    for ch in repaired:
+        if esc:
+            esc = False
+            continue
+        if ch == '\\':
+            esc = True
+            continue
+        if ch == '"':
+            in_str = not in_str
+            continue
+        if in_str:
+            continue
+        if ch == '{':
+            opens += 1
+        elif ch == '}':
+            opens -= 1
+        elif ch == '[':
+            open_sq += 1
+        elif ch == ']':
+            open_sq -= 1
+    
+    repaired += ']' * max(0, open_sq)
+    repaired += '}' * max(0, opens)
+    
+    try:
+        json.loads(repaired)
+        logger.info("JSON repaired successfully (added %d closing tokens).",
+                    max(0, open_sq) + max(0, opens) + (1 if in_string else 0))
+        return repaired
+    except json.JSONDecodeError:
+        return None
 
 
 # ── Prompt builders ───────────────────────────────────────────────────
@@ -242,10 +326,10 @@ def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
         system_instruction=system_prompt,
         response_mime_type="application/json",
         temperature=0.8,
-        max_output_tokens=4096,
+        max_output_tokens=8192,
     )
 
-    models = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-3.1-flash-lite"]
+    models = ["gemini-2.5-flash", "gemini-2.5-flash-lite"]
     for model in models:
         try:
             logger.info("Trying model: %s", model)
@@ -329,12 +413,21 @@ def generate_content(today_info: dict) -> dict | None:
                 if not raw_text:
                     raise ValueError("Empty response")
 
-                if raw_text.startswith("```"):
-                    raw_text = raw_text.strip("`").strip()
-                    if raw_text.startswith("json"):
-                        raw_text = raw_text[4:].strip()
+                # Try direct parse, then repair if truncated
+                clean = raw_text
+                if clean.startswith("```"):
+                    clean = clean.strip("`").strip()
+                    if clean.startswith("json"):
+                        clean = clean[4:].strip()
 
-                content = json.loads(raw_text)
+                try:
+                    content = json.loads(clean)
+                except json.JSONDecodeError:
+                    logger.warning("[%s] JSON parse failed, attempting repair...", backend_name)
+                    repaired = _repair_json(raw_text)
+                    if repaired is None:
+                        raise
+                    content = json.loads(repaired)
 
                 if "thcs_post" not in content or "thpt_post" not in content:
                     logger.error("Response missing required keys.")
