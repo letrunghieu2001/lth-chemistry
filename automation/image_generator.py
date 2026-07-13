@@ -1,15 +1,23 @@
 """
-Image generator v3: Hybrid Rendering + OCR Safety Net + Chibi Characters.
+Image generator v7: Two-Stage AI Pipeline for Study Cards.
 
 Pipeline:
-  1. Prompt Rewriter  – injects chibi characters + "no text" rules
-  2. AI Visual Gen    – Gemini Flash Image generates text-free visual
-  3. Text Compositor  – Pillow overlays all text (always correct)
-  4. OCR Validator    – Gemini Vision checks for garbled AI text
-  5. Logo Overlay     – brand logo at bottom-right
+  1. Pick 2 chibi guest characters (weighted, history-aware)
+  2. Build content brief from structured data
+  3. ★ STAGE 1: Gemini Flash composes the EXACT image prompt
+     - Decides layout, visual concept, decorations
+     - Pre-bakes ALL Vietnamese text with correct spelling
+     - Outputs a detailed image generation prompt
+  4. ★ STAGE 2: Gemini Pro Image generates the image from that prompt
+  5. OCR validates Vietnamese text quality
+  6. If garbled → regenerate (up to N retries)
+  7. Overlay logo → Save
 
-Text is NEVER rendered by the AI model. Pillow handles all typography
-using Be Vietnam Pro fonts, guaranteeing perfect Vietnamese diacritics.
+Why two stages?
+  - Text models spell Vietnamese perfectly
+  - Image models often garble diacritics (ă, ơ, ư, ễ, ọ, etc.)
+  - By pre-composing exact text in the prompt, the image model has a
+    precise reference to copy, dramatically reducing spelling errors.
 """
 
 import logging
@@ -25,615 +33,449 @@ from config import (
     IMAGE_WIDTH,
     IMAGE_HEIGHT,
     LOGO_PATH,
-    LOGO_MAX_HEIGHT,
     FONT_REGULAR,
     FONT_BOLD,
-    TEMPLATE_COLORS,
-    POST_TYPE_LABELS,
     OUTPUT_DIR,
-    COLORS,
     CHIBI_MASCOT,
     CHIBI_GUEST_CHARACTERS,
+    CHARACTER_HISTORY_SIZE,
     OCR_MAX_RETRIES,
     OCR_VISION_MODEL,
+    V3_LAYOUT_MAP,
 )
 
 logger = logging.getLogger(__name__)
 
+AI_GEN_MAX_RETRIES = 3
+AI_GEN_RETRY_DELAY = 8
+
+# Models
+PROMPT_COMPOSER_MODEL = "gemini-2.5-flash"  # Stage 1: thinks, composes text
+IMAGE_GEN_MODEL = "gemini-3-pro-image"       # Stage 2: renders pixels
+
 _font_cache: dict[str, ImageFont.FreeTypeFont] = {}
 
 
-# ── Font utilities ────────────────────────────────────────────────────
+# ── Font Utilities (for logo overlay only) ───────────────────────────
 
 def _get_font(bold: bool = False, size: int = 40) -> ImageFont.FreeTypeFont:
-    """Load font with caching. Falls back to default if custom font missing."""
     path = FONT_BOLD if bold else FONT_REGULAR
-    cache_key = f"{path}_{size}"
-    if cache_key in _font_cache:
-        return _font_cache[cache_key]
-
+    key = f"{path}_{size}"
+    if key in _font_cache:
+        return _font_cache[key]
     try:
         font = ImageFont.truetype(str(path), size)
     except (OSError, IOError):
-        logger.warning("Font %s not found, using default.", path)
         try:
             font = ImageFont.truetype("arial.ttf", size)
         except (OSError, IOError):
             font = ImageFont.load_default()
-
-    _font_cache[cache_key] = font
+    _font_cache[key] = font
     return font
 
 
-def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
-    """Convert hex color string to RGB tuple."""
-    hex_color = hex_color.lstrip("#")
-    return tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
-
-
-# ── Chibi Character Selection ────────────────────────────────────────
+# ── Character Selection ──────────────────────────────────────────────
 
 def pick_guest_character(
-    post_type: str,
-    last_character: str | None = None,
+    post_type: str, recent: list[str] | None = None,
 ) -> tuple[str, str]:
-    """Pick a guest chibi character based on post type, avoiding repeats.
+    """Pick a guest chibi, avoiding recent repeats. Returns (name, desc)."""
+    recent = recent or []
+    recent_set = set(recent[-CHARACTER_HISTORY_SIZE:])
 
-    Returns:
-        (character_name, character_description)
-    """
-    # Find characters that prefer this post type
-    preferred = [
-        (name, desc)
-        for name, desc, types in CHIBI_GUEST_CHARACTERS
-        if post_type in types and name != last_character
+    pool = [
+        (n, d, wt)
+        for n, d, types, wt in CHIBI_GUEST_CHARACTERS
+        if post_type in types and n not in recent_set
     ]
-
-    # If no preferred match or all filtered out, use full list minus last
-    if not preferred:
-        preferred = [
-            (name, desc)
-            for name, desc, _ in CHIBI_GUEST_CHARACTERS
-            if name != last_character
+    if not pool:
+        pool = [
+            (n, d, wt)
+            for n, d, _, wt in CHIBI_GUEST_CHARACTERS
+            if n not in recent_set
         ]
+    if not pool:
+        pool = [(n, d, wt) for n, d, _, wt in CHIBI_GUEST_CHARACTERS]
 
-    # Safety fallback: if everything filtered, use full list
-    if not preferred:
-        preferred = [(name, desc) for name, desc, _ in CHIBI_GUEST_CHARACTERS]
-
-    return random.choice(preferred)
+    idx = random.choices(range(len(pool)), weights=[p[2] for p in pool], k=1)[0]
+    return pool[idx][0], pool[idx][1]
 
 
-# ── Step 1: Prompt Rewriter ──────────────────────────────────────────
+def _pick_two(post_type: str, recent: list[str] | None = None):
+    """Pick 2 different guest characters."""
+    n1, d1 = pick_guest_character(post_type, recent)
+    n2, d2 = pick_guest_character(post_type, (recent or []) + [n1])
+    return (n1, d1), (n2, d2)
 
-def _rewrite_prompt_for_visual(
-    image_prompt: str,
-    post_type: str,
-    guest_name: str,
-    guest_desc: str,
+
+# ── Stage 1: Prompt Composer (Text LLM) ─────────────────────────────
+
+def _build_text_inventory(
+    image_title: str,
+    grade_label: str,
+    layout_type: str,
+    diagram_data: dict,
+    quiz_data: dict | None = None,
 ) -> str:
-    """Rewrite the content image_prompt into a text-free visual prompt.
-
-    Adds chibi character instructions, brand colors, and strict no-text rules.
-    The original image_prompt describes the chemistry content; we keep the
-    visual/conceptual parts but strip any text-rendering instructions.
     """
-    accent_color = TEMPLATE_COLORS.get(post_type, TEMPLATE_COLORS["review_question"])["accent"]
-
-    prompt = (
-        "STYLE: Cute chibi anime illustration, kawaii aesthetic, chemistry education theme. "
-        "1080x1080 square image, no watermark. "
-        "\n\n"
-        f"BACKGROUND: Dark navy blue gradient from #213555 (top) to #172540 (bottom). "
-        f"Accent color {accent_color} for decorative borders and highlight elements. "
-        "Add subtle chalkboard or paper grain texture for organic feel. "
-        "\n\n"
-        "LAYOUT: Editorial magazine style, slightly asymmetric, hand-crafted feel. "
-        "Leave the TOP 30% of the image mostly clear (dark background only) for text overlay. "
-        "Leave the CENTER 40% with semi-transparent space for text overlay. "
-        "Characters and decorations positioned around the edges and corners. "
-        "\n\n"
-        f"MAIN CHARACTER (bottom-right): {CHIBI_MASCOT} "
-        "\n\n"
-        f"GUEST CHARACTER (bottom-left or mid-left): {guest_desc} "
-        "The guest character should be interacting with chemistry-related props. "
-        "\n\n"
-        f"CHEMISTRY VISUAL ELEMENTS (scattered as decoration): {image_prompt} "
-        "Show these as visual diagrams, molecular models, beakers, periodic table cards, "
-        "or floating chemical symbols. Use sketch-style arrows and rough borders. "
-        "\n\n"
-        "CRITICAL RULES: "
-        "DO NOT render ANY text, words, letters, numbers, or characters in the image. "
-        "NO titles, NO labels, NO captions, NO watermarks, NO text of any kind. "
-        "The image must be COMPLETELY TEXT-FREE. "
-        "All text will be added separately via overlay. "
-        "Only visual elements: characters, chemistry props, decorations, backgrounds."
-    )
-    return prompt
-
-
-# ── Step 2: AI Visual Generator ──────────────────────────────────────
-
-def _generate_visual(prompt: str) -> Image.Image | None:
-    """Generate a text-free visual using Gemini Flash Image.
-
-    Returns a PIL Image or None on failure.
+    Pre-build an exhaustive TEXT INVENTORY — a numbered list of EVERY text
+    string that must appear in the generated image, verbatim.
+    This is the core innovation: the image model copies these strings
+    exactly instead of generating its own (error-prone) Vietnamese text.
     """
-    if not GEMINI_API_KEY:
-        logger.warning("GEMINI_API_KEY not set, skipping AI visual generation.")
-        return None
+    lines: list[str] = []
+    n = 1
 
-    try:
-        from google import genai
-    except ImportError:
-        logger.warning("google-genai not installed, skipping AI visual gen.")
-        return None
+    # Title & label
+    lines.append(f'T{n}: "{image_title}"')
+    n += 1
+    lines.append(f'T{n}: "{grade_label}"')
+    n += 1
 
-    try:
-        client = genai.Client(api_key=GEMINI_API_KEY)
+    if layout_type == "mind_map":
+        center = diagram_data.get("center", "")
+        lines.append(f'T{n}: "{center}"')
+        n += 1
+        for br in diagram_data.get("branches", []):
+            title = br.get("title", "")
+            detail = br.get("detail", "")
+            lines.append(f'T{n}: "{title}"')
+            n += 1
+            lines.append(f'T{n}: "{detail}"')
+            n += 1
 
-        response = client.models.generate_content(
-            model="gemini-3.1-flash-image",
-            contents=[prompt],
-        )
+    elif layout_type == "flowchart":
+        for st in diagram_data.get("steps", []):
+            label = st.get("label", "")
+            detail = st.get("detail", "")
+            lines.append(f'T{n}: "{label}"')
+            n += 1
+            lines.append(f'T{n}: "{detail}"')
+            n += 1
 
-        for part in response.parts:
-            if part.inline_data is not None:
-                image = Image.open(BytesIO(part.inline_data.data))
-                logger.info(
-                    "AI visual generated (%dx%d).", image.width, image.height
-                )
-                return image
-            elif part.text is not None:
-                logger.info("AI text response: %s", part.text[:200])
-
-        logger.warning("No image data in Gemini response.")
-        return None
-
-    except Exception as exc:
-        logger.error("AI visual generation failed: %s", exc, exc_info=True)
-        return None
-
-
-# ── Step 3: Text Compositor (Pillow) ─────────────────────────────────
-
-def _wrap_text(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list[str]:
-    """Wrap text to fit within max_width pixels."""
-    words = text.split()
-    lines = []
-    current_line = ""
-
-    for word in words:
-        test_line = f"{current_line} {word}".strip()
-        bbox = font.getbbox(test_line)
-        line_width = bbox[2] - bbox[0]
-        if line_width <= max_width:
-            current_line = test_line
+    elif layout_type == "info_grid":
+        if quiz_data and quiz_data.get("question"):
+            lines.append(f'T{n}: "{quiz_data["question"]}"')
+            n += 1
+            for i, cell in enumerate(diagram_data.get("cells", []), 1):
+                letter = chr(64 + i)
+                for bullet in cell.get("bullets", []):
+                    lines.append(f'T{n}: "{letter}: {bullet}"')
+                    n += 1
         else:
-            if current_line:
-                lines.append(current_line)
-            current_line = word
-    if current_line:
-        lines.append(current_line)
+            for cell in diagram_data.get("cells", []):
+                title = cell.get("title", "")
+                lines.append(f'T{n}: "{title}"')
+                n += 1
+                for bullet in cell.get("bullets", []):
+                    lines.append(f'T{n}: "{bullet}"')
+                    n += 1
 
-    return lines
-
-
-def _draw_rounded_rect(
-    draw: ImageDraw.ImageDraw,
-    xy: tuple[int, int, int, int],
-    radius: int,
-    fill: tuple[int, int, int, int],
-) -> None:
-    """Draw a rounded rectangle with alpha fill."""
-    draw.rounded_rectangle(xy, radius=radius, fill=fill)
+    return "\n".join(lines)
 
 
-def _draw_text_block(
-    draw: ImageDraw.ImageDraw,
-    text: str,
-    font: ImageFont.FreeTypeFont,
-    y: int,
-    color: tuple[int, int, int],
-    max_width: int,
-    center: bool = True,
-) -> int:
-    """Draw word-wrapped text. Returns the Y position after the last line."""
-    lines = _wrap_text(text, font, max_width)
-
-    for line in lines:
-        bbox = font.getbbox(line)
-        line_width = bbox[2] - bbox[0]
-        line_height = bbox[3] - bbox[1]
-        if center:
-            x = (IMAGE_WIDTH - line_width) // 2
-        else:
-            x = (IMAGE_WIDTH - max_width) // 2
-        draw.text((x, y), line, fill=color, font=font)
-        y += line_height + 10
-
-    return y
-
-
-def _composite_text(
-    bg_image: Image.Image,
+def _build_content_brief(
     post_type: str,
     image_title: str,
-    image_content: str,
+    layout_type: str,
+    diagram_data: dict,
     grade_label: str,
+    image_prompt: str,
+    char1_desc: str,
+    char2_desc: str,
     quiz_data: dict | None = None,
-) -> Image.Image:
-    """Overlay all text onto the AI-generated visual background.
+) -> str:
+    """Build a content brief for the prompt composer LLM."""
 
-    Creates semi-transparent boxes for readability, then renders text
-    using Pillow fonts (guaranteed correct Vietnamese).
+    # Build the exhaustive text inventory
+    text_inventory = _build_text_inventory(
+        image_title, grade_label, layout_type, diagram_data, quiz_data,
+    )
+
+    # Describe layout type in Vietnamese for the LLM
+    layout_desc_map = {
+        "mind_map": "Sơ đồ tư duy (Mind Map): nút trung tâm + các nhánh tỏa ra",
+        "flowchart": "Lưu đồ (Flowchart): các bước nối nhau bằng mũi tên, từ trên xuống",
+        "info_grid": "Lưới thông tin (Info Grid): chia thành 2x2 ô thông tin",
+    }
+    layout_desc = layout_desc_map.get(layout_type, "Lưới thông tin")
+
+    # Quiz-specific note
+    quiz_note = ""
+    if quiz_data and quiz_data.get("question"):
+        layout_desc = "Thẻ trắc nghiệm (Quiz Card): câu hỏi lớn ở trên, 4 đáp án A/B/C/D bên dưới"
+        quiz_note = "\n- Đây là Quiz Card: câu hỏi nổi bật trên nền navy, các đáp án là 4 ô riêng biệt."
+
+    brief = f"""Bạn là chuyên gia thiết kế infographic giáo dục hóa học cho học sinh Việt Nam.
+
+NHIỆM VỤ: Viết một prompt chi tiết bằng TIẾNG ANH để tạo ảnh infographic 1080x1080px.
+Prompt này sẽ được gửi đến một AI image generator (Gemini Pro Image).
+
+═══════════════════════════════════════════════════════════
+DANH SÁCH TEXT BẮT BUỘC (TEXT INVENTORY)
+Đây là TOÀN BỘ text phải xuất hiện trong ảnh. Sao chép NGUYÊN VĂN.
+KHÔNG thêm, KHÔNG bớt, KHÔNG sửa, KHÔNG dịch bất kỳ chữ nào.
+═══════════════════════════════════════════════════════════
+{text_inventory}
+═══════════════════════════════════════════════════════════
+
+BỐ CỤC: {layout_desc}{quiz_note}
+CHỦ ĐỀ HÌNH ẢNH: {image_prompt}
+
+NHÂN VẬT CHIBI:
+- Góc dưới bên trái: {char1_desc} (chibi sticker nhỏ ~15% chiều cao ảnh)
+- Góc dưới bên phải: {char2_desc} (chibi sticker nhỏ ~15% chiều cao ảnh)
+
+YÊU CẦU BẮT BUỘC cho prompt output:
+
+1. PHẦN "TEXT PLACEMENT" — Bắt buộc trong prompt:
+   Prompt PHẢI chứa một section "EXACT TEXT PLACEMENT" liệt kê TỪNG text item
+   từ TEXT INVENTORY ở trên, kèm vị trí chính xác trong ảnh.
+   Format: "Text string" → position in image (e.g., top center, branch 1, step 2).
+   Sao chép NGUYÊN VĂN các text string, giữ ĐÚNG dấu tiếng Việt.
+
+2. PHẦN "FORBIDDEN" — Bắt buộc trong prompt:
+   Prompt PHẢI chứa dòng: "DO NOT generate any text that is not listed above.
+   DO NOT modify, abbreviate, translate, or rephrase any text string.
+   Copy each string character-by-character from the TEXT PLACEMENT list."
+
+3. Giữ nguyên 100% dấu tiếng Việt (ă, â, ơ, ư, ễ, ọ, ứ, ờ, etc.)
+4. Công thức hóa học giữ subscript: H₂O, CO₂, Fe₂O₃, Al₂O₃, etc.
+5. Mô tả chi tiết: bố cục, kích thước, màu sắc, style cho từng element.
+
+PALETTE MÀU BẮT BUỘC:
+- Nền: kem ấm (#FDF8F0) với hoa văn chemistry nhạt
+- Màu chính: teal (#0BA5A5) cho headers, connectors
+- Màu phụ: navy đậm (#213555) cho borders, tiêu đề
+- Text body: gần đen (#1A1A2E)
+- Nền cards: trắng (#FFFFFF)
+- Accent: vàng gold (#D4A017)
+
+PHONG CÁCH:
+- Modern, clean educational infographic — premium study flashcard
+- Dày đặc thông tin, ít khoảng trắng (70-80% canvas là content)
+- Text phải đọc rõ trên điện thoại
+
+OUTPUT: Viết prompt bằng tiếng Anh, nhưng COPY-PASTE NGUYÊN VĂN tất cả
+text tiếng Việt từ TEXT INVENTORY (trong ngoặc kép).
+Chỉ output prompt, không giải thích gì thêm."""
+
+    return brief
+
+
+def _compose_image_prompt(content_brief: str) -> str | None:
     """
-    # Ensure RGBA for alpha compositing
-    if bg_image.mode != "RGBA":
-        bg_image = bg_image.convert("RGBA")
-
-    # Create transparent overlay for text boxes
-    overlay = Image.new("RGBA", bg_image.size, (0, 0, 0, 0))
-    draw = ImageDraw.Draw(overlay)
-
-    colors = TEMPLATE_COLORS.get(post_type, TEMPLATE_COLORS["review_question"])
-    accent_rgb = _hex_to_rgb(colors["accent"])
-    white = (255, 255, 255)
-    gold_rgb = _hex_to_rgb(COLORS["gold"])
-
-    type_label = POST_TYPE_LABELS.get(post_type, "LTH CHEMISTRY")
-    padding_x = 50
-    content_width = IMAGE_WIDTH - padding_x * 2
-
-    # ── Top bar: post type label ──
-    top_bar_h = 90
-    _draw_rounded_rect(
-        draw,
-        (0, 0, IMAGE_WIDTH, top_bar_h),
-        radius=0,
-        fill=(17, 25, 40, 200),  # dark navy, ~78% opacity
-    )
-    # Accent line at bottom of top bar
-    draw.rectangle(
-        [0, top_bar_h - 3, IMAGE_WIDTH, top_bar_h],
-        fill=(*accent_rgb, 220),
-    )
-
-    font_type = _get_font(bold=True, size=26)
-    bbox = font_type.getbbox(type_label)
-    lw = bbox[2] - bbox[0]
-    draw.text(
-        ((IMAGE_WIDTH - lw) // 2, 30),
-        type_label,
-        fill=gold_rgb,
-        font=font_type,
-    )
-
-    # ── Grade label (below top bar) ──
-    font_grade = _get_font(bold=False, size=22)
-    bbox_g = font_grade.getbbox(grade_label)
-    gw = bbox_g[2] - bbox_g[0]
-    draw.text(
-        ((IMAGE_WIDTH - gw) // 2, top_bar_h + 15),
-        grade_label,
-        fill=accent_rgb,
-        font=font_grade,
-    )
-
-    # ── Main content box (semi-transparent) ──
-    content_top = top_bar_h + 55
-    content_bottom = IMAGE_HEIGHT - 160 if not quiz_data else IMAGE_HEIGHT - 130
-    box_margin = 35
-    _draw_rounded_rect(
-        draw,
-        (box_margin, content_top, IMAGE_WIDTH - box_margin, content_bottom),
-        radius=18,
-        fill=(17, 25, 40, 170),  # navy, ~67% opacity
-    )
-
-    # ── Title ──
-    font_title = _get_font(bold=True, size=40)
-    title_y = content_top + 25
-    title_y = _draw_text_block(
-        draw, image_title, font_title, title_y,
-        gold_rgb, content_width - 30, center=True,
-    )
-
-    # Divider line
-    div_y = title_y + 8
-    div_x1 = IMAGE_WIDTH // 4
-    div_x2 = 3 * IMAGE_WIDTH // 4
-    draw.line([(div_x1, div_y), (div_x2, div_y)], fill=(*accent_rgb, 180), width=2)
-
-    # ── Content text ──
-    font_content = _get_font(bold=False, size=30)
-    text_y = div_y + 18
-
-    if quiz_data:
-        # Quiz: show question + 4 options in 2x2 grid
-        question = quiz_data.get("question", image_content)
-        options = quiz_data.get("options", [])
-
-        # Question text
-        text_y = _draw_text_block(
-            draw, question, font_content, text_y,
-            white, content_width - 40, center=True,
-        )
-        text_y += 15
-
-        # Options in 2x2 grid
-        if len(options) >= 4:
-            font_opt = _get_font(bold=False, size=26)
-            opt_w = (content_width - 60) // 2
-            opt_h = 55
-            gap = 12
-            grid_x = box_margin + 25
-
-            for i, opt_text in enumerate(options[:4]):
-                row = i // 2
-                col = i % 2
-                ox = grid_x + col * (opt_w + gap)
-                oy = text_y + row * (opt_h + gap)
-
-                # Option box
-                _draw_rounded_rect(
-                    draw,
-                    (ox, oy, ox + opt_w, oy + opt_h),
-                    radius=10,
-                    fill=(*accent_rgb, 60),
-                )
-                # Option border
-                draw.rounded_rectangle(
-                    (ox, oy, ox + opt_w, oy + opt_h),
-                    radius=10,
-                    outline=(*accent_rgb, 140),
-                    width=1,
-                )
-                # Option text
-                draw.text(
-                    (ox + 12, oy + 13),
-                    opt_text,
-                    fill=white,
-                    font=font_opt,
-                )
-    else:
-        # Normal post: just show content
-        _draw_text_block(
-            draw, image_content, font_content, text_y,
-            white, content_width - 40, center=True,
-        )
-
-    # ── Bottom brand bar ──
-    bar_h = 55
-    bar_y = IMAGE_HEIGHT - bar_h
-    _draw_rounded_rect(
-        draw,
-        (0, bar_y, IMAGE_WIDTH, IMAGE_HEIGHT),
-        radius=0,
-        fill=(17, 25, 40, 200),
-    )
-    # Top accent line
-    draw.rectangle(
-        [0, bar_y, IMAGE_WIDTH, bar_y + 3],
-        fill=(*accent_rgb, 220),
-    )
-    font_brand = _get_font(bold=False, size=18)
-    draw.text(
-        (padding_x, bar_y + 18),
-        "fb.com/LTHChemistry",
-        fill=(200, 200, 200),
-        font=font_brand,
-    )
-
-    # Composite overlay onto background
-    result = Image.alpha_composite(bg_image, overlay)
-    return result
-
-
-# ── Step 4: OCR Validator ────────────────────────────────────────────
-
-def _validate_no_garbled_text(image: Image.Image) -> bool:
-    """Use Gemini Vision to check if the AI visual contains garbled text.
-
-    Returns True if image is clean (no garbled text), False if problems found.
+    Stage 1: Use Gemini Flash to compose the detailed image prompt.
+    The text LLM ensures all Vietnamese text is perfectly spelled.
     """
     if not GEMINI_API_KEY:
-        logger.info("No API key for OCR validation, skipping check.")
-        return True
+        logger.error("GEMINI_API_KEY not set.")
+        return None
+    try:
+        from google import genai
+        client = genai.Client(api_key=GEMINI_API_KEY)
+        resp = client.models.generate_content(
+            model=PROMPT_COMPOSER_MODEL,
+            contents=[content_brief],
+        )
+        composed = resp.text.strip()
+        logger.info(
+            "Stage 1 complete: prompt composed (%d chars).", len(composed)
+        )
+        return composed
+    except Exception as exc:
+        logger.error("Prompt composer failed: %s", exc)
+        return None
 
+
+# ── Stage 2: Image Generation ────────────────────────────────────────
+
+def _gen_ai_image(prompt: str) -> Image.Image | None:
+    """Stage 2: Generate image via Gemini Pro Image."""
+    if not GEMINI_API_KEY:
+        logger.error("GEMINI_API_KEY not set.")
+        return None
+    try:
+        from google import genai
+        client = genai.Client(api_key=GEMINI_API_KEY)
+        resp = client.models.generate_content(
+            model=IMAGE_GEN_MODEL, contents=[prompt],
+        )
+        for part in resp.parts:
+            if part.inline_data is not None:
+                return Image.open(BytesIO(part.inline_data.data))
+        return None
+    except Exception as exc:
+        logger.error("AI image gen failed: %s", exc)
+        return None
+
+
+# ── OCR Validator ────────────────────────────────────────────────────
+
+def _validate_image_quality(image: Image.Image, expected_title: str) -> bool:
+    """
+    Validate AI-generated image:
+    1. Check for garbled/misspelled Vietnamese text
+    2. Verify the title is present and readable
+    Returns True if image passes quality checks.
+    """
+    if not GEMINI_API_KEY:
+        return True
     try:
         from google import genai
         from google.genai import types
-    except ImportError:
-        logger.info("google-genai not installed, skipping OCR validation.")
-        return True
-
-    try:
         client = genai.Client(api_key=GEMINI_API_KEY)
-
-        # Convert PIL image to bytes for the API
         buf = BytesIO()
         image.save(buf, format="PNG")
-        image_bytes = buf.getvalue()
-
-        response = client.models.generate_content(
+        resp = client.models.generate_content(
             model=OCR_VISION_MODEL,
             contents=[
-                types.Part.from_bytes(data=image_bytes, mime_type="image/png"),
+                types.Part.from_bytes(data=buf.getvalue(), mime_type="image/png"),
                 (
-                    "Examine this image carefully. Look for ANY text, words, letters, "
-                    "or numbers rendered IN the image itself (not overlaid text boxes). "
-                    "If you find text that is garbled, misspelled, broken, or nonsensical "
-                    "(like random letter combinations that don't form real words), "
-                    "respond with EXACTLY: GARBLED_TEXT_FOUND\n"
-                    "If the image is clean (no text at all, or only correctly spelled text), "
-                    "respond with EXACTLY: IMAGE_CLEAN\n"
-                    "Respond with only one of those two phrases, nothing else."
+                    f"Examine this Vietnamese educational infographic image carefully.\n"
+                    f"Expected title: \"{expected_title}\"\n\n"
+                    f"Check for these issues:\n"
+                    f"1. Any garbled, nonsensical, or badly misspelled Vietnamese text\n"
+                    f"2. Text that is unreadable or too blurry\n"
+                    f"3. Chemistry formulas that look wrong\n\n"
+                    f"If the image has CLEAR, READABLE Vietnamese text with no major "
+                    f"spelling errors, respond EXACTLY: IMAGE_CLEAN\n"
+                    f"If you find garbled or seriously misspelled text, respond EXACTLY: "
+                    f"GARBLED_TEXT_FOUND\n"
+                    f"Respond with only one of these two phrases."
                 ),
             ],
         )
-
-        result_text = response.text.strip().upper()
-        if "GARBLED" in result_text:
-            logger.warning("OCR validator found garbled text in AI visual.")
+        result = resp.text.strip().upper()
+        if "GARBLED" in result:
+            logger.warning("OCR: garbled/misspelled text detected in image.")
             return False
-
-        logger.info("OCR validator: image is clean.")
+        logger.info("OCR: image text quality OK.")
         return True
-
     except Exception as exc:
-        logger.warning("OCR validation failed (non-critical): %s", exc)
-        return True  # don't block pipeline on OCR failure
+        logger.warning("OCR validation error (non-critical): %s", exc)
+        return True  # Don't block on OCR failure
 
 
-# ── Step 5: Logo Overlay ─────────────────────────────────────────────
+# ── Logo Overlay ─────────────────────────────────────────────────────
 
 def _overlay_logo(img: Image.Image) -> Image.Image:
-    """Place the LTH Chemistry logo at bottom-right corner."""
+    """Place logo in top-right corner (small, non-intrusive)."""
     try:
         logo = Image.open(LOGO_PATH).convert("RGBA")
     except (FileNotFoundError, IOError):
-        logger.warning("Logo not found at %s, skipping overlay.", LOGO_PATH)
         return img
 
-    # Scale logo to fit max height while keeping aspect ratio
+    new_h = 45
     aspect = logo.width / logo.height
-    new_height = LOGO_MAX_HEIGHT
-    new_width = int(new_height * aspect)
-    logo = logo.resize((new_width, new_height), Image.LANCZOS)
-
-    # Position: bottom-right, above the brand bar
-    padding = 30
-    x = img.width - new_width - padding
-    y = img.height - new_height - padding - 55  # above brand bar
+    new_w = int(new_h * aspect)
+    logo = logo.resize((new_w, new_h), Image.LANCZOS)
 
     if img.mode != "RGBA":
         img = img.convert("RGBA")
-    img.paste(logo, (x, y), logo)
 
+    x = img.width - new_w - 16
+    y = 12
+    img.paste(logo, (x, y), logo)
     return img
 
 
-
-
-# ── Constants ────────────────────────────────────────────────────────
-
-AI_GEN_MAX_RETRIES = 3       # max retries when Nano Banana API fails
-AI_GEN_RETRY_DELAY = 10      # seconds between retries
-
-
-# ── Main entry point ─────────────────────────────────────────────────
+# ── Main Entry Point ─────────────────────────────────────────────────
 
 def create_post_image(
     post_type: str,
     image_title: str,
-    image_content: str,
+    layout_type: str,
+    diagram_data: dict,
     grade_label: str,
     image_prompt: str,
     filename: str,
-    last_character: str | None = None,
+    recent_characters: list[str] | None = None,
     quiz_data: dict | None = None,
-) -> tuple[Path | None, str | None]:
+    # Backward compat — ignored
+    image_bullets: list[str] | None = None,
+) -> tuple[Path | None, list[str] | None]:
     """
-    Create a post image using the Nano Banana pipeline (mandatory).
+    Create a FULL AI-generated Study Card image (two-stage pipeline).
 
-    Pipeline:
-      1. Pick chibi guest character
-      2. Rewrite prompt (no text + chibi)
-      3. Generate AI visual via Nano Banana (text-free) — REQUIRED
-      4. OCR validate (regen if garbled text detected)
-      5. Overlay text via Pillow
-      6. Overlay logo
-      7. Save
+    Stage 1: Gemini Flash composes the exact image prompt (perfect Vietnamese)
+    Stage 2: Gemini Pro Image renders the infographic
 
-    If Nano Banana fails after all retries, returns (None, None)
-    and the post is skipped entirely. There is NO fallback.
-
-    Args:
-        post_type: One of the post types (quiz_mcq, review_question, etc.)
-        image_title: Short title for the image header
-        image_content: Main content text
-        grade_label: Grade/subject label (e.g., "Hóa Học Lớp 10")
-        image_prompt: English prompt for AI image generation
-        filename: Output filename (without path)
-        last_character: Name of the last used guest character (to avoid repeats)
-        quiz_data: Optional dict with question/options/answer for quiz posts
-
-    Returns:
-        Tuple of (path_to_image, guest_character_name) or (None, None) on failure.
+    Returns (path_to_image, [char1_name, char2_name]) or (None, None).
     """
     try:
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         output_path = OUTPUT_DIR / filename
 
-        # Step 1: Pick guest character
-        guest_name, guest_desc = pick_guest_character(post_type, last_character)
-        logger.info("Guest character: %s", guest_name)
+        # Resolve layout type
+        if not layout_type:
+            layout_type = V3_LAYOUT_MAP.get(post_type, "info_grid")
 
-        # Step 2: Rewrite prompt
-        visual_prompt = _rewrite_prompt_for_visual(
-            image_prompt, post_type, guest_name, guest_desc
+        # Step 1: Pick 2 guest characters
+        (c1_name, c1_desc), (c2_name, c2_desc) = _pick_two(
+            post_type, recent_characters,
         )
+        logger.info("Characters: %s (L), %s (R)", c1_name, c2_name)
 
-        # Step 3: Generate AI visual via Nano Banana (mandatory, with retries)
-        bg_image = None
+        # Step 2 (Stage 1): Build content brief → LLM composes prompt
+        content_brief = _build_content_brief(
+            post_type, image_title, layout_type, diagram_data,
+            grade_label, image_prompt, c1_desc, c2_desc, quiz_data,
+        )
+        logger.info("Content brief built (%d chars). Composing image prompt...", len(content_brief))
 
-        for attempt in range(1, AI_GEN_MAX_RETRIES + 1):
-            # Generate visual via Nano Banana
-            ai_visual = _generate_visual(visual_prompt)
-
-            if ai_visual is not None:
-                # Resize to target dimensions
-                ai_visual = ai_visual.resize(
-                    (IMAGE_WIDTH, IMAGE_HEIGHT), Image.LANCZOS
-                )
-
-                # Step 4: OCR validate the raw AI visual (before text overlay)
-                if _validate_no_garbled_text(ai_visual):
-                    bg_image = ai_visual
-                    logger.info("Nano Banana visual accepted (attempt %d).", attempt)
-                    break
-                else:
-                    logger.warning(
-                        "Garbled text detected, regenerating (attempt %d/%d)...",
-                        attempt, AI_GEN_MAX_RETRIES,
-                    )
-            else:
-                logger.warning(
-                    "Nano Banana returned None (attempt %d/%d).",
-                    attempt, AI_GEN_MAX_RETRIES,
-                )
-
-            # Wait before retry (skip delay on last attempt)
-            if attempt < AI_GEN_MAX_RETRIES:
-                logger.info("Waiting %ds before retry...", AI_GEN_RETRY_DELAY)
-                time.sleep(AI_GEN_RETRY_DELAY)
-
-        # NO FALLBACK — Nano Banana is mandatory
-        if bg_image is None:
-            logger.error(
-                "Nano Banana failed after %d attempts. "
-                "Skipping post (no fallback).",
-                AI_GEN_MAX_RETRIES,
-            )
+        composed_prompt = _compose_image_prompt(content_brief)
+        if not composed_prompt:
+            logger.error("Stage 1 failed: could not compose prompt.")
             return None, None
 
-        # Step 5: Composite text overlay
-        img = _composite_text(
-            bg_image, post_type, image_title, image_content,
-            grade_label, quiz_data=quiz_data,
-        )
+        # Step 3 (Stage 2): Generate image + OCR validate (with retries)
+        final_image = None
+        for attempt in range(1, AI_GEN_MAX_RETRIES + 1):
+            logger.info("Generation attempt %d/%d...", attempt, AI_GEN_MAX_RETRIES)
 
-        # Step 6: Logo overlay
-        img = _overlay_logo(img)
+            raw_image = _gen_ai_image(composed_prompt)
+            if raw_image is None:
+                logger.warning("AI returned None (attempt %d).", attempt)
+                if attempt < AI_GEN_MAX_RETRIES:
+                    time.sleep(AI_GEN_RETRY_DELAY)
+                continue
 
-        # Save as PNG (flatten to RGB)
-        final = Image.new("RGB", img.size, (255, 255, 255))
-        final.paste(img, mask=img.split()[3] if img.mode == "RGBA" else None)
-        final.save(str(output_path), "PNG", quality=95)
+            # Resize to exact dimensions
+            raw_image = raw_image.resize(
+                (IMAGE_WIDTH, IMAGE_HEIGHT), Image.LANCZOS,
+            )
 
-        logger.info("Image created: %s (character: %s)", output_path, guest_name)
-        return output_path, guest_name
+            # OCR quality check
+            if _validate_image_quality(raw_image, image_title):
+                final_image = raw_image
+                logger.info("Image accepted (attempt %d).", attempt)
+                break
+            else:
+                logger.warning(
+                    "Image failed OCR check (attempt %d). Regenerating...",
+                    attempt,
+                )
+                if attempt < AI_GEN_MAX_RETRIES:
+                    time.sleep(AI_GEN_RETRY_DELAY)
+
+        if final_image is None:
+            logger.error("All generation attempts failed.")
+            return None, None
+
+        # Step 4: Logo overlay
+        final_image = _overlay_logo(final_image)
+
+        # Step 5: Save as PNG
+        if final_image.mode == "RGBA":
+            save_img = Image.new("RGB", final_image.size, (255, 255, 255))
+            save_img.paste(final_image, mask=final_image.split()[3])
+        else:
+            save_img = final_image.convert("RGB")
+        save_img.save(str(output_path), "PNG", quality=95)
+
+        logger.info("Image saved: %s", output_path)
+        return output_path, [c1_name, c2_name]
 
     except Exception as exc:
         logger.error("Failed to create image: %s", exc, exc_info=True)

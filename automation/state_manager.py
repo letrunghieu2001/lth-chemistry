@@ -13,6 +13,7 @@ from config import (
     THCS_GRADES,
     THPT_GRADES,
     POST_TYPE_WEIGHTS,
+    CHARACTER_HISTORY_SIZE,
 )
 
 logger = logging.getLogger(__name__)
@@ -104,7 +105,7 @@ def get_today_info(state: dict) -> dict:
         "thcs_chapter": thcs_chapter,
         "thpt_grade": thpt_grade,
         "thpt_chapter": thpt_chapter,
-        "last_character": state.get("last_character"),
+        "recent_characters": state.get("recent_characters", []),
     }
 
 
@@ -112,14 +113,14 @@ def advance_state(
     state: dict,
     thcs_type: str,
     thpt_type: str,
-    last_character: str | None = None,
+    used_characters: list[str] | None = None,
 ) -> dict:
     """
     Advance the rotation after posting.
-    - Rotate THCS grade index: 6 → 7 → 8 → 9 → 6 …
-    - Rotate THPT grade index: 10 → 11 → 12 → 10 …
+    - Rotate THCS grade index: 6 -> 7 -> 8 -> 9 -> 6 ...
+    - Rotate THPT grade index: 10 -> 11 -> 12 -> 10 ...
     - Track recent post types for streak prevention.
-    - Track last chibi guest character to avoid repeats.
+    - Track recent chibi characters (last N) to avoid repeats.
     - Update post count and last date.
     """
     now = datetime.now(VN_TZ)
@@ -134,9 +135,11 @@ def advance_state(
     recent.extend([thcs_type, thpt_type])
     state["recent_types"] = recent[-6:]
 
-    # Track last chibi character
-    if last_character:
-        state["last_character"] = last_character
+    # Track recent characters (keep last N for history-aware selection)
+    recent_chars = state.get("recent_characters", [])
+    if used_characters:
+        recent_chars.extend(used_characters)
+    state["recent_characters"] = recent_chars[-CHARACTER_HISTORY_SIZE:]
 
     return state
 
@@ -161,5 +164,5 @@ def _default_state() -> dict:
         "last_post_date": None,
         "posts_count": 0,
         "recent_types": [],
-        "last_character": None,
+        "recent_characters": [],
     }

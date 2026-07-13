@@ -1,10 +1,17 @@
 """
 Configuration for LTH Chemistry Facebook automation.
-All secrets loaded from environment variables (GitHub Secrets).
+Secrets loaded from environment variables (GitHub Secrets in CI,
+.env file for local development).
 """
 
 import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+# Load .env for local development (no-op if file doesn't exist)
+load_dotenv(Path(__file__).parent / ".env")
+load_dotenv(Path(__file__).parent.parent / ".env")
 
 # ── Paths ─────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).parent
@@ -37,7 +44,19 @@ THPT_POST_MINUTE = 0
 # ── Image settings ────────────────────────────────────────────────────
 IMAGE_WIDTH = 1080
 IMAGE_HEIGHT = 1080
-LOGO_MAX_HEIGHT = 80
+LOGO_MAX_HEIGHT = 60  # smaller logo for v2 compact header
+
+# ── Study Card v2 Layout Constants ────────────────────────────────────
+CARD_MARGIN = 20           # reduced from 35
+HEADER_HEIGHT = 50         # compact header strip
+FOOTER_HEIGHT = 35         # compact footer strip
+TITLE_FONT_SIZE = 36       # reduced from 40
+BULLET_FONT_SIZE = 26      # reduced from 30
+GRADE_FONT_SIZE = 20       # reduced from 22
+BULLET_SPACING = 8         # tight line spacing between bullets
+
+# ── Caption Styles ────────────────────────────────────────────────────
+CAPTION_STYLES = ["story_hook", "mini_trivia"]
 
 # ── Grade rotation ────────────────────────────────────────────────────
 THCS_GRADES = [6, 7, 8, 9]
@@ -66,32 +85,28 @@ POST_TYPE_LABELS = {
 }
 
 # ── Brand colors (Boped Design System) ───────────────────────────────
-# All products share the same base palette for brand consistency.
-# See: boped-design-system workflow
 COLORS = {
     # Core brand
-    "primary_teal": "#0BA5A5",    # hsl(185, 87%, 35%)
-    "primary_dark": "#213555",     # Navy - primary dark
-    "gold": "#FFBF00",             # hsl(45, 100%, 60%)
+    "primary_teal": "#0BA5A5",
+    "primary_dark": "#213555",
+    "gold": "#FFBF00",
     # Extended palette
-    "navy_deep": "#172540",        # Gradient bottom
-    "teal_light": "#0DC5C5",       # Gradient top accent
+    "navy_deep": "#172540",
+    "teal_light": "#0DC5C5",
     "white": "#ffffff",
-    "off_white": "#F9FDFD",        # hsl(180, 20%, 99%)
-    "muted": "#EFF5F5",            # hsl(180, 15%, 96%)
-    # Status accents (for post-type differentiation)
-    "safe_green": "#33A06A",       # hsl(152, 60%, 40%)
-    "attempt_amber": "#F0A500",    # hsl(40, 95%, 52%)
-    "dream_red": "#D94444",        # hsl(0, 72%, 55%)
+    "off_white": "#F9FDFD",
+    "muted": "#EFF5F5",
+    # Status accents
+    "safe_green": "#33A06A",
+    "attempt_amber": "#F0A500",
+    "dream_red": "#D94444",
     "purple": "#7C3AED",
 }
 
-# ── Template color schemes per post type (Pillow fallback) ───────────
-# UNIFIED: All types share the same navy background for brand consistency.
-# Only accent color differs to signal content type.
+# ── Template color schemes per post type ──────────────────────────────
 _NAVY_BG = {
-    "bg_top": COLORS["primary_dark"],     # #213555
-    "bg_bottom": COLORS["navy_deep"],      # #172540
+    "bg_top": COLORS["primary_dark"],
+    "bg_bottom": COLORS["navy_deep"],
     "text": COLORS["white"],
 }
 
@@ -105,7 +120,7 @@ TEMPLATE_COLORS = {
     "exam_countdown":      {**_NAVY_BG, "accent": COLORS["dream_red"]},
 }
 
-# ── Chibi Character System ───────────────────────────────────────────
+# ── Chibi Character System (v2 — All-Stars Roster) ───────────────────
 # Fixed mascot description (appears in every image)
 CHIBI_MASCOT = (
     "a cute chibi male Vietnamese teacher character with round face, "
@@ -114,59 +129,207 @@ CHIBI_MASCOT = (
     "positioned at bottom-right area of the image, small size (about 15% of image)"
 )
 
-# Guest characters: mapped to preferred post types for thematic matching.
-# Each entry: (name, chibi_description, [preferred_post_types])
+# Guest characters: (name, chibi_description, [preferred_post_types], weight)
+# weight=1.0 is normal, 0.5 for rare "special guest" appearances
 CHIBI_GUEST_CHARACTERS = [
+    # ── Anime ──
     (
         "doraemon",
         "a cute chibi blue robot cat character (fan art style) pulling a chemistry "
         "beaker from its front pocket, big round eyes, red nose, no bell collar",
-        ["fun_facts", "chemistry_around_us"],
+        ["fun_facts", "chemistry_around_us"], 1.0,
     ),
     (
         "conan",
         "a cute chibi detective boy character (fan art style) with big glasses "
         "and bow tie, examining molecules with a magnifying glass, determined expression",
-        ["quiz_mcq", "review_question"],
+        ["quiz_mcq", "review_question"], 1.0,
     ),
     (
         "naruto",
         "a cute chibi ninja boy character (fan art style) with spiky blonde hair "
         "and orange outfit, making hand signs with chemistry symbols floating around",
-        ["mnemonic_tips"],
+        ["mnemonic_tips"], 1.0,
     ),
     (
         "luffy",
         "a cute chibi pirate boy character (fan art style) with straw hat, "
         "stretching rubber arm to grab a floating periodic table element card",
-        ["common_mistakes"],
+        ["common_mistakes"], 1.0,
     ),
     (
         "nobita",
         "a cute chibi sleepy student boy character (fan art style) with round glasses, "
         "suddenly excited and alert while reading a chemistry textbook, sparkle eyes",
-        ["exam_countdown"],
+        ["exam_countdown"], 1.0,
     ),
     (
         "pikachu",
         "a cute chibi yellow electric mouse creature (fan art style) with red cheeks, "
         "generating tiny lightning bolts between chemistry electrodes",
-        ["review_question"],
+        ["review_question"], 1.0,
     ),
     (
         "goku",
         "a cute chibi spiky-haired warrior boy character (fan art style) in orange gi, "
         "powering up with colorful chemical energy aura",
-        ["fun_facts"],
+        ["fun_facts"], 1.0,
+    ),
+    # ── Marvel ──
+    (
+        "spider_man",
+        "a cute chibi friendly red-blue web-slinging hero character (fan art style) "
+        "connecting molecular bonds with webs between atoms",
+        ["common_mistakes", "review_question"], 1.0,
     ),
     (
-        "kiki",
-        "a cute chibi young witch girl character (fan art style) with big red bow "
-        "in hair, stirring a bubbling chemistry cauldron with a glass stirring rod",
-        ["chemistry_around_us"],
+        "iron_man",
+        "a cute chibi red-gold armored genius hero character (fan art style) "
+        "projecting a holographic periodic table from palm repulsor",
+        ["mnemonic_tips", "review_question"], 1.0,
+    ),
+    (
+        "hulk",
+        "a cute chibi giant green muscular hero character (fan art style) "
+        "smashing atom models apart showing nuclear fission",
+        ["fun_facts"], 1.0,
+    ),
+    (
+        "dr_strange",
+        "a cute chibi sorcerer hero character (fan art style) with red cape, "
+        "opening glowing portals filled with chemistry symbols and equations",
+        ["quiz_mcq"], 1.0,
+    ),
+    # ── Disney / Pixar ──
+    (
+        "elsa",
+        "a cute chibi ice princess character (fan art style) with blonde braid, "
+        "creating crystalline molecular structures from ice magic",
+        ["chemistry_around_us"], 1.0,
+    ),
+    (
+        "buzz",
+        "a cute chibi space ranger astronaut character (fan art style) with green visor, "
+        "scanning alien chemical compounds with a wrist laser",
+        ["fun_facts"], 1.0,
+    ),
+    (
+        "remy",
+        "a cute chibi chef rat character (fan art style) with tiny chef hat, "
+        "mixing colorful chemical solutions in laboratory beakers",
+        ["chemistry_around_us"], 1.0,
+    ),
+    (
+        "baymax",
+        "a cute chibi white inflatable healthcare robot character (fan art style), "
+        "analyzing molecular structure diagrams on a holographic screen",
+        ["common_mistakes"], 1.0,
+    ),
+    # ── Football Stars ──
+    (
+        "messi",
+        "a cute chibi short football star character (fan art style) with #10 jersey, "
+        "juggling colorful atom models like footballs",
+        ["exam_countdown"], 1.0,
+    ),
+    (
+        "ronaldo",
+        "a cute chibi athletic football star character (fan art style) with #7 jersey, "
+        "doing a celebratory pose holding test tubes instead of trophies",
+        ["mnemonic_tips"], 1.0,
+    ),
+    (
+        "mbappe",
+        "a cute chibi speedy football star character (fan art style) sprinting past "
+        "flying periodic table element cards in a race",
+        ["exam_countdown"], 1.0,
+    ),
+    # ── Music Stars ──
+    (
+        "kpop_idol",
+        "a cute chibi stylish K-pop boy band member character (fan art style) "
+        "singing into a microphone shaped like a molecular model",
+        ["fun_facts"], 1.0,
+    ),
+    (
+        "son_tung",
+        "a cute chibi Vietnamese pop star character (fan art style) with stylish hair, "
+        "performing on stage with chemistry-themed neon light effects",
+        ["chemistry_around_us"], 1.0,
+    ),
+    (
+        "taylor",
+        "a cute chibi pop diva character (fan art style) with sparkly outfit, "
+        "writing chemistry formulas in a glowing diary notebook",
+        ["mnemonic_tips"], 1.0,
+    ),
+    # ── Science Legends (special guests — lower weight) ──
+    (
+        "einstein",
+        "a cute chibi wild-haired genius professor character (fan art style), "
+        "writing E=mc2 on a floating chalkboard with chalk dust flying",
+        ["review_question"], 0.5,
+    ),
+    (
+        "marie_curie",
+        "a cute chibi determined female scientist character (fan art style) in old-style dress, "
+        "holding glowing radium vials that illuminate her face",
+        ["fun_facts"], 0.5,
+    ),
+    (
+        "mendeleev",
+        "a cute chibi bearded Russian chemist character (fan art style), "
+        "arranging colorful periodic table cards on a large table",
+        ["quiz_mcq"], 0.5,
     ),
 ]
 
+# Number of recent characters to avoid repeating
+CHARACTER_HISTORY_SIZE = 3
+
+# ── Study Card v3 Layout Constants ────────────────────────────────────
+# Zone heights (of 1080px total)
+V3_MARGIN = 40
+V3_HEADER_H = 65
+V3_TITLE_TOP = 75
+V3_CONTENT_TOP = 150
+V3_FOOTER_H = 220
+V3_CONTENT_H = IMAGE_HEIGHT - 150 - 220  # ~710px
+
+# Light academic color palette
+V3_PALETTE = {
+    "bg": "#FDF8F0",           # Warm cream canvas
+    "header_bg": "#213555",    # Navy header
+    "title_text": "#1A1A2E",   # Near-black
+    "body_text": "#2D3436",    # Dark gray
+    "node_bg": "#FFFFFF",      # White nodes
+    "node_border": "#213555",  # Navy border
+    "accent": "#0BA5A5",       # Teal primary accent
+    "accent2": "#D4A017",      # Gold secondary
+    "accent_light": "#E8F6F6", # Light teal fill
+    "connector": "#0BA5A5",    # Teal connectors
+    "result_bg": "#213555",    # Navy for conclusions
+    "result_text": "#FFFFFF",  # White on navy
+    "footer_bg": "#213555",    # Navy footer
+}
+
+# Chibi sticker settings
+V3_CHIBI_HEIGHT = 150    # px height for sticker
+V3_CHIBI_MARGIN = 24     # px from edge
+
+# Post type → default diagram layout
+V3_LAYOUT_MAP = {
+    "review_question": "mind_map",
+    "common_mistakes": "mind_map",
+    "fun_facts": "info_grid",
+    "quiz_mcq": "info_grid",
+    "quick_formula": "flowchart",
+    "experiment_tip": "flowchart",
+    "chemistry_around_us": "info_grid",
+    "mnemonic_tips": "flowchart",
+    "exam_countdown": "mind_map",
+}
+
 # ── OCR Validation Settings ──────────────────────────────────────────
-OCR_MAX_RETRIES = 2          # max regen attempts if garbled text detected
-OCR_VISION_MODEL = "gemini-2.5-flash"  # model for OCR spell-checking
+OCR_MAX_RETRIES = 2
+OCR_VISION_MODEL = "gemini-2.5-flash"

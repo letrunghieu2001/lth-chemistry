@@ -89,13 +89,13 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
     thcs = content["thcs_post"]
     thpt = content["thpt_post"]
 
-    logger.info("THCS caption preview: %s...", thcs["caption"][:80])
-    logger.info("THPT caption preview: %s...", thpt["caption"][:80])
+    logger.info("THCS status preview: %s...", thcs["status"][:80])
+    logger.info("THPT status preview: %s...", thpt["status"][:80])
 
-    # ── Step 3: Create images (AI-generated + logo overlay) ───────
+    # ── Step 3: Create images (AI-generated diagrams + chibi stickers) ──
     logger.info("Creating images...")
 
-    last_char = today.get("last_character")
+    recent_chars = today.get("recent_characters", [])
 
     # Build quiz_data if applicable
     thcs_quiz = None
@@ -114,25 +114,30 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
             "answer": thpt.get("answer", ""),
         }
 
-    thcs_image, thcs_char = create_post_image(
+    thcs_image, thcs_chars = create_post_image(
         post_type=today["thcs_post_type"],
         image_title=thcs["image_title"],
-        image_content=thcs["image_content"],
+        layout_type=thcs.get("layout_type", ""),
+        diagram_data=thcs.get("diagram_data", {}),
         grade_label=thcs["grade_label"],
         image_prompt=thcs.get("image_prompt", ""),
         filename=f"{today['date']}_thcs.png",
-        last_character=last_char,
+        recent_characters=recent_chars,
         quiz_data=thcs_quiz,
     )
 
-    thpt_image, thpt_char = create_post_image(
+    # Add THCS chars to recent list for THPT selection
+    thpt_recent = recent_chars + (thcs_chars if thcs_chars else [])
+
+    thpt_image, thpt_chars = create_post_image(
         post_type=today["thpt_post_type"],
         image_title=thpt["image_title"],
-        image_content=thpt["image_content"],
+        layout_type=thpt.get("layout_type", ""),
+        diagram_data=thpt.get("diagram_data", {}),
         grade_label=thpt["grade_label"],
         image_prompt=thpt.get("image_prompt", ""),
         filename=f"{today['date']}_thpt.png",
-        last_character=thcs_char,  # avoid same character in both posts
+        recent_characters=thpt_recent,
         quiz_data=thpt_quiz,
     )
 
@@ -141,21 +146,21 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
         return False
 
     logger.info(
-        "Images created: %s (char: %s), %s (char: %s)",
-        thcs_image.name, thcs_char, thpt_image.name, thpt_char,
+        "Images created: %s (chars: %s), %s (chars: %s)",
+        thcs_image.name, thcs_chars, thpt_image.name, thpt_chars,
     )
 
     # ── Step 4: Post to Facebook ──────────────────────────────────
     if dry_run:
         logger.info("[DRY RUN] Would post THCS at %02d:%02d", THCS_POST_HOUR, THCS_POST_MINUTE)
         logger.info("[DRY RUN] Would post THPT at %02d:%02d", THPT_POST_HOUR, THPT_POST_MINUTE)
-        logger.info("[DRY RUN] THCS type: %s | character: %s", thcs_label, thcs_char)
-        logger.info("[DRY RUN] THPT type: %s | character: %s", thpt_label, thpt_char)
-        logger.info("[DRY RUN] THCS caption:\n%s\n%s", thcs["caption"], thcs["hashtags"])
-        logger.info("[DRY RUN] THPT caption:\n%s\n%s", thpt["caption"], thpt["hashtags"])
+        logger.info("[DRY RUN] THCS type: %s | characters: %s", thcs_label, thcs_chars)
+        logger.info("[DRY RUN] THPT type: %s | characters: %s", thpt_label, thpt_chars)
+        logger.info("[DRY RUN] THCS status:\n%s\n%s", thcs["status"], thcs["hashtags"])
+        logger.info("[DRY RUN] THPT status:\n%s\n%s", thpt["status"], thpt["hashtags"])
     else:
         # THCS post: schedule for morning
-        thcs_caption = f"{thcs['caption']}\n\n{thcs['hashtags']}"
+        thcs_caption = f"{thcs['status']}\n\n{thcs['hashtags']}"
         thcs_result = schedule_photo(
             image_path=str(thcs_image),
             caption=thcs_caption,
@@ -168,7 +173,7 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
             return False
 
         # THPT post: schedule for evening
-        thpt_caption = f"{thpt['caption']}\n\n{thpt['hashtags']}"
+        thpt_caption = f"{thpt['status']}\n\n{thpt['hashtags']}"
         thpt_result = schedule_photo(
             image_path=str(thpt_image),
             caption=thpt_caption,
@@ -181,11 +186,11 @@ def run(dry_run: bool = False, force: bool = False) -> bool:
             return False
 
     # ── Step 5: Advance state ─────────────────────────────────────
-    # Track the last character used (THPT char, since it's the most recent)
-    final_char = thpt_char or thcs_char
+    # Track all characters used today (each post uses 2)
+    used_chars = (thcs_chars or []) + (thpt_chars or [])
     state = advance_state(
         state, today["thcs_post_type"], today["thpt_post_type"],
-        last_character=final_char,
+        used_characters=used_chars,
     )
     save_state(state)
 
