@@ -58,6 +58,7 @@ def post_photo_now(image_path: str, caption: str) -> dict | None:
             )
 
         result = response.json()
+        logger.info("FB API response (post_now): status=%s body=%s", response.status_code, result)
 
         if "id" in result:
             logger.info("Posted successfully. Post ID: %s", result["id"])
@@ -101,6 +102,10 @@ def schedule_photo(image_path: str, caption: str,
         return post_photo_now(image_path, caption)
 
     unix_timestamp = int(scheduled_time.timestamp())
+    logger.info(
+        "Scheduling post: page_id=%s, time=%s (unix=%d), image=%s",
+        FB_PAGE_ID, scheduled_time.isoformat(), unix_timestamp, image_path,
+    )
 
     url = f"{GRAPH_API_BASE}/{FB_PAGE_ID}/photos"
 
@@ -121,6 +126,7 @@ def schedule_photo(image_path: str, caption: str,
             )
 
         result = response.json()
+        logger.info("FB API response (schedule): status=%s body=%s", response.status_code, result)
 
         if "id" in result:
             logger.info(
@@ -168,7 +174,14 @@ def verify_token() -> bool:
                 data.get("error", {}).get("message", "Unknown"),
             )
         else:
-            logger.info("Facebook token is valid.")
+            scopes = data.get("scopes", [])
+            app_id = data.get("app_id", "unknown")
+            token_type = data.get("type", "unknown")
+            expires_at = data.get("expires_at", 0)
+            logger.info(
+                "Facebook token is valid. type=%s app_id=%s scopes=%s expires_at=%s",
+                token_type, app_id, scopes, expires_at,
+            )
 
         return is_valid
 
