@@ -1,6 +1,6 @@
 {
-  "thcs_grade_index": 0,
-  "thpt_grade_index": 2,
+  "thcs_grade_index": 1,
+  "thpt_grade_index": 0,
   "thcs_chapter": {
     "6": 1,
     "7": 1,
@@ -12,20 +12,20 @@
     "11": 1,
     "12": 1
   },
-  "last_post_date": "2026-07-14",
-  "posts_count": 16,
+  "last_post_date": "2026-07-15",
+  "posts_count": 18,
   "recent_types": [
-    "chemistry_around_us",
-    "exam_countdown",
     "quiz_mcq",
     "quiz_mcq",
     "common_mistakes",
-    "common_mistakes"
+    "common_mistakes",
+    "quiz_mcq",
+    "quiz_mcq"
   ],
   "last_character": "conan",
   "recent_characters": [
-    "luffy",
-    "taylor",
-    "baymax"
+    "conan",
+    "mendeleev",
+    "iron_man"
   ]
 }
