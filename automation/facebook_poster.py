@@ -41,15 +41,18 @@ def post_photo_now(image_path: str, caption: str) -> dict | None:
     if not _validate_credentials():
         return None
 
-    url = f"{GRAPH_API_BASE}/{FB_PAGE_ID}/photos"
+    # ── Strategy: 2-step upload (avoids pages_manage_metadata) ──
+    # Step 1: Upload photo as unpublished
+    # Step 2: Publish via /feed with attached_media
+    upload_url = f"{GRAPH_API_BASE}/{FB_PAGE_ID}/photos"
 
     try:
         with open(image_path, "rb") as img_file:
-            response = requests.post(
-                url,
+            upload_resp = requests.post(
+                upload_url,
                 data={
-                    "caption": caption,
                     "access_token": FB_PAGE_ACCESS_TOKEN,
+                    "published": "false",
                 },
                 files={
                     "source": ("post_image.png", img_file, "image/png"),
@@ -57,14 +60,42 @@ def post_photo_now(image_path: str, caption: str) -> dict | None:
                 timeout=60,
             )
 
-        result = response.json()
-        logger.info("FB API response (post_now): status=%s body=%s", response.status_code, result)
+        upload_result = upload_resp.json()
+        logger.info(
+            "FB photo upload response: status=%s body=%s",
+            upload_resp.status_code, upload_result,
+        )
 
-        if "id" in result:
-            logger.info("Posted successfully. Post ID: %s", result["id"])
-            return result
+        if "id" not in upload_result:
+            logger.error("Failed to upload photo: %s", upload_result)
+            return None
+
+        photo_id = upload_result["id"]
+        logger.info("Photo uploaded (unpublished). photo_id=%s", photo_id)
+
+        # Step 2: Publish via /feed with attached_media
+        feed_url = f"{GRAPH_API_BASE}/{FB_PAGE_ID}/feed"
+        feed_resp = requests.post(
+            feed_url,
+            data={
+                "message": caption,
+                "access_token": FB_PAGE_ACCESS_TOKEN,
+                "attached_media[0]": f'{{"media_fbid":"{photo_id}"}}',
+            },
+            timeout=60,
+        )
+
+        feed_result = feed_resp.json()
+        logger.info(
+            "FB feed publish response: status=%s body=%s",
+            feed_resp.status_code, feed_result,
+        )
+
+        if "id" in feed_result:
+            logger.info("Posted successfully via /feed. Post ID: %s", feed_result["id"])
+            return feed_result
         else:
-            logger.error("Facebook API error: %s", result)
+            logger.error("Facebook /feed publish error: %s", feed_result)
             return None
 
     except requests.RequestException as exc:
