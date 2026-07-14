@@ -39,9 +39,6 @@ from config import (
     CHIBI_MASCOT,
     CHIBI_GUEST_CHARACTERS,
     CHARACTER_HISTORY_SIZE,
-    OCR_MAX_RETRIES,
-    OCR_VISION_MODEL,
-    V3_LAYOUT_MAP,
 )
 
 logger = logging.getLogger(__name__)
