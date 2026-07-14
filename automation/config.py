@@ -330,6 +330,6 @@ V3_LAYOUT_MAP = {
     "exam_countdown": "mind_map",
 }
 
-# ── OCR Validation Settings ──────────────────────────────────────────
-OCR_MAX_RETRIES = 2
-OCR_VISION_MODEL = "gemini-2.5-flash"
+# ── Model Fallback Chain (high → low) ────────────────────────────────
+FLASH_MODEL_CHAIN = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash"]
+OCR_VISION_MODEL = FLASH_MODEL_CHAIN[0]  # Best available for OCR

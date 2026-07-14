@@ -329,8 +329,8 @@ def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
         max_output_tokens=8192,
     )
 
-    models = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash"]
-    for model in models:
+    from config import FLASH_MODEL_CHAIN
+    for model in FLASH_MODEL_CHAIN:
         try:
             logger.info("Trying model: %s", model)
             response = client.models.generate_content(
@@ -350,8 +350,8 @@ def _call_gemini_direct(system_prompt: str, user_prompt: str) -> str | None:
 def _call_openrouter(system_prompt: str, user_prompt: str) -> str | None:
     models_to_try = [
         "google/gemini-3.5-flash",
+        "google/gemini-3.1-flash-lite",
         "google/gemini-2.5-flash",
-        "google/gemini-2.5-flash-preview-05-20",
         "openrouter/free",
     ]
     last_error = None

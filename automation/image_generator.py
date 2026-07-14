@@ -50,7 +50,7 @@ AI_GEN_MAX_RETRIES = 5
 AI_GEN_RETRY_DELAY = 8
 
 # Models
-PROMPT_COMPOSER_MODEL = "gemini-2.5-flash"  # Stage 1: thinks, composes text
+PROMPT_COMPOSER_MODELS = None  # Will use FLASH_MODEL_CHAIN from config
 IMAGE_GEN_MODEL = "gemini-3-pro-image"       # Stage 2: renders pixels
 
 _font_cache: dict[str, ImageFont.FreeTypeFont] = {}
@@ -267,24 +267,35 @@ def _compose_image_prompt(content_brief: str) -> str | None:
     """
     Stage 1: Use Gemini Flash to compose the detailed image prompt.
     The text LLM ensures all Vietnamese text is perfectly spelled.
+    Uses model fallback chain: 3.5 → 3.1 → 2.5
     """
     if not GEMINI_API_KEY:
         logger.error("GEMINI_API_KEY not set.")
         return None
     try:
         from google import genai
+        from config import FLASH_MODEL_CHAIN
         client = genai.Client(api_key=GEMINI_API_KEY)
-        resp = client.models.generate_content(
-            model=PROMPT_COMPOSER_MODEL,
-            contents=[content_brief],
-        )
-        composed = resp.text.strip()
-        logger.info(
-            "Stage 1 complete: prompt composed (%d chars).", len(composed)
-        )
-        return composed
+        last_err = None
+        for model_name in FLASH_MODEL_CHAIN:
+            try:
+                resp = client.models.generate_content(
+                    model=model_name,
+                    contents=[content_brief],
+                )
+                composed = resp.text.strip()
+                logger.info(
+                    "Stage 1 complete (model=%s): prompt composed (%d chars).",
+                    model_name, len(composed),
+                )
+                return composed
+            except Exception as exc:
+                logger.warning("Prompt composer failed with %s: %s", model_name, exc)
+                last_err = exc
+        logger.error("All prompt composer models failed. Last error: %s", last_err)
+        return None
     except Exception as exc:
-        logger.error("Prompt composer failed: %s", exc)
+        logger.error("Prompt composer setup failed: %s", exc)
         return None
 
 
@@ -331,33 +342,40 @@ def _validate_image_quality(image: Image.Image, expected_title: str) -> bool:
     try:
         from google import genai
         from google.genai import types
+        from config import FLASH_MODEL_CHAIN
         client = genai.Client(api_key=GEMINI_API_KEY)
         buf = BytesIO()
         image.save(buf, format="PNG")
-        resp = client.models.generate_content(
-            model=OCR_VISION_MODEL,
-            contents=[
-                types.Part.from_bytes(data=buf.getvalue(), mime_type="image/png"),
-                (
-                    f"Examine this Vietnamese educational infographic image carefully.\n"
-                    f"Expected title: \"{expected_title}\"\n\n"
-                    f"Check for these issues:\n"
-                    f"1. Any garbled, nonsensical, or badly misspelled Vietnamese text\n"
-                    f"2. Text that is unreadable or too blurry\n"
-                    f"3. Chemistry formulas that look wrong\n\n"
-                    f"If the image has CLEAR, READABLE Vietnamese text with no major "
-                    f"spelling errors, respond EXACTLY: IMAGE_CLEAN\n"
-                    f"If you find garbled or seriously misspelled text, respond EXACTLY: "
-                    f"GARBLED_TEXT_FOUND\n"
-                    f"Respond with only one of these two phrases."
-                ),
-            ],
+        image_part = types.Part.from_bytes(data=buf.getvalue(), mime_type="image/png")
+        prompt_text = (
+            f"Examine this Vietnamese educational infographic image carefully.\n"
+            f"Expected title: \"{expected_title}\"\n\n"
+            f"Check for these issues:\n"
+            f"1. Any garbled, nonsensical, or badly misspelled Vietnamese text\n"
+            f"2. Text that is unreadable or too blurry\n"
+            f"3. Chemistry formulas that look wrong\n\n"
+            f"If the image has CLEAR, READABLE Vietnamese text with no major "
+            f"spelling errors, respond EXACTLY: IMAGE_CLEAN\n"
+            f"If you find garbled or seriously misspelled text, respond EXACTLY: "
+            f"GARBLED_TEXT_FOUND\n"
+            f"Respond with only one of these two phrases."
         )
-        result = resp.text.strip().upper()
-        if "GARBLED" in result:
-            logger.warning("OCR: garbled/misspelled text detected in image.")
-            return False
-        logger.info("OCR: image text quality OK.")
+        for ocr_model in FLASH_MODEL_CHAIN:
+            try:
+                resp = client.models.generate_content(
+                    model=ocr_model,
+                    contents=[image_part, prompt_text],
+                )
+                result = resp.text.strip().upper()
+                if "GARBLED" in result:
+                    logger.warning("OCR (%s): garbled/misspelled text detected.", ocr_model)
+                    return False
+                logger.info("OCR (%s): image text quality OK.", ocr_model)
+                return True
+            except Exception as exc:
+                logger.warning("OCR model %s failed: %s", ocr_model, exc)
+        # All OCR models failed — don't block
+        logger.warning("All OCR models failed. Passing image by default.")
         return True
     except Exception as exc:
         logger.warning("OCR validation error (non-critical): %s", exc)
