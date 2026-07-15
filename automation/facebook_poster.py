@@ -127,9 +127,14 @@ def schedule_photo(image_path: str, caption: str,
     now_vn = datetime.now(VN_TZ)
     scheduled_time = now_vn.replace(hour=hour, minute=minute, second=0, microsecond=0)
 
-    # If the time has already passed today, post immediately instead
-    if scheduled_time <= now_vn:
-        logger.info("Scheduled time already passed. Posting immediately.")
+    # If the time has already passed today or is within 15 minutes,
+    # post immediately instead (Facebook requires ≥10 min for scheduling)
+    min_schedule_time = now_vn + timedelta(minutes=15)
+    if scheduled_time <= min_schedule_time:
+        logger.info(
+            "Scheduled time %s too close or passed (now=%s). Posting immediately.",
+            scheduled_time.strftime("%H:%M"), now_vn.strftime("%H:%M"),
+        )
         return post_photo_now(image_path, caption)
 
     unix_timestamp = int(scheduled_time.timestamp())
