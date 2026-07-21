@@ -81,7 +81,7 @@ const HeroSection = () => {
               </div>
               <div className="text-center">
                 <div className="font-quicksand font-bold text-2xl gradient-text">
-                  6+
+                  {new Date().getFullYear() - 2019}+
                 </div>
                 <div className="font-vietnam text-sm text-muted-foreground">
                   Năm kinh nghiệm

@@ -111,8 +111,8 @@ const AchievementsSection = () => {
   const stats = [
     { number: "78%", label: "Học sinh đạt từ 8 điểm Hóa trở lên" },
     { number: "92%", label: "Đậu vào trường mục tiêu các em đặt ra" },
-    { number: "96.7%", label: "Vượt mục tiêu điểm tự đề ra" },
-    { number: "98.5%", label: "Phụ huynh hài lòng về chất lượng" },
+    { number: "97%", label: "Vượt mục tiêu điểm tự đề ra" },
+    { number: "100%", label: "Phụ huynh hài lòng về chất lượng" },
   ];
 
   // Top universities with logos
