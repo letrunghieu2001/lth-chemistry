@@ -19,7 +19,7 @@ const BenefitsSection = () => {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
       title: "Kết Quả Nói Lên Tất Cả",
       description:
-        "75% học sinh đạt từ 8 điểm Hóa trở lên, 95% các em vượt qua mục tiêu điểm mà chính mình đặt ra từ đầu. Kết quả cụ thể, không cần nói nhiều.",
+        "78% học sinh đạt từ 8 điểm Hóa trở lên, 92% đậu vào đúng trường mục tiêu. 96.7% các em vượt mục tiêu điểm tự đặt ra — con số nói thay lời.",
     },
     {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,

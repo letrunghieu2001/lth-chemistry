@@ -1,9 +1,9 @@
 name: Daily Facebook Post
 
 on:
-  schedule:
-    # Run at 22:30 UTC = 05:30 AM Vietnam time (UTC+7)
-    - cron: '30 22 * * *'
+  # schedule:
+  #   # Run at 22:30 UTC = 05:30 AM Vietnam time (UTC+7)
+  #   - cron: '30 22 * * *'
   workflow_dispatch:
     inputs:
       dry_run:

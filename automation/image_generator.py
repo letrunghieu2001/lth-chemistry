@@ -23,8 +23,11 @@ Why two stages?
 import logging
 import random
 import time
+import urllib.parse
 from io import BytesIO
 from pathlib import Path
+
+import requests
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -48,7 +51,9 @@ AI_GEN_RETRY_DELAY = 8
 
 # Models
 PROMPT_COMPOSER_MODELS = None  # Will use FLASH_MODEL_CHAIN from config
-IMAGE_GEN_MODEL = "gemini-3-pro-image"       # Stage 2: renders pixels
+# Stage 2: Pollinations.ai (FREE, no API key needed)
+POLLINATIONS_BASE_URL = "https://image.pollinations.ai/prompt/"
+POLLINATIONS_TIMEOUT = 120  # seconds
 
 _font_cache: dict[str, ImageFont.FreeTypeFont] = {}
 
@@ -206,7 +211,7 @@ def _build_content_brief(
     brief = f"""Bạn là chuyên gia thiết kế infographic giáo dục hóa học cho học sinh Việt Nam.
 
 NHIỆM VỤ: Viết một prompt chi tiết bằng TIẾNG ANH để tạo ảnh infographic 1080x1080px.
-Prompt này sẽ được gửi đến một AI image generator (Gemini Pro Image).
+Prompt này sẽ được gửi đến AI image generator (Flux model via Pollinations.ai).
 
 ═══════════════════════════════════════════════════════════
 DANH SÁCH TEXT BẮT BUỘC (TEXT INVENTORY)
@@ -253,8 +258,10 @@ PHONG CÁCH:
 - Dày đặc thông tin, ít khoảng trắng (70-80% canvas là content)
 - Text phải đọc rõ trên điện thoại
 
-OUTPUT: Viết prompt bằng tiếng Anh, nhưng COPY-PASTE NGUYÊN VĂN tất cả
-text tiếng Việt từ TEXT INVENTORY (trong ngoặc kép).
+OUTPUT: Viết prompt bằng tiếng Anh, ngắn gọn (TỐI ĐA 400 ký tự / ~80 từ).
+Chỉ mô tả HÌNH ẢNH, KHÔNG liệt kê text.
+Đây là prompt cho AI image generator (Flux) qua URL — prompt DÀI sẽ BỊ LỖI.
+Không bao gồm text tiếng Việt trong prompt — text sẽ được overlay riêng.
 Chỉ output prompt, không giải thích gì thêm."""
 
     return brief
@@ -296,32 +303,55 @@ def _compose_image_prompt(content_brief: str) -> str | None:
         return None
 
 
-# ── Stage 2: Image Generation ────────────────────────────────────────
+# ── Stage 2: Image Generation (Pollinations.ai — FREE) ──────────────
 
 def _gen_ai_image(prompt: str) -> Image.Image | None:
-    """Stage 2: Generate image via Gemini Pro Image."""
-    if not GEMINI_API_KEY:
-        logger.error("GEMINI_API_KEY not set.")
-        return None
+    """
+    Stage 2: Generate image via Pollinations.ai (FREE, no API key).
+    Uses Flux model via simple HTTP GET request.
+    """
     try:
-        from google import genai
-        client = genai.Client(api_key=GEMINI_API_KEY)
-        resp = client.models.generate_content(
-            model=IMAGE_GEN_MODEL, contents=[prompt],
-        )
-        # Guard against None parts (safety filters, empty response)
-        parts = getattr(resp, 'parts', None)
-        if not parts:
-            logger.warning("AI image gen returned no parts (possibly blocked by safety filter).")
+        # URL-encode the prompt for the GET request (cap at 500 chars for URL safety)
+        encoded_prompt = urllib.parse.quote(prompt[:500])
+        url = f"{POLLINATIONS_BASE_URL}{encoded_prompt}"
+        params = {
+            "width": IMAGE_WIDTH,
+            "height": IMAGE_HEIGHT,
+            "seed": random.randint(1, 999999),
+            "nologo": "true",
+            "model": "flux",
+        }
+        logger.info("Requesting image from Pollinations.ai (Flux model)...")
+        resp = requests.get(url, params=params, timeout=POLLINATIONS_TIMEOUT)
+
+        if resp.status_code != 200:
+            logger.warning("Pollinations.ai returned status %d", resp.status_code)
             return None
-        for part in parts:
-            inline = getattr(part, 'inline_data', None)
-            if inline is not None and hasattr(inline, 'data'):
-                return Image.open(BytesIO(inline.data))
-        logger.warning("AI image gen returned parts but no image data.")
+
+        content_type = resp.headers.get("content-type", "")
+        if "image" not in content_type:
+            logger.warning(
+                "Pollinations.ai returned non-image content-type: %s (body: %.200s)",
+                content_type, resp.text,
+            )
+            return None
+
+        if len(resp.content) < 10000:
+            logger.warning("Pollinations.ai response too small (%d bytes)", len(resp.content))
+            return None
+
+        img = Image.open(BytesIO(resp.content))
+        logger.info(
+            "Pollinations.ai image received: %dx%d, %d bytes",
+            img.width, img.height, len(resp.content),
+        )
+        return img
+
+    except requests.Timeout:
+        logger.error("Pollinations.ai request timed out (%ds)", POLLINATIONS_TIMEOUT)
         return None
     except Exception as exc:
-        logger.error("AI image gen failed: %s", exc)
+        logger.error("Pollinations.ai image gen failed: %s", exc)
         return None
 
 
@@ -431,7 +461,7 @@ def create_post_image(
 
         # Resolve layout type
         if not layout_type:
-            layout_type = V3_LAYOUT_MAP.get(post_type, "info_grid")
+            layout_type = "info_grid"
 
         # Step 1: Pick 2 guest characters
         (c1_name, c1_desc), (c2_name, c2_desc) = _pick_two(
@@ -451,9 +481,9 @@ def create_post_image(
             logger.error("Stage 1 failed: could not compose prompt.")
             return None, None
 
-        # Step 3 (Stage 2): Generate image + OCR validate (with retries)
-        # On OCR failure, re-compose prompt (Stage 1) every 2 failures
-        # to get a fresh visual approach
+        # Step 3 (Stage 2): Generate image via Pollinations.ai (with retries)
+        # NOTE: OCR check is DISABLED because Pollinations/Flux generates garbled
+        # text (expected). Vietnamese text is overlaid by Pillow separately.
         final_image = None
         for attempt in range(1, AI_GEN_MAX_RETRIES + 1):
             logger.info("Generation attempt %d/%d...", attempt, AI_GEN_MAX_RETRIES)
@@ -477,18 +507,10 @@ def create_post_image(
                 (IMAGE_WIDTH, IMAGE_HEIGHT), Image.LANCZOS,
             )
 
-            # OCR quality check
-            if _validate_image_quality(raw_image, image_title):
-                final_image = raw_image
-                logger.info("Image accepted (attempt %d).", attempt)
-                break
-            else:
-                logger.warning(
-                    "Image failed OCR check (attempt %d). Regenerating...",
-                    attempt,
-                )
-                if attempt < AI_GEN_MAX_RETRIES:
-                    time.sleep(AI_GEN_RETRY_DELAY)
+            # Accept first valid image (no OCR check for Pollinations)
+            final_image = raw_image
+            logger.info("Image accepted (attempt %d).", attempt)
+            break
 
         if final_image is None:
             logger.error("All %d generation attempts failed.", AI_GEN_MAX_RETRIES)

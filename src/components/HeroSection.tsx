@@ -73,7 +73,7 @@ const HeroSection = () => {
             <div className="mt-12 grid grid-cols-2 md:grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
               <div className="text-center">
                 <div className="font-quicksand font-bold text-2xl gradient-text">
-                  75%+
+                  78%
                 </div>
                 <div className="font-vietnam text-sm text-muted-foreground">
                   Đạt từ 8 điểm Hóa
@@ -89,10 +89,10 @@ const HeroSection = () => {
               </div>
               <div className="text-center col-span-2 md:col-span-1">
                 <div className="font-quicksand font-bold text-2xl gradient-text">
-                  95%+
+                  92%
                 </div>
                 <div className="font-vietnam text-sm text-muted-foreground">
-                  Vượt mục tiêu tự đề ra
+                  Đậu trường mục tiêu
                 </div>
               </div>
             </div>
