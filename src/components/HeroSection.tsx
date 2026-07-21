@@ -41,7 +41,7 @@ const HeroSection = () => {
             </h1>
 
             <p className="font-vietnam text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
-              Lớp học Hóa học của thầy Lê Trung Hiếu – hơn 6 năm đồng hành
+              Lớp học Hóa học của thầy Lê Trung Hiếu – hơn {new Date().getFullYear() - 2019} năm đồng hành
               cùng học sinh từ THCS luyện thi chuyên đến THPT lớp 10, 11, 12.
               Giúp các em hiểu sâu, nắm chắc và tự tin chinh phục mọi kỳ thi.
             </p>

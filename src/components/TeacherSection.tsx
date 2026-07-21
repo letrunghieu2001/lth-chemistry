@@ -12,7 +12,7 @@ const TeacherSection = () => {
             <span className="gradient-text">Thầy Lê Trung Hiếu</span>
           </h2>
           <p className="font-vietnam text-lg text-muted-foreground max-w-3xl mx-auto">
-            Hơn 6 năm gắn bó với bục giảng, thầy Hiếu không chỉ dạy kiến thức
+            Hơn {new Date().getFullYear() - 2019} năm gắn bó với bục giảng, thầy Hiếu không chỉ dạy kiến thức
             mà còn truyền cho các em ngọn lửa đam mê với Hóa học. Với thầy,
             mỗi học trò đều là một câu chuyện riêng cần được lắng nghe và đồng hành.
           </p>
@@ -25,7 +25,7 @@ const TeacherSection = () => {
               <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-primary/10 to-primary-dark/10 p-2 flex items-center justify-center">
                 <img
                   src="/lovable-uploads/fd9015f2-43d2-4e3c-85de-28b9afb79e4b.png"
-                  alt="Thầy Lê Trung Hiếu – Thầy giáo dạy Hóa học hơn 6 năm kinh nghiệm, cựu học sinh chuyên Hóa ĐHQGHN"
+                  alt={`Thầy Lê Trung Hiếu – Thầy giáo dạy Hóa học hơn ${new Date().getFullYear() - 2019} năm kinh nghiệm, cựu học sinh chuyên Hóa ĐHQGHN`}
                   className="w-full h-full rounded-2xl object-cover"
                   title="Thầy Lê Trung Hiếu – Dạy Hóa THCS chuyên & THPT tại LTH Chemistry"
                 />
@@ -33,7 +33,7 @@ const TeacherSection = () => {
 
               {/* Floating badges */}
               <div className="absolute -top-4 -right-4 bg-gold text-gold-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float">
-                6+ năm kinh nghiệm
+                {new Date().getFullYear() - 2019}+ năm kinh nghiệm
               </div>
               <div
                 className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-4 py-2 rounded-full font-vietnam font-semibold shadow-lg animate-float"
@@ -115,7 +115,7 @@ const TeacherSection = () => {
                       <ul className="font-vietnam text-muted-foreground space-y-2 ml-7">
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          Hơn 6 năm dạy Hóa học cho học sinh THCS luyện thi chuyên và THPT lớp 10–12
+                          Hơn {new Date().getFullYear() - 2019} năm dạy Hóa học cho học sinh THCS luyện thi chuyên và THPT lớp 10–12
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>

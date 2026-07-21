@@ -343,5 +343,24 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Auto-update năm kinh nghiệm: currentYear - 2019 -->
+    <script>
+      (function() {
+        var y = new Date().getFullYear() - 2019;
+        // Update meta description
+        var meta = document.querySelector('meta[name="description"]');
+        if (meta) meta.content = meta.content.replace(/\d+\+?\s*năm kinh nghiệm/, y + '+ năm kinh nghiệm');
+        // Update OG description
+        var og = document.querySelector('meta[property="og:description"]');
+        if (og) og.content = og.content.replace(/\d+\+?\s*năm kinh nghiệm/, y + '+ năm kinh nghiệm');
+        // Update Twitter description
+        var tw = document.querySelector('meta[name="twitter:description"]');
+        if (tw) tw.content = tw.content.replace(/\d+\+?\s*năm kinh nghiệm/, y + '+ năm kinh nghiệm');
+        // Update JSON-LD
+        document.querySelectorAll('script[type="application/ld+json"]').forEach(function(s) {
+          s.textContent = s.textContent.replace(/hơn \d+ năm/g, 'hơn ' + y + ' năm');
+        });
+      })();
+    </script>
   </body>
 </html>

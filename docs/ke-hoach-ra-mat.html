@@ -240,5 +240,16 @@ function copyText(id) {
     });
 }
 </script>
+<!-- Auto-update năm kinh nghiệm: currentYear - 2019 -->
+<script>
+(function() {
+    var y = new Date().getFullYear() - 2019;
+    document.querySelectorAll('.post-box, .kv span').forEach(function(el) {
+        el.innerHTML = el.innerHTML
+            .replace(/[Hh]ơn \d+ năm/g, 'Hơn ' + y + ' năm')
+            .replace(/\d+\+\s*năm/g, y + '+ năm');
+    });
+})();
+</script>
 </body>
 </html>

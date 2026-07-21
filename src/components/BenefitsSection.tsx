@@ -13,7 +13,7 @@ const BenefitsSection = () => {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
       title: "Thầy Giáo Tâm Huyết",
       description:
-        "Thầy Lê Trung Hiếu – hơn 6 năm kinh nghiệm, cựu học sinh chuyên Hóa THPT Chuyên Khoa Học Tự Nhiên - ĐHQGHN. Thầy hiểu học sinh cần gì và biết cách truyền đạt sao cho dễ nhớ nhất.",
+        `Thầy Lê Trung Hiếu – hơn ${new Date().getFullYear() - 2019} năm kinh nghiệm, cựu học sinh chuyên Hóa THPT Chuyên Khoa Học Tự Nhiên - ĐHQGHN. Thầy hiểu học sinh cần gì và biết cách truyền đạt sao cho dễ nhớ nhất.`,
     },
     {
       icon: <Star className="h-8 w-8 text-gold" fill="currentColor" />,
