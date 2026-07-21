@@ -73,10 +73,10 @@ const HeroSection = () => {
             <div className="mt-12 grid grid-cols-2 md:grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
               <div className="text-center">
                 <div className="font-quicksand font-bold text-2xl gradient-text">
-                  80%+
+                  75%+
                 </div>
                 <div className="font-vietnam text-sm text-muted-foreground">
-                  Học sinh đạt 9+
+                  Đạt từ 8 điểm Hóa
                 </div>
               </div>
               <div className="text-center">
@@ -92,7 +92,7 @@ const HeroSection = () => {
                   95%+
                 </div>
                 <div className="font-vietnam text-sm text-muted-foreground">
-                  Học sinh đậu trường top
+                  Vượt mục tiêu tự đề ra
                 </div>
               </div>
             </div>

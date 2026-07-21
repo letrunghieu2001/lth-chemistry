@@ -14,7 +14,7 @@ const Index = () => {
     <div className="min-h-screen bg-background font-vietnam">
       <Helmet>
         <title>LTH Chemistry — Dạy Hóa cấp 3, luyện thi THPTQG Hà Nội</title>
-        <meta name="description" content="LTH Chemistry — Thầy Lê Trung Hiếu dạy Hóa cấp 3 tại Hà Nội. 80% Học sinh đạt điểm 9+ môn Hóa, luyện thi THPTQG hiệu quả." />
+        <meta name="description" content="LTH Chemistry — Thầy Lê Trung Hiếu dạy Hóa cấp 3 tại Hà Nội. 75% học sinh đạt từ 8 điểm Hóa trở lên, 95% vượt mục tiêu điểm tự đề ra. Luyện thi THPTQG hiệu quả." />
         <link rel="canonical" href="https://lthchemistry.lovable.app/" />
         <meta property="og:url" content="https://lthchemistry.lovable.app/" />
       </Helmet>
